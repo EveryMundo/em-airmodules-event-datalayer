@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Package for airmodules",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,5 +11,8 @@
     "everymundo"
   ],
   "author": "Kayling <kayling@everymundo.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "luxon": "^1.26.0"
+  }
 }
