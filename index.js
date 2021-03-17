@@ -1,11 +1,11 @@
-import { DateTime } from 'luxon';
+import { DateTime } from "luxon";
 
 const airModulesDataLayer = {
   event: "viewable-impression",
   module: "em-booking-popup-abstract",
   eventAction: "viewable - impression",
   actionLabel: null,
-  airlineIataCode: "UL",
+  airlineIataCode: "",
   provider: "SriLankanAirlines",
   journeyType: "ROUND_TRIP",
   originAirportIataCode: "CMB",
@@ -15,7 +15,7 @@ const airModulesDataLayer = {
   totalPrice: null,
   totalPriceUSD: null,
   fareClass: "ECONOMY",
-  departureDate: "2021-03-13",
+  departureDate: "03/13/2021",
   returnDate: "2021-06-14",
   daysUntilFlight: 25,
   tripLength: 93,
@@ -44,7 +44,7 @@ const airModulesDataLayer = {
   ],
   lodging: [
     {
-      cityCode: "SIN",
+      cityCode: "sin",
       name: "Intercontinental",
       startDate: "2021-03-13",
       endDate: "2021-03-20",
@@ -55,14 +55,48 @@ const airModulesDataLayer = {
   ],
 };
 
-let mappedData = Object.keys(airModulesDataLayer).map((key) => ({
-  key,
-  value: airModulesDataLayer[key],
-}));
+// let mappedData = Object.keys(airModulesDataLayer).map((key) => ({
+//   key,
+//   value: airModulesDataLayer[key],
+// }));
+
+// const flattenObject = (obj, prefix = '') =>
+// Object.keys(obj).reduce((acc, k) => {
+//   const pre = prefix.length ? `${prefix}.` : '';
+//   if (
+//     typeof obj[k] === 'object' &&
+//     obj[k] !== null &&
+//     Object.keys(obj[k]).length > 0
+//   )
+//     Object.assign(acc, flattenObject(obj[k], pre + k));
+//   else acc[pre + k] = obj[k];
+//   return acc;
+// }, {});
+
+// function flattenObject(obj) {
+//   var toReturn = {};
+
+//   for (var i in obj) {
+//       if (!obj.hasOwnProperty(i)) continue;
+
+//       if ((typeof obj[i]) == 'object' && obj[i] !== null) {
+//           var flatObject = flattenObject(obj[i]);
+//           for (var x in flatObject) {
+//               if (!flatObject.hasOwnProperty(x)) continue;
+
+//               toReturn[i + '.' + x] = flatObject[x];
+//           }
+//       } else {
+//           toReturn[i] = obj[i];
+//       }
+//   }
+//   return toReturn;
+// }
 
 const formatter = {
-  formatJourney() {
-    var journey = airModulesDataLayer.journeyType;
+  
+  formatJourney(obj) {
+    var journey = obj.journeyType;
     if (journey.match(/(oneway|one-way|one_way|ow|one way)/gi)) {
       return "ONE_WAY";
     } else if (
@@ -76,8 +110,8 @@ const formatter = {
   },
 
   //can only format to capital letters if airline name is separated by spaces
-  formatProvider() {
-    let airlineName = airModulesDataLayer.provider;
+  formatProvider(obj) {
+    let airlineName = obj.provider;
     let finalAirlineName = "";
     airlineName = "sri lankan airlines";
 
@@ -95,25 +129,43 @@ const formatter = {
     }
   },
 
-  formatCaps() {
+  formatCaps(obj) {
     //add countryIsoCode, cityCode
-    let keyArr = ["airlineIataCode", "originAirportIataCode", "destinationAirportIataCode", "currencyCode", "route",];
+    let keyArr = [
+      "airlineIataCode",
+      "originAirportIataCode",
+      "destinationAirportIataCode",
+      "currencyCode",
+      "route",
+    ];
     keyArr.forEach((key) => {
-      airModulesDataLayer[key] = airModulesDataLayer[key].toUpperCase();
+      if(obj[key].length === 0){
+        return 'N/A';
+      }
+      obj[key] = obj[key].toUpperCase();
     });
 
     // return keyArr.length ? keyArr.length : 'N/A';
   },
 
-  formatDate() {
-    let dateArr = ["departureDate", "returnDate"]
-    dateArr.map((key) => {
-      airModulesDataLayer[key]= airModulesDataLayer[key].toISODate();
-    })
+  formatDate(obj) {
+
+    let dateArr = ["departureDate", "returnDate", "timestamp"];
+    dateArr.forEach((key) => {
+      if (key == "departureDate" || key == "returnDate") {
+        obj[key] = new Date(obj[key])
+          .toISOString()
+          .substr(0, 10);
+      } else {
+        obj[key] = new Date(
+          obj[key]
+        ).toISOString();
+      }
+    });
+    return obj;
   },
 };
 
-console.log(formatter.formatCaps());
-console.log(airModulesDataLayer);
-
+console.log(formatter.formatDate(airModulesDataLayer));
+// console.log(flattenObject(airModulesDataLayer));
 export default formatter;
