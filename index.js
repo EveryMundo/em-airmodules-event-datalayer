@@ -1,5 +1,3 @@
-import { DateTime } from "luxon";
-
 const airModulesDataLayer = {
   event: "viewable-impression",
   module: "em-booking-popup-abstract",
@@ -38,15 +36,15 @@ const airModulesDataLayer = {
   page: [
     {
       siteEdition: "en-LK",
-      countryIsoCode: "LK",
+      countryIsoCode: "lk",
       languageIsoCode: "en",
     },
   ],
   lodging: [
     {
       cityCode: "sin",
-      name: "Intercontinental",
-      startDate: "2021-03-13",
+      name: "intercontinental",
+      startDate: "2021/03/13",
       endDate: "2021-03-20",
       roomCount: 2,
       tripLength: 7,
@@ -55,46 +53,8 @@ const airModulesDataLayer = {
   ],
 };
 
-// let mappedData = Object.keys(airModulesDataLayer).map((key) => ({
-//   key,
-//   value: airModulesDataLayer[key],
-// }));
-
-// const flattenObject = (obj, prefix = '') =>
-// Object.keys(obj).reduce((acc, k) => {
-//   const pre = prefix.length ? `${prefix}.` : '';
-//   if (
-//     typeof obj[k] === 'object' &&
-//     obj[k] !== null &&
-//     Object.keys(obj[k]).length > 0
-//   )
-//     Object.assign(acc, flattenObject(obj[k], pre + k));
-//   else acc[pre + k] = obj[k];
-//   return acc;
-// }, {});
-
-// function flattenObject(obj) {
-//   var toReturn = {};
-
-//   for (var i in obj) {
-//       if (!obj.hasOwnProperty(i)) continue;
-
-//       if ((typeof obj[i]) == 'object' && obj[i] !== null) {
-//           var flatObject = flattenObject(obj[i]);
-//           for (var x in flatObject) {
-//               if (!flatObject.hasOwnProperty(x)) continue;
-
-//               toReturn[i + '.' + x] = flatObject[x];
-//           }
-//       } else {
-//           toReturn[i] = obj[i];
-//       }
-//   }
-//   return toReturn;
-// }
-
 const formatter = {
-  
+
   formatJourney(obj) {
     var journey = obj.journeyType;
     if (journey.match(/(oneway|one-way|one_way|ow|one way)/gi)) {
@@ -104,9 +64,23 @@ const formatter = {
     ) {
       return "ROUND_TRIP";
     } else {
-      return "N/A";
+      return "";
     }
     return journey;
+  },
+
+  formatFareClass(obj) {
+    var fareClass = obj.fareClass;
+    if (fareClass.match(/(economy|ec|e)/gi)) {
+      return "ECONOMY";
+    } else if (fareClass.match(/(business|bc|b|businessclass)/gi)) {
+      return "BUSINESS";
+    } else if (fareClass.match(/(first|fc|f|firstclass)/gi)) {
+      return "FIRST";
+    } else {
+      return "";
+    }
+    return fareClass;
   },
 
   //can only format to capital letters if airline name is separated by spaces
@@ -124,48 +98,76 @@ const formatter = {
         });
         return finalAirlineName;
       } else {
-        return "N/A";
+        return "";
       }
     }
   },
 
-  formatCaps(obj) {
-    //add countryIsoCode, cityCode
+
+  formatCase(obj) {
     let keyArr = [
       "airlineIataCode",
       "originAirportIataCode",
       "destinationAirportIataCode",
       "currencyCode",
       "route",
+      "countryIsoCode",
+      "cityCode",
+      "languageIsoCode",
+      "siteEdition",
+      "name", //lodging name gets titlecased.
     ];
+
     keyArr.forEach((key) => {
-      if(obj[key].length === 0){
-        return 'N/A';
-      }
-      obj[key] = obj[key].toUpperCase();
-    });
+      if (key == "countryIsoCode" || key == "cityCode" || key== "languageIsoCode" || key== "siteEdition") {
+        //Lodging casing
+        obj.lodging[0].cityCode = obj.lodging[0].cityCode.toUpperCase();
 
-    // return keyArr.length ? keyArr.length : 'N/A';
-  },
+        //Page casing
+        obj.page[0].countryIsoCode = obj.page[0].countryIsoCode.toUpperCase();
+        obj.page[0].languageIsoCode = obj.page[0].languageIsoCode.toLowerCase();
+        obj.page[0].siteEdition = obj.page[0].languageIsoCode.toLowerCase() + "-" + obj.page[0].countryIsoCode.toUpperCase();
 
-  formatDate(obj) {
-
-    let dateArr = ["departureDate", "returnDate", "timestamp"];
-    dateArr.forEach((key) => {
-      if (key == "departureDate" || key == "returnDate") {
-        obj[key] = new Date(obj[key])
-          .toISOString()
-          .substr(0, 10);
-      } else {
-        obj[key] = new Date(
-          obj[key]
-        ).toISOString();
+      } else if (key == "name") {
+        obj.lodging[0].name =
+          obj.lodging[0].name.charAt(0).toUpperCase() +
+          obj.lodging[0].name.substr(1).toLowerCase();
+       } else {
+        obj[key] = obj[key].toUpperCase();
       }
     });
     return obj;
   },
-};
 
-console.log(formatter.formatDate(airModulesDataLayer));
-// console.log(flattenObject(airModulesDataLayer));
+  formatDate(obj) {
+    let dateArr = [
+      "departureDate",
+      "returnDate",
+      "timestamp",
+      "startDate",
+      "endDate",
+    ];
+    dateArr.forEach((key) => {
+      if (key == "timestamp") {
+        obj[key] = new Date(obj[key]).toISOString();
+      } else if (key == "startDate" || key == "endDate") {
+        obj.lodging[0][key] = new Date(obj.lodging[0][key])
+          .toISOString()
+          .substr(0, 10);
+      } else {
+        obj[key] = new Date(obj[key]).toISOString().substr(0, 10);
+      }
+    });
+    return obj;
+  },
+
+  formatUrl(obj) {
+    var newUrl = obj.url.split(":").join(": ");
+
+    return newUrl;
+  },
+};
+console.log(formatter.formatCase(airModulesDataLayer));
+
+
 export default formatter;
