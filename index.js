@@ -1,6 +1,6 @@
 const airModulesDataLayer = {
   event: "viewable impression",
-  module: "em booking popup abstract",
+  module: "emBookingPopupAbstract",
   eventAction: "viewableimpression",
   actionLabel: null,
   airlineIataCode: "ul",
@@ -10,12 +10,12 @@ const airModulesDataLayer = {
   destinationAirportIataCode: "SIN",
   route: "CMB>SIN",
   currencyCode: "LKR",
-  totalPrice: null,
+  totalPrice: "5",
   totalPriceUSD: null,
   fareClass: "ec",
   departureDate: "03/13/2021",
   returnDate: "2021-06-14",
-  daysUntilFlight: 25,
+  daysUntilFlight: "25", //25
   tripLength: 93,
   isFlexibleDates: null,
   discountCode: null,
@@ -26,7 +26,7 @@ const airModulesDataLayer = {
   passenger: [
     {
       count: 1,
-      adultCount: 1,
+      adultCount: "1",
       youngAdultCount: null,
       childCount: null,
       infantInLapCount: null,
@@ -61,7 +61,9 @@ const formatAll = (obj) => {
     formatProvider(obj),
     formatCase(obj),
     formatDate(obj),
-    formatUrl(obj)
+    formatUrl(obj),
+    replaceNullValues(obj),
+    formatNumbers(obj)
   );
 };
 
@@ -201,6 +203,23 @@ const formatUrl = (obj) => {
   return obj;
 };
 
+//recursively replace Null values
+const replaceNullValues = (obj) => {
+  for (var property in obj) {
+    if (obj.hasOwnProperty(property)) {
+      if (typeof obj[property] == "object") {
+        replaceNullValues(obj[property]);
+        if (obj[property] == null) {
+          obj[property] = "";
+        }
+      } else {
+        // console.log(property + "   " + obj[property]);
+      }
+    }
+  }
+  return obj;
+};
+
 // const formatNumbers = (obj) => {
 //   let numArr = [
 //     "totalPrice",
@@ -218,33 +237,20 @@ const formatUrl = (obj) => {
 //   ];
 
 //   let error = "Value is not a number.";
-
 //   numArr.forEach((key) => {
 //     if (
-//       typeof obj[key] == "string" ||
-//       typeof obj.passenger[0][key] == "string" ||
-//       typeof obj.lodging[0][key] == "string"
+//       !isNaN(obj[key])
+//       // typeof obj.passenger[0][key] === "string" && !isNaN(obj.passenger[0][key]) ||
+//       // typeof obj.lodging[0][key] === "string" && !isNaN(obj.lodging[0][key])
 //     ) {
-//       const parsedKey = parseInt(obj[key]);
-//       const parsedPassenger = parseInt(obj.passenger[0][key]);
-//       const parsedLodging = parseInt(obj.lodging[0][key]);
-//       if (
-//         !isNaN(parsedKey) ||
-//         !isNaN(parsedPassenger) ||
-//         !isNaN(parsedLodging)
-//       ) {
-//         return parsedKey, parsedPassenger, parsedLodging;
+//       obj[key]= parseInt(obj[key]);
+//       // const parsedPassenger = parseInt(obj.passenger[0][key]);
+//       // const parsedLodging = parseInt(obj.lodging[0][key]);
+
+//         // parsedPassenger, parsedLodging;
+// console.log(obj,obj[key])
 //       } else {
 //         throw error;
-//       }
-//     }
-//     if (
-//       !obj[key]||
-//       !obj.passenger[0][key]||
-//       !obj.lodging[0][key]
-//     ) {
-//       return "";
-// 			console.log(obj[key]);
 //     }
 //     return obj;
 //   });
@@ -259,10 +265,12 @@ const formatter = {
   formatCase,
   formatDate,
   formatUrl,
-  // formatNumbers,
+  replaceNullValues,
+  formatNumbers,
 };
 console.log("OUTPUT", formatter.formatAll(airModulesDataLayer));
 
 // console.log(formatNumbers(airModulesDataLayer));
+// console.log(replaceNullValues(airModulesDataLayer));
 
 export default formatter;
