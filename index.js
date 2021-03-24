@@ -317,9 +317,9 @@ const formatter = {
   formatUrl,
   convertValues,
 };
-// console.log("OUTPUT", formatter.formatAll(airModulesDataLayer));
+console.log("OUTPUT", formatter.formatAll(airModulesDataLayer));
 
-console.log(validateObj(airModulesDataLayer));
+// console.log(validateObj(airModulesDataLayer));
 
 
 export default formatter;
