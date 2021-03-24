@@ -61,60 +61,6 @@ const airModulesDataLayer = {
  */
 
 const validateObj = (obj) =>{
-let schema = {
-  event: "",
-  module: "",
-  eventAction: "",
-  actionLabel: "",
-  airlineIataCode: "",
-  provider: "",
-  journeyType: "",
-  originAirportIataCode: "",
-  destinationAirportIataCode: "",
-  route: "",
-  currencyCode: "",
-  totalPrice: "",
-  totalPriceUSD: "",
-  fareClass: "",
-  departureDate: "",
-  returnDate: "",
-  daysUntilFlight: "", 
-  tripLength: "",
-  isFlexibleDates: "",
-  discountCode: "",
-  deeplinkSiteEdition: "",
-  miles: "",
-  timestamp: "",
-  url: "",
-  passenger: [
-    {
-      count: "",
-      adultCount: "",
-      youngAdultCount: "",
-      childCount: "",
-      infantInLapCount: "",
-      infantInSeatCount: "",
-    },
-  ],
-  page: [
-    {
-      siteEdition: "",
-      countryIsoCode: "",
-      languageIsoCode: "",
-    },
-  ],
-  lodging: [
-    {
-      cityCode: "",
-      name: "",
-      startDate: "",
-      endDate: "",
-      roomCount: "",
-      tripLength: "",
-      starRating: "",
-    },
-  ],
-};
   // var errors = Object.keys(schema).filter(function (key) {
   //   return !schema[key](obj[key]);
   // }).map(function (key) {
