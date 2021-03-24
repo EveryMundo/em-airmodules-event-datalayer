@@ -10,7 +10,7 @@ const airModulesDataLayer = {
   destinationAirportIataCode: "SIN",
   route: "CMB>SIN",
   currencyCode: "LKR",
-  totalPrice: "5",
+  totalPrice: "5.21",
   totalPriceUSD: null,
   fareClass: "ec",
   departureDate: "03/13/2021",
@@ -53,6 +53,90 @@ const airModulesDataLayer = {
   ],
 };
 
+
+/**
+ * Validates object to check if it contains the required parameters.
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns the object.
+ */
+
+const validateObj = (obj) =>{
+let schema = {
+  event: "",
+  module: "",
+  eventAction: "",
+  actionLabel: "",
+  airlineIataCode: "",
+  provider: "",
+  journeyType: "",
+  originAirportIataCode: "",
+  destinationAirportIataCode: "",
+  route: "",
+  currencyCode: "",
+  totalPrice: "",
+  totalPriceUSD: "",
+  fareClass: "",
+  departureDate: "",
+  returnDate: "",
+  daysUntilFlight: "", 
+  tripLength: "",
+  isFlexibleDates: "",
+  discountCode: "",
+  deeplinkSiteEdition: "",
+  miles: "",
+  timestamp: "",
+  url: "",
+  passenger: [
+    {
+      count: "",
+      adultCount: "",
+      youngAdultCount: "",
+      childCount: "",
+      infantInLapCount: "",
+      infantInSeatCount: "",
+    },
+  ],
+  page: [
+    {
+      siteEdition: "",
+      countryIsoCode: "",
+      languageIsoCode: "",
+    },
+  ],
+  lodging: [
+    {
+      cityCode: "",
+      name: "",
+      startDate: "",
+      endDate: "",
+      roomCount: "",
+      tripLength: "",
+      starRating: "",
+    },
+  ],
+};
+  // var errors = Object.keys(schema).filter(function (key) {
+  //   return !schema[key](obj[key]);
+  // }).map(function (key) {
+  //   return new Error(key + " is invalid.");
+  // });
+
+  // if (errors.length > 0) {
+  //   errors.forEach(function (error) {
+  //     console.log(error.message);
+  //   });
+  // } else {
+  //   console.log("info is valid");
+  // }
+}
+
+
+/**
+ * Returns fully formatted object.
+ * @param {object} obj - data layer object.
+ * @return {function name(params) { }}} - Returns the formatted object using all format functions
+ */
+
 const formatAll = (obj) => {
   return (
     addParameters(obj),
@@ -62,10 +146,15 @@ const formatAll = (obj) => {
     formatCase(obj),
     formatDate(obj),
     formatUrl(obj),
-    replaceNullValues(obj),
-    formatNumbers(obj)
+    convertValues(obj)
   );
 };
+
+/**
+ * Adds moduleId and tagName parameters if they are not in the given object.
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns the formatted object with the parameters as needed.
+ */
 
 const addParameters = (obj) => {
   if (!obj.hasOwnProperty("moduleId")) {
@@ -76,6 +165,12 @@ const addParameters = (obj) => {
   }
   return obj;
 };
+
+/**
+ * Formats journey type to ONE_WAY or ROUND_TRIP. 
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns formatted journey type.
+ */
 
 const formatJourney = (obj) => {
   if (obj.journeyType.match(/(oneway|one-way|one_way|ow|one way)/gi)) {
@@ -90,6 +185,12 @@ const formatJourney = (obj) => {
   return obj;
 };
 
+/**
+ * Formats fareClass to ECONOMY, BUSINESS, or FIRST. 
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns formatted fare class.
+ */
+
 const formatFareClass = (obj) => {
   if (obj.fareClass.match(/(economy|ec|e)/gi)) {
     obj.fareClass = "ECONOMY";
@@ -103,7 +204,12 @@ const formatFareClass = (obj) => {
   return obj;
 };
 
-//can only format to capital letters if airline name is separated by spaces
+/**
+ * Formats provider. Can only format the provider name if it is separated by spaces.
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns formatted provider name.
+ */
+
 const formatProvider = (obj) => {
   let airlineName = obj.provider;
   let finalAirlineName = "";
@@ -122,11 +228,20 @@ const formatProvider = (obj) => {
   }
 };
 
+/**
+ * Formats casing for different key values.
+ * Events, Module - kebab-case
+ * eventAction - spaced - kebab - case
+ * lodging name - Titlecased
+ * Rest - Capital
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns case-converted object.
+ */
 const formatCase = (obj) => {
   let keyArr = [
-    "event", //kebab case
-    "module", //kebab case
-    "eventAction", //spaced kebab case
+    "event", 
+    "module", 
+    "eventAction", 
     "airlineIataCode",
     "originAirportIataCode",
     "destinationAirportIataCode",
@@ -136,7 +251,7 @@ const formatCase = (obj) => {
     "cityCode",
     "languageIsoCode",
     "siteEdition",
-    "name", //lodging name gets titlecased.
+    "name", 
   ];
 
   keyArr.forEach((key) => {
@@ -174,6 +289,12 @@ const formatCase = (obj) => {
   return obj;
 };
 
+/**
+ * Formats date to ISO format.
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns formatted dates.
+ */
+
 const formatDate = (obj) => {
   let dateArr = [
     "departureDate",
@@ -196,65 +317,48 @@ const formatDate = (obj) => {
   return obj;
 };
 
+/**
+ * Formats url spacing. 
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns url spaced between : and /.
+ */
 const formatUrl = (obj) => {
-  let newUrl = obj.url.split(":").join(": ");
-  obj.url = newUrl;
-
+  obj.url = obj.url.split(":").join(": ");
   return obj;
 };
 
-//recursively replace Null values
-const replaceNullValues = (obj) => {
+/**
+ * Recursive Function.
+ * Replaces null values to empty string.
+ * Converts numeric string values to their number value.
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns formatted object.
+ */
+const convertValues = (obj) => {
   for (var property in obj) {
     if (obj.hasOwnProperty(property)) {
-      if (typeof obj[property] == "object") {
-        replaceNullValues(obj[property]);
+      if (typeof obj[property] === "object") {
+        convertValues(obj[property]);
         if (obj[property] == null) {
           obj[property] = "";
         }
       } else {
-        // console.log(property + "   " + obj[property]);
+        if (
+          typeof obj[property] === "string" &&
+          // !Number.isNaN(+obj[property])
+          !isNaN(obj[property]) &&
+          !isNaN(parseFloat(obj[property]))
+        ) {
+          obj[property] = +obj[property];
+        }
       }
+      // console.log(property + "   " + obj[property]);
     }
   }
   return obj;
 };
 
-// const formatNumbers = (obj) => {
-//   let numArr = [
-//     "totalPrice",
-//     "totalPriceUSD",
-//     "daysUntilFlight",
-//     "miles",
-//     "count",
-//     "adultCount",
-//     "youngAdultCount",
-//     "childCount",
-//     "infantInLapCount",
-//     "infantInSeatCount",
-//     "roomCount",
-//     "starRating",
-//   ];
 
-//   let error = "Value is not a number.";
-//   numArr.forEach((key) => {
-//     if (
-//       !isNaN(obj[key])
-//       // typeof obj.passenger[0][key] === "string" && !isNaN(obj.passenger[0][key]) ||
-//       // typeof obj.lodging[0][key] === "string" && !isNaN(obj.lodging[0][key])
-//     ) {
-//       obj[key]= parseInt(obj[key]);
-//       // const parsedPassenger = parseInt(obj.passenger[0][key]);
-//       // const parsedLodging = parseInt(obj.lodging[0][key]);
-
-//         // parsedPassenger, parsedLodging;
-// console.log(obj,obj[key])
-//       } else {
-//         throw error;
-//     }
-//     return obj;
-//   });
-// };
 
 const formatter = {
   formatAll,
@@ -265,12 +369,11 @@ const formatter = {
   formatCase,
   formatDate,
   formatUrl,
-  replaceNullValues,
-  formatNumbers,
+  convertValues,
 };
-console.log("OUTPUT", formatter.formatAll(airModulesDataLayer));
+// console.log("OUTPUT", formatter.formatAll(airModulesDataLayer));
 
-// console.log(formatNumbers(airModulesDataLayer));
-// console.log(replaceNullValues(airModulesDataLayer));
+console.log(validateObj(airModulesDataLayer));
+
 
 export default formatter;
