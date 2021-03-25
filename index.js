@@ -316,11 +316,11 @@ const convertValues = (obj) => {
  * Pushes formatted object to datalayer
  * @param  {object} obj - formatted object
  */
- const pushFormattedAirModulesData = (obj) => {
-  if(window && window.dataLayer){
-      window.dataLayer.push(obj);
-    }
+const pushFormattedAirModulesData = (obj) => {
+  if (window && window.dataLayer) {
+    window.dataLayer.push(obj);
   }
+};
 
 const formatter = { formatAll };
 
