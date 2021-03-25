@@ -1,14 +1,14 @@
 const airModulesDataLayer = {
   event: "viewable impression",
   module: "emBookingPopupAbstract",
-  eventAction: "viewableimpression",
+  eventAction: "viewable - impression",
   actionLabel: null,
   airlineIataCode: "ul",
   provider: "sri lankan airlines",
   journeyType: "ow",
   originAirportIataCode: "CMB",
   destinationAirportIataCode: "SIN",
-  route: "CMB>SIN",
+  route: "cmb>sin",
   currencyCode: "LKR",
   totalPrice: "5.21",
   totalPriceUSD: null,
@@ -21,7 +21,7 @@ const airModulesDataLayer = {
   discountCode: null,
   deeplinkSiteEdition: null,
   miles: null,
-  timestamp: "2021-02-16T17:41:43.200Z",
+  timestamp: "2021-02-16",
   url: "https://www.srilankan.com/en-lk/",
   passenger: [
     {
@@ -52,31 +52,6 @@ const airModulesDataLayer = {
     },
   ],
 };
-
-
-/**
- * Validates object to check if it contains the required parameters.
- * @param {object} obj - data layer object.
- * @return {object} - Returns the object.
- */
-
-const validateObj = (obj) =>{
-  // var errors = Object.keys(schema).filter(function (key) {
-  //   return !schema[key](obj[key]);
-  // }).map(function (key) {
-  //   return new Error(key + " is invalid.");
-  // });
-
-  // if (errors.length > 0) {
-  //   errors.forEach(function (error) {
-  //     console.log(error.message);
-  //   });
-  // } else {
-  //   console.log("info is valid");
-  // }
-}
-
-
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -84,16 +59,25 @@ const validateObj = (obj) =>{
  */
 
 const formatAll = (obj) => {
-  return (
-    addParameters(obj),
-    formatJourney(obj),
-    formatFareClass(obj),
-    formatProvider(obj),
-    formatCase(obj),
-    formatDate(obj),
-    formatUrl(obj),
-    convertValues(obj)
-  );
+  if (
+    obj.hasOwnProperty("module") &&
+    obj.module != "" &&
+    obj.hasOwnProperty("eventAction") &&
+    obj.eventAction != ""
+  ) {
+    return (
+      addParameters(obj),
+      formatJourney(obj),
+      formatFareClass(obj),
+      formatProvider(obj),
+      formatCase(obj),
+      formatDate(obj),
+      formatUrl(obj),
+      convertValues(obj),
+      pushFormattedAirModulesData(obj)
+    );
+  }
+  return "Module name or eventAction missing.";
 };
 
 /**
@@ -113,39 +97,43 @@ const addParameters = (obj) => {
 };
 
 /**
- * Formats journey type to ONE_WAY or ROUND_TRIP. 
+ * Formats journey type to ONE_WAY or ROUND_TRIP.
  * @param {object} obj - data layer object.
  * @return {object} - Returns formatted journey type.
  */
 
 const formatJourney = (obj) => {
-  if (obj.journeyType.match(/(oneway|one-way|one_way|ow|one way)/gi)) {
-    obj.journeyType = "ONE_WAY";
-  } else if (
-    obj.journeyType.match(/(roundtrip|round-trip|round_trip|rt|round trip)/gi)
-  ) {
-    obj.journeyType = "ROUND_TRIP";
-  } else {
-    return (obj.journeyType = "");
+  if (obj.hasOwnProperty("journeyType")) {
+    if (obj.journeyType.match(/(oneway|one-way|one_way|ow|one way)/gi)) {
+      obj.journeyType = "ONE_WAY";
+    } else if (
+      obj.journeyType.match(/(roundtrip|round-trip|round_trip|rt|round trip)/gi)
+    ) {
+      obj.journeyType = "ROUND_TRIP";
+    } else {
+      return (obj.journeyType = "");
+    }
   }
   return obj;
 };
 
 /**
- * Formats fareClass to ECONOMY, BUSINESS, or FIRST. 
+ * Formats fareClass to ECONOMY, BUSINESS, or FIRST.
  * @param {object} obj - data layer object.
  * @return {object} - Returns formatted fare class.
  */
 
 const formatFareClass = (obj) => {
-  if (obj.fareClass.match(/(economy|ec|e)/gi)) {
-    obj.fareClass = "ECONOMY";
-  } else if (obj.fareClass.match(/(business|bc|b|businessclass)/gi)) {
-    obj.fareClass = "BUSINESS";
-  } else if (obj.fareClass.match(/(first|fc|f|firstclass)/gi)) {
-    obj.fareClass = "FIRST";
-  } else {
-    obj.fareClass = "";
+  if (obj.hasOwnProperty("fareClass")) {
+    if (obj.fareClass.match(/(economy|ec|e)/gi)) {
+      obj.fareClass = "ECONOMY";
+    } else if (obj.fareClass.match(/(business|bc|b|businessclass)/gi)) {
+      obj.fareClass = "BUSINESS";
+    } else if (obj.fareClass.match(/(first|fc|f|firstclass)/gi)) {
+      obj.fareClass = "FIRST";
+    } else {
+      obj.fareClass = "";
+    }
   }
   return obj;
 };
@@ -157,19 +145,21 @@ const formatFareClass = (obj) => {
  */
 
 const formatProvider = (obj) => {
-  let airlineName = obj.provider;
-  let finalAirlineName = "";
+  if (obj.hasOwnProperty("provider")) {
+    let airlineName = obj.provider;
+    let finalAirlineName = "";
 
-  if (airlineName.match(/[a-zA-Z0-9]+/g)) {
-    const airlineArray = airlineName ? airlineName.split(" ") : [];
-    if (airlineArray && airlineArray.length > 0) {
-      airlineArray.forEach((key) => {
-        finalAirlineName +=
-          key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
-      });
-      return (obj.provider = finalAirlineName);
-    } else {
-      return "";
+    if (airlineName.match(/[a-zA-Z0-9]+/g)) {
+      const airlineArray = airlineName ? airlineName.split(" ") : [];
+      if (airlineArray && airlineArray.length > 0) {
+        airlineArray.forEach((key) => {
+          finalAirlineName +=
+            key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
+        });
+        return (obj.provider = finalAirlineName);
+      } else {
+        return "";
+      }
     }
   }
 };
@@ -185,9 +175,9 @@ const formatProvider = (obj) => {
  */
 const formatCase = (obj) => {
   let keyArr = [
-    "event", 
-    "module", 
-    "eventAction", 
+    "event",
+    "module",
+    "eventAction",
     "airlineIataCode",
     "originAirportIataCode",
     "destinationAirportIataCode",
@@ -197,39 +187,49 @@ const formatCase = (obj) => {
     "cityCode",
     "languageIsoCode",
     "siteEdition",
-    "name", 
+    "name",
   ];
 
   keyArr.forEach((key) => {
-    if (key == "event" || key == "module") {
-      obj[key] = obj[key]
-        .replace(/([a-z])([A-Z])/g, "$1-$2")
-        .replace(/[\s_]+/g, "-")
-        .toLowerCase();
-    } else if (key == "eventAction") {
-      obj.eventAction = obj.event.split("-").join(" - ");
-    } else if (
-      key == "countryIsoCode" ||
-      key == "cityCode" ||
-      key == "languageIsoCode" ||
-      key == "siteEdition"
-    ) {
-      //Lodging casing
-      obj.lodging[0].cityCode = obj.lodging[0].cityCode.toUpperCase();
-
-      //Page casing
-      obj.page[0].countryIsoCode = obj.page[0].countryIsoCode.toUpperCase();
-      obj.page[0].languageIsoCode = obj.page[0].languageIsoCode.toLowerCase();
-      obj.page[0].siteEdition =
-        obj.page[0].languageIsoCode.toLowerCase() +
-        "-" +
-        obj.page[0].countryIsoCode.toUpperCase();
-    } else if (key == "name") {
-      obj.lodging[0].name =
-        obj.lodging[0].name.charAt(0).toUpperCase() +
-        obj.lodging[0].name.substr(1).toLowerCase();
-    } else {
-      obj[key] = obj[key].toUpperCase();
+    if (obj.hasOwnProperty(key)) {
+      if (key === "event" || key === "module") {
+        obj[key] = obj[key]
+          .replace(/([a-z])([A-Z])/g, "$1-$2")
+          .replace(/[\s_]+/g, "-")
+          .toLowerCase();
+      } else if (key === "eventAction") {
+        obj.eventAction =
+          obj.hasOwnProperty("event") && obj.event != ""
+            ? obj.event.split("-").join(" - ")
+            : obj.eventAction;
+      } else {
+        obj[key] = obj[key].toUpperCase();
+      }
+    } else if (obj.page !== undefined) {
+      if (
+        obj.page[0].hasOwnProperty(key) &&
+        (key === "languageIsoCode" ||
+          key === "siteEdition" ||
+          key === "countryIsoCode")
+      ) {
+        obj.page[0].countryIsoCode =
+          obj.page[0].countryIsoCode?.toUpperCase() ?? "";
+        obj.page[0].languageIsoCode =
+          obj.page[0].languageIsoCode?.toLowerCase() ?? "";
+        obj.page[0].siteEdition =
+          obj.page[0].languageIsoCode?.toLowerCase() +
+            "-" +
+            obj.page[0].countryIsoCode?.toUpperCase() ?? "";
+      }
+    } else if (obj.lodging !== undefined) {
+      if (obj.lodging[0].hasOwnProperty(key) && key == "cityCode") {
+        obj.lodging[0].cityCode = obj.lodging[0].cityCode?.toUpperCase() ?? "";
+      }
+      if (obj.lodging[0].hasOwnProperty(key) && key === "name") {
+        obj.lodging[0].name =
+          obj.lodging[0].name?.charAt(0).toUpperCase() +
+            obj.lodging[0].name?.substr(1).toLowerCase() ?? "";
+      }
     }
   });
   return obj;
@@ -250,26 +250,36 @@ const formatDate = (obj) => {
     "endDate",
   ];
   dateArr.forEach((key) => {
-    if (key == "timestamp") {
-      obj[key] = new Date(obj[key]).toISOString();
-    } else if (key == "startDate" || key == "endDate") {
-      obj.lodging[0][key] = new Date(obj.lodging[0][key])
-        .toISOString()
-        .substr(0, 10);
-    } else {
-      obj[key] = new Date(obj[key]).toISOString().substr(0, 10);
+    if (obj.hasOwnProperty(key)) {
+      if (key === "timestamp") {
+        obj[key] = new Date(obj[key]).toISOString();
+      } else {
+        obj[key] = new Date(obj[key]).toISOString().substr(0, 10);
+      }
+    }
+    if (obj.lodging !== undefined) {
+      if (
+        obj.lodging[0].hasOwnProperty(key) &&
+        (key === "startDate" || key === "endDate")
+      ) {
+        obj.lodging[0][key] = new Date(obj.lodging[0][key])
+          .toISOString()
+          .substr(0, 10);
+      }
     }
   });
   return obj;
 };
 
 /**
- * Formats url spacing. 
+ * Formats url spacing.
  * @param {object} obj - data layer object.
  * @return {object} - Returns url spaced between : and /.
  */
 const formatUrl = (obj) => {
-  obj.url = obj.url.split(":").join(": ");
+  if (obj.hasOwnProperty("url")) {
+    obj.url = obj.url.split(":").join(": ");
+  }
   return obj;
 };
 
@@ -291,35 +301,29 @@ const convertValues = (obj) => {
       } else {
         if (
           typeof obj[property] === "string" &&
-          // !Number.isNaN(+obj[property])
           !isNaN(obj[property]) &&
           !isNaN(parseFloat(obj[property]))
         ) {
           obj[property] = +obj[property];
         }
       }
-      // console.log(property + "   " + obj[property]);
     }
   }
   return obj;
 };
 
+/**
+ * Pushes formatted object to datalayer
+ * @param  {object} obj - formatted object
+ */
+ const pushFormattedAirModulesData = (obj) => {
+  if(window && window.dataLayer){
+      window.dataLayer.push(obj);
+    }
+  }
 
+const formatter = { formatAll };
 
-const formatter = {
-  formatAll,
-  addParameters,
-  formatJourney,
-  formatFareClass,
-  formatProvider,
-  formatCase,
-  formatDate,
-  formatUrl,
-  convertValues,
-};
 console.log("OUTPUT", formatter.formatAll(airModulesDataLayer));
 
-// console.log(validateObj(airModulesDataLayer));
-
-
-export default formatter;
+module.exports = formatter;
