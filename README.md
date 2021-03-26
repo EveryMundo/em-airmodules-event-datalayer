@@ -51,7 +51,7 @@ import { formatter } from "airmodules-event-datalayer";
 <summary>Create an object</summary>
 
 ```js
-<p>
+
   const airModulesDataLayer = {
   event: "viewable impression",
   module: "emBookingPopupAbstract",
@@ -107,7 +107,6 @@ import { formatter } from "airmodules-event-datalayer";
   ],
 };
 
-</p>
 ```
 </details>
 
