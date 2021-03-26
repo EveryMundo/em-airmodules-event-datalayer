@@ -1,16 +1,33 @@
 {
-  "name": "airmodules-event-datalayer",
+  "name": "@everymundo/airmodules-event-datalayer",
   "version": "1.0.0",
   "description": "Package for airmodules",
   "main": "index.js",
-
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "babel src --watch -d dist",
+    "build": "babel src -d dist",
+    "babel": "./node_modules/.bin/babel"
   },
   "keywords": [
     "everymundo"
   ],
   "author": "Kayling <kayling@everymundo.com>",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/node": "^7.13.12",
+    "@babel/preset-env": "^7.13.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EveryMundo/em-airmodules-event-datalayer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EveryMundo/em-airmodules-event-datalayer/issues"
+  },
+  "homepage": "https://github.com/EveryMundo/em-airmodules-event-datalayer#readme"
 }

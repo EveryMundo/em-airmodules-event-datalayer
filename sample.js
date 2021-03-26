@@ -1,4 +1,5 @@
-const formatter = require("./index.js");
+import formatter from "./src/index.js";
+
 const airModulesDataLayer = {
   event: "viewable impression",
   module: "emBookingPopupAbstract",
