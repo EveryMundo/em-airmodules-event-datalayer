@@ -12,7 +12,7 @@
 
 ---
 
-<p align="center"> airmodules-event-datalayer is a package used for formatting datalayer object values. This package uses <b>optional chaining</b>, which may require appropriate configuration.
+<p align="center"> airmodules-event-datalayer is a package used for formatting datalayer object values. 
     <br> 
 </p>
 
@@ -32,13 +32,13 @@ npm package which exports a formatting function based on the airModules dataLaye
 Use [npm](https://www.npmjs.com/) to install airmodules-event-datalayer.
 
 ```bash
-npm install airmodules-event-datalayer
+npm install @everymundo/airmodules-event-datalayer
 ```
 
 ### Usage
 
 ```js
-import { formatter } from "airmodules-event-datalayer";
+import { formatter } from "@everymundo/airmodules-event-datalayer";
 ```
 
 ---
