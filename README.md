@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="https://www.everymundo.com/wp-content/uploads/2018/08/Everymundo_Logo_NO-BACKGROUND-1-e1533159346674.png" alt="EM Logo"></a>
+ <img src="https://www.everymundo.com/wp-content/uploads/2018/08/Everymundo_Logo_NO-BACKGROUND-1-e1533159346674.png" alt="EM Logo"></a>
 </p>
 
 <h3 align="center">airmodules-event-datalayer</h3>
@@ -25,7 +25,6 @@
 - [Usage](#usage)
 - [Built Using](#built_using)
 
-
 ## 🧐 About <a name = "about"></a>
 
 npm package which exports a formatting function based on the airModules dataLayer to be used by FC.
@@ -33,25 +32,27 @@ npm package which exports a formatting function based on the airModules dataLaye
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
 Use [npm](https://www.npmjs.com/) to install airmodules-event-datalayer.
+
 ```bash
 npm install airmodules-event-datalayer
 ```
 
-
 ### Usage
 
 ```js
-import { formatter } from "airmodules-event-datalayer"
+import { formatter } from "airmodules-event-datalayer";
 ```
+
 ---
 
 #### Sample usage can be found in sample.js
 
-<details><summary>Create an object</summary>
+<details>
+<summary>Create an object</summary>
 
-<p>
 ```js
- const airModulesDataLayer = {
+<p>
+  const airModulesDataLayer = {
   event: "viewable impression",
   module: "emBookingPopupAbstract",
   eventAction: "viewable - impression",
@@ -105,14 +106,17 @@ import { formatter } from "airmodules-event-datalayer"
     },
   ],
 };
-```
+
 </p>
+```
 </details>
 
 Function call:
 
 ```js
-{formatter.formatAll(airModulesDataLayer)}
+{
+  formatter.formatAll(airModulesDataLayer);
+}
 ```
 
 ## ⛏️ Built Using <a name = "built_using"></a>
