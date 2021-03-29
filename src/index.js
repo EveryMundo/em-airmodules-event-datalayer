@@ -19,8 +19,8 @@ const formatAll = (obj) => {
       formatCase(obj),
       formatDate(obj),
       formatUrl(obj),
-      convertValues(obj)
-      // pushFormattedAirModulesData(obj)
+      convertValues(obj),
+      pushFormattedAirModulesData(obj)
     );
   }
   return "Module name or eventAction missing.";

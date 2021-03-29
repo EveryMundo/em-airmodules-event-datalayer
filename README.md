@@ -115,6 +115,88 @@ Function call:
   formatter.formatAll(airModulesDataLayer);
 }
 ```
+#### formatAll function:
+-Checks whether the incoming object includes "module" and "eventAction"
+-Returns all formatting functions, including: addParameters(), formatCase(), etc.
+
+#### addParameters function:
+-Adds moduleId/tagName if they are not in the given object.
+
+#### formatJourney function:
+-Formats journey field.
+  -  oneway, one-way, ow, one way, one_way -> ONE_WAY
+  -  roundtrip, round-trip, round_trip, rt, round trip -> ROUND_TRIP
+
+#### formatFareClass function:
+-Formats fareClass to ECONOMY, BUSINESS or FIRST.
+  - ec, economy, e -> ECONOMY
+  - business, bc, b, businessclass -> BUSINESS
+  - first, fc, f, firstclass -> FIRST
+
+#### formatProvider function:
+-Formats provider. <b>Provider name can only be formatted if it is separated by spaces. </b>
+  - "sri lankan airlines" -> SriLankanAirlines
+
+#### formatCase function:
+-Formats casing for different key values.
+  - events, module -> kebab-case
+  - eventAction -> spaced - kebab - case. (formatted from "event")
+  - lodging name - Titlecased
+  - ... - Capital
+-In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key.
+  - i.e: 
+  ```json
+  {
+    "countryIsoCode": ""
+  }
+  ```
+
+#### formatDate function:
+-Formats dates to ISO format.
+  - Input Example:
+```JSON
+{
+   "departureDate": "03/13/2021"
+}
+
+```
+  - Output:
+```JSON
+{
+   "departureDate": "2021-03-13"
+}
+```
+#### formatUrl function:
+-Formats URL spacing.
+  - Returns the url spaced between : and /.
+  - Input Example:
+```JSON
+{
+"url": "https://www.srilankan.com/en-lk/"
+}
+```
+  - Output:
+```JSON
+{
+"url": "https: //www.srilankan.com/en-lk/"
+}
+```  
+#### convertValues function:
+-Replaces null values to empty string and converts numeric <b> string </b> values to their respective number values.
+  - Input Example:
+```JSON
+{
+"totalPrice": "25",
+"totalPriceUSD": null,
+}
+```  
+  - Output:
+```JSON
+{
+"totalPrice": 25,
+"totalPriceUSD": "",
+}
+```  
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
