@@ -1,9 +1,9 @@
 import formatter from "./src/index.js";
 
 const airModulesDataLayer = {
-  event: "viewable impression",
-  module: "emBookingPopupAbstract",
-  eventAction: "viewable - impression",
+  event: "search",
+  module: "emBookingAbstract",
+  eventAction: "fsi",
   actionLabel: null,
   airlineIataCode: "ul",
   provider: "sri lankan airlines",
@@ -39,7 +39,7 @@ const airModulesDataLayer = {
     {
       siteEdition: "en-LK",
       countryIsoCode: "lk",
-      languageIsoCode: "en",
+      languageIsoCode: "EN",
     },
   ],
   lodging: [
@@ -49,7 +49,7 @@ const airModulesDataLayer = {
       startDate: "2021/03/13",
       endDate: "2021-03-20",
       roomCount: 2,
-      tripLength: 7,
+      tripLength: "7",
       starRating: 5,
     },
   ],

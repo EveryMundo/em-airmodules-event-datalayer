@@ -112,14 +112,14 @@ const formatProvider = (obj) => {
 
 /**
  * Formats casing for different key values.
- * Events, Module - kebab-case
- * eventAction - spaced - kebab - case
+ * Events, Module, eventAction - kebab-case
  * lodging name - Titlecased
  * Rest - Capital
  * @param {object} obj - data layer object.
  * @return {object} - Returns case-converted object.
  */
 const formatCase = (obj) => {
+  
   let keyArr = [
     "event",
     "module",
@@ -136,6 +136,44 @@ const formatCase = (obj) => {
     "name",
   ];
 
+  let listOfEvents = [
+    "viewable-impression", 
+    "fsi", 
+    "change-origin", 
+    "change-destination", 
+    "change-departure-date", 
+    "change-return-date", 
+    "change-journey-type", 
+    "change-miles", 
+    "expand-form", 
+    "collapse-form", 
+    "sort", 
+    "more-deals", 
+    "open-booking-popup", 
+    "select-tab", 
+    "filter-airlines", 
+    "change-budget", 
+    "change-fare-class", 
+    "collapse-histogram", 
+    "select-month", 
+    "expand-flight", 
+    "reset-filter", 
+    "toggle-farelist", 
+    "expand-map", 
+    "select-map-destination", 
+    "selected-travel-interest", 
+    "zoom", 
+    "select-interest", 
+    "click-out", 
+    "read-article", 
+    "change-month", 
+    "select-location", 
+    "change-location" , 
+    "search", 
+    "change-status",
+  "flight"]
+
+
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
       if (key === "event" || key === "module") {
@@ -143,15 +181,21 @@ const formatCase = (obj) => {
           .replace(/([a-z])([A-Z])/g, "$1-$2")
           .replace(/[\s_]+/g, "-")
           .toLowerCase();
+          
+          const found = listOfEvents.includes(obj["event"])
+          
+          if(!found && key === "event"){
+            obj["event"] = "Event value does not exist"
+            console.log("Error: Please check event value")
+          }
       } else if (key === "eventAction") {
         obj.eventAction =
           obj.hasOwnProperty("event") && obj.event != ""
-            ? obj.event.split("-").join(" - ")
-            : obj.eventAction;
+            ? obj.event : obj.eventAction;
       } else {
         obj[key] = obj[key].toUpperCase();
-      }
-    } else if (obj.page !== undefined) {
+      }}
+     if (obj.page !== undefined) {
       if (
         obj.page[0].hasOwnProperty(key) &&
         (key === "languageIsoCode" ||
@@ -167,7 +211,8 @@ const formatCase = (obj) => {
             "-" +
             obj.page[0].countryIsoCode?.toUpperCase() ?? "";
       }
-    } else if (obj.lodging !== undefined) {
+    }if (obj.lodging !== undefined) {
+
       if (obj.lodging[0].hasOwnProperty(key) && key == "cityCode") {
         obj.lodging[0].cityCode = obj.lodging[0].cityCode?.toUpperCase() ?? "";
       }
@@ -176,8 +221,7 @@ const formatCase = (obj) => {
           obj.lodging[0].name?.charAt(0).toUpperCase() +
             obj.lodging[0].name?.substr(1).toLowerCase() ?? "";
       }
-    }
-  });
+  }});
   return obj;
 };
 

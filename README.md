@@ -19,6 +19,7 @@
 ## 📝 Table of Contents
 
 - [About](#about)
+- [Notes](#notes)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
 - [Built Using](#built_using)
@@ -26,6 +27,49 @@
 ## 🧐 About <a name = "about"></a>
 
 npm package which exports a formatting function based on the airModules dataLayer to be used by FC.
+
+## 📓  Notes <a name = "notes"></a>
+* The event object should follow the [emDataStandards](https://github.com/EveryMundo/emDataStandards)
+* The event object should contain as many parameters as possible. 
+* The event parameter is required and takes in specific values. Please ensure that the passed value belongs to this list:
+<details>
+<summary>Expand me to view list</summary>
+
+- viewable-impression
+- fsi
+- change-origin
+- change-destination
+- change-departure-date
+- change-return-date
+- change-journey-type
+- change-miles
+- expand-form
+- collapse-form
+- sort
+- more-deals 
+- open-booking-popup
+- select-tab
+- filter-airlines
+- change-budget
+- change-fare-class
+- collapse-histogram
+- select-month
+- expand-flight
+- reset-filter
+- toggle-farelist
+- expand-map
+- select-map-destination
+- selected-travel-interest
+- zoom
+- select-interest
+- click-out
+- read-article
+- change-month
+- select-location
+- change-location
+- search
+- change-status
+</details>
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -50,7 +94,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 
 ```js
 
-  const airModulesDataLayer = {
+  const eventObject = {
   event: "viewable impression",
   module: "emBookingPopupAbstract",
   eventAction: "viewable - impression",
@@ -112,7 +156,7 @@ Function call:
 
 ```js
 {
-  formatter.formatAll(airModulesDataLayer);
+  formatter.formatAll(eventObject);
 }
 ```
 #### formatAll function:
@@ -140,10 +184,12 @@ Function call:
 #### formatCase function:
 -Formats casing for different key values.
   - events, module -> kebab-case
-  - eventAction -> spaced - kebab - case. (formatted from "event")
+  - eventAction -> kebab-case (formatted from "event")
   - lodging name - Titlecased
   - ... - Capital
--In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key.
+
+- Events and modules can only be formatted if it is either <b>separated by spaces or is camelCased.</b>
+- In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key.
   - i.e: 
   ```json
   {
