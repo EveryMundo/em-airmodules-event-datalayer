@@ -71,11 +71,11 @@ const formatJourney = (obj) => {
 
 const formatFareClass = (obj) => {
   if (obj.hasOwnProperty("fareClass")) {
-    if (obj.fareClass.match(/(economy|ec|e)/gi)) {
+    if (obj.fareClass.match(/(economy|ec|^e$)/gi)) {
       obj.fareClass = "ECONOMY";
-    } else if (obj.fareClass.match(/(business|bc|b|businessclass)/gi)) {
+    } else if (obj.fareClass.match(/(business|bc|^b$|businessclass)/gi)) {
       obj.fareClass = "BUSINESS";
-    } else if (obj.fareClass.match(/(first|fc|f|firstclass)/gi)) {
+    } else if (obj.fareClass.match(/(first|fc|^f$|firstclass)/gi)) {
       obj.fareClass = "FIRST";
     } else {
       obj.fareClass = "";
@@ -312,5 +312,5 @@ const pushFormattedAirModulesData = (obj) => {
   }
 };
 
-const formatter = { formatAll };
+const formatter = { formatAll, addParameters, formatJourney, formatFareClass, formatProvider, formatCase, formatDate, formatUrl, convertValues };
 module.exports = formatter;
