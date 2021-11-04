@@ -171,7 +171,14 @@ const formatCase = (obj) => {
     "change-location" , 
     "search", 
     "change-status",
-  "flight"]
+  "flight",
+"search-initiation",
+"select-location",
+"select-date",
+"select-experience",
+"change-budget",
+"reset-filter",
+"sort"]
 
 
   keyArr.forEach((key) => {
@@ -312,5 +319,5 @@ const pushFormattedAirModulesData = (obj) => {
   }
 };
 
-const formatter = { formatAll, addParameters, formatJourney, formatFareClass, formatProvider, formatCase, formatDate, formatUrl, convertValues };
+const formatter = { formatAll };
 module.exports = formatter;
