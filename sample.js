@@ -1,57 +1,96 @@
 import formatter from "./src/index.js";
 
-const airModulesDataLayer = {
-  event: "search",
-  module: "emBookingAbstract",
-  eventAction: "fsi",
-  actionLabel: null,
-  airlineIataCode: "ul",
-  provider: "sri lankan airlines",
-  journeyType: "ow",
-  originAirportIataCode: "CMB",
-  destinationAirportIataCode: "SIN",
-  route: "cmb>sin",
-  currencyCode: "LKR",
-  totalPrice: "5.21",
-  totalPriceUSD: null,
+const eventObject = {
+  event: "change budget",
+  module: "Em farelist featured destination",
+  eventAction: "budget",
+  actionLabel: "test",
+  airlineIataCode: "TX",
+  provider: "AirlineTRFX",
+  journeyType: "round trip",
+  originAirportIataCode: "MIA",
+  destinationAirportIataCode: "FLL",
+  route: "mia>FLL",
+  currencyCode: "USD",
+  totalPrice: "40",
+  totalPriceUSD: 40,
   fareClass: "ec",
-  departureDate: "03/13/2021",
-  returnDate: "2021-06-14",
-  daysUntilFlight: "25", //25
-  tripLength: 93,
+  departureDate: "03-13-2021",
+  returnDate: "2021/06/14",
+  daysUntilFlight: 21,
+  tripLength: "7",
   isFlexibleDates: null,
   discountCode: null,
   deeplinkSiteEdition: null,
-  miles: null,
-  timestamp: "2021-02-16",
-  url: "https://www.srilankan.com/en-lk/",
+  miles: "500",
+  timestamp: "04 November 2021 5:13 EST",
+  url: "https://www.testurl.com/",
   passenger: [
     {
-      count: 1,
-      adultCount: "1",
-      youngAdultCount: null,
-      childCount: null,
+      count: 2,
+      adultCount: 2,
+      youngAdultCount: "1",
+      childCount:"0",
       infantInLapCount: null,
       infantInSeatCount: null,
     },
   ],
   page: [
     {
-      siteEdition: "en-LK",
+      siteEdition: "enUs",
       countryIsoCode: "lk",
       languageIsoCode: "EN",
     },
   ],
   lodging: [
     {
-      cityCode: "sin",
-      name: "intercontinental",
+      cityCode: "FLL",
+      name: "Test lodging",
       startDate: "2021/03/13",
       endDate: "2021-03-20",
       roomCount: 2,
       tripLength: "7",
-      starRating: 5,
+      starRating: "5",
     },
   ],
 };
-formatter.formatAll(airModulesDataLayer);
+
+const hotelEventObject = {
+event: 'viewable-impression',
+module: 'em-booking-popup-abstract',
+eventAction: 'viewable-impression',
+actionLabel: null,
+tenantCode: 'UL',
+provider: 'hyat',
+regionName: 'north america',
+countryCode: 'US',
+cityName: 'miami',
+propertyCode: 'hyatt9015479',
+propertyName: 'hyatt miami',
+currencyCode: 'USD',
+totalPrice: 900.50,
+totalPriceUSD: '900.50',
+startDate: '2022-04-01',
+startDate: '2022-04-07',
+daysUntilBooking: 25,
+tripLength: 4,
+roomAvailability: 'true',
+timestamp: '2021-02-16T17:41:43.200Z',
+url: 'https: //www.hyatt.com/en/miami',
+passenger: [{
+    count: 1,
+    adultCount: 1,
+    youngAdultCount: null,
+    childCount: null,
+    infantInLapCount: null,
+    infantInSeatCount: null
+}],
+page: [{
+    siteEdition: 'en-LK',
+    countryIsoCode: 'LK',
+    languageIsoCode: 'en'
+}]
+}
+
+console.log("OUTPUT FOR HOTEL OBJECT", formatter.formatHotels(hotelEventObject));
+formatter.formatHotels(hotelEventObject);

@@ -4,7 +4,7 @@
  * @return {function name(params) { }}} - Returns the formatted object using all format functions
  */
 
-const formatAll = (obj) => {
+const formatAirlines = (obj) => {
   if (
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -13,18 +13,37 @@ const formatAll = (obj) => {
   ) {
     return (
       addParameters(obj),
+      convertValues(obj),
       formatJourney(obj),
       formatFareClass(obj),
       formatProvider(obj),
       formatCase(obj),
       formatDate(obj),
       formatUrl(obj),
-      convertValues(obj),
-      pushFormattedAirModulesData(obj)
+      pushFormattedEventData(obj)
     );
   }
   return "Module name or eventAction missing.";
 };
+
+const formatHotels = (obj) => {
+  if (
+    obj.hasOwnProperty("module") &&
+    obj.module != "" &&
+    obj.hasOwnProperty("eventAction") &&
+    obj.eventAction != ""
+  ) {
+    return (
+      convertValues(obj),
+      formatProvider(obj),
+      formatCase(obj),
+      formatDate(obj),
+      formatUrl(obj),
+      pushFormattedEventData(obj)
+    );
+  }
+  return "Module name or eventAction missing.";
+}
 
 /**
  * Adds moduleId and tagName parameters if they are not in the given object.
@@ -134,6 +153,14 @@ const formatCase = (obj) => {
     "languageIsoCode",
     "siteEdition",
     "name",
+    //Hotel values
+    "tenantCode",
+    "actionLabel",
+    "regionName",
+    "countryCode",
+    "cityName",
+    "propertyCode",
+    "propertyName",
   ];
 
   let listOfEvents = [
@@ -178,12 +205,13 @@ const formatCase = (obj) => {
 "select-experience",
 "change-budget",
 "reset-filter",
-"sort"]
+"sort",
+"select-stop"]
 
 
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
-      if (key === "event" || key === "module") {
+      if (key === "event" || key === "module" || key === "actionLabel") {
         obj[key] = obj[key]
           .replace(/([a-z])([A-Z])/g, "$1-$2")
           .replace(/[\s_]+/g, "-")
@@ -199,9 +227,20 @@ const formatCase = (obj) => {
         obj.eventAction =
           obj.hasOwnProperty("event") && obj.event != ""
             ? obj.event : obj.eventAction;
+      }
+      else if (key === "regionName" || key === "cityName" || key === "propertyName") {
+        //To titlecase
+        obj[key] = obj[key].replace(
+          /\w\S*/g, match => {
+            return  match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
+          }
+        );
       } else {
-        obj[key] = obj[key].toUpperCase();
+        obj[key] = obj[key].toUpperCase()
       }}
+
+  
+
      if (obj.page !== undefined) {
       if (
         obj.page[0].hasOwnProperty(key) &&
@@ -284,24 +323,28 @@ const formatUrl = (obj) => {
  * Recursive Function.
  * Replaces null values to empty string.
  * Converts numeric string values to their number value.
+ * Converts true/false string values to their boolean values
  * @param {object} obj - data layer object.
  * @return {object} - Returns formatted object.
  */
 const convertValues = (obj) => {
-  for (var property in obj) {
+  for (const property in obj) {
     if (obj.hasOwnProperty(property)) {
       if (typeof obj[property] === "object") {
         convertValues(obj[property]);
         if (obj[property] == null) {
           obj[property] = "";
         }
-      } else {
-        if (
-          typeof obj[property] === "string" &&
-          !isNaN(obj[property]) &&
-          !isNaN(parseFloat(obj[property]))
-        ) {
+      } else if (
+        typeof obj[property] === "string" &&
+        !isNaN(obj[property]) &&
+        !isNaN(parseFloat(obj[property]))
+      ) {
           obj[property] = +obj[property];
+      }
+      else{
+        if(typeof obj[property] === "string" && (obj[property] === "false" || obj[property] === "true" )){
+          obj[property] = obj[property].toLowerCase() === 'true' ? true : false
         }
       }
     }
@@ -313,11 +356,11 @@ const convertValues = (obj) => {
  * Pushes formatted object to datalayer
  * @param  {object} obj - formatted object
  */
-const pushFormattedAirModulesData = (obj) => {
+const pushFormattedEventData = (obj) => {
   if (window && window.dataLayer) {
     window.dataLayer.push(obj);
   }
 };
 
-const formatter = { formatAll };
+const formatter = { formatAirlines, formatHotels };
 module.exports = formatter;

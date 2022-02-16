@@ -3,15 +3,16 @@
  <img src="https://www.everymundo.com/wp-content/uploads/2018/08/Everymundo_Logo_NO-BACKGROUND-1-e1533159346674.png" alt="EM Logo"></a>
 </p>
 
-<h3 align="center">airmodules-event-datalayer</h3>
+<h3 align="center">Tracking Package</h3>
 
 <div align="center">
+
 
 </div>
 
 ---
 
-<p align="center"> airmodules-event-datalayer is a package used for formatting datalayer object values. 
+<p align="center"> The tracking package is used for formatting datalayer object values. 
     <br> 
 </p>
 
@@ -25,24 +26,24 @@
 
 ## 🧐 About <a name = "about"></a>
 
-npm package which exports a formatting function that transforms the event tracking object into an airModules dataLayer format as defined in the [emDataStandards](https://github.com/EveryMundo/emDataStandards/blob/master/dataLayer/airmodules.datalayer.js). This function then pushes to the [dataLayer](https://support.google.com/tagmanager/answer/6164391?hl=en).
+npm package which exports a formatting function that transforms the event tracking object into a dataLayer format as defined in the [emDataStandards](https://github.com/EveryMundo/emDataStandards/blob/master/dataLayer/airmodules.datalayer.js). This function then pushes to the [dataLayer](https://support.google.com/tagmanager/answer/6164391?hl=en). 
 
-## 📓 Notes <a name = "notes"></a>
+## 📓  Notes <a name = "notes"></a>
+* The [_event object_](#eventObject) should follow the [emDataStandards](https://github.com/EveryMundo/emDataStandards)
+* The [_event object_](#eventObject) should contain as many parameters as possible. Minimum required parameters:
+ 
+| emDataStandards Field 	| Event Label Parameter 	| Example                                                 |
+|-----------------------	|-----------------------	|-------------------------------------------------------	|
+| provider              	| p                     	| AmericanAirlines                                      	|
+| url                   	| url                   	| https://aa.com/en-us/flights                           	|
+| deviceCategory        	| dct                   	| DESKTOP                                                	|
+| siteEdition           	| se                    	| en-US                                                 	|
+| pageTypeCode          	| ptc                   	| HP                                                 	    |
+| airlineIataCode       	| aic                   	| AA                                                    	|
+| emcid            	      | emcid                 	| T-HgP91dNuv   
 
-- The event object should follow the [emDataStandards](https://github.com/EveryMundo/emDataStandards)
-- The event object should contain as many parameters as possible. Minimum required parameters:
 
-| emDataStandards field | Event Label Parameter | Example                                               |
-| --------------------- | --------------------- | ----------------------------------------------------- |
-| provider              | p                     | AmericanAirlines                                      |
-| url                   | url                   | https://www.emirates.com/flights-from-dublin-to-dubai |
-| deviceCategory        | dct                   | MOBILE                                                |
-| siteEdition           | se                    | en-HK                                                 |
-| pageTypeCode          | ptc                   | CICI                                                  |
-| airlineIataCode       | aic                   | UA                                                    |
-| emClientId            | emcid                 | T-123456jKL                                           |
-
-- The event parameter is required and takes in specific values. Please ensure that the passed value belongs to this list:
+*   The _event_ and _eventAction_ parameter of the [_event object_](#eventObject) should have values that belong to the list. Please ensure that the passed value belongs to this list: 
 <table> <tr> <td> Customer Type </td> <td> Event Actions </td>
 </tr>
 <tr>
@@ -54,14 +55,14 @@ Events
 <details> 
 <summary> Click to expand list  </summary>
 
-- viewable-impression
-- search-initiation
-- select-location
-- select-date
-- select-experience
-- change-budget
-- reset-filter
-- sort
+ - viewable-impression
+ - search-initiation
+ - select-location
+ - select-date
+ - select-experience
+ - change-budget
+ - reset-filter
+ - sort
 
 </details>
 
@@ -74,50 +75,53 @@ Events
 <details> 
 <summary> Click to expand list  </summary>
 
-- viewable-impression
-- fsi
-- change-origin
-- change-destination
-- change-departure-date
-- change-return-date
-- change-journey-type
-- change-miles
-- expand-form
-- collapse-form
-- sort
-- more-deals
-- open-booking-popup
-- select-tab
-- filter-airlines
-- change-budget
-- change-fare-class
-- collapse-histogram
-- select-month
-- expand-flight
-- reset-filter
-- toggle-farelist
-- expand-map
-- select-map-destination
-- selected-travel-interest
-- zoom
-- select-interest
-- click-out
-- read-article
-- change-month
-- select-location
-- change-location
-- search
-- change-status
-</details>
+ - viewable-impression
+ - fsi
+ - change-origin
+ - change-destination
+ - change-departure-date
+ - change-return-date
+ - change-journey-type
+ - change-miles
+ - expand-form
+ - collapse-form
+ - sort
+ - more-deals
+ - open-booking-popup
+ - select-tab
+ - filter-airlines
+ - change-budget
+ - change-fare-class
+ - collapse-histogram
+ - select-month
+ - expand-flight
+ - reset-filter
+ - toggle-farelist
+ - expand-map
+ - select-map-destination
+ - selected-travel-interest
+ - zoom
+ - select-interest
+ - click-out
+ - read-article
+ - change-month
+ - select-location
+ - change-location
+ - search
+ - change-status
+ - select-stop
+ </details>
 
 </td>
 </tr>
 </tr>
 </table>
 
+
+
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
-Use [npm](https://www.npmjs.com/) to install airmodules-event-datalayer.
+Use [npm](https://www.npmjs.com/) to install the Tracking Package.
 
 ```bash
 npm install @everymundo/airmodules-event-datalayer
@@ -131,25 +135,33 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 
 ### Function call
 
+#### For Airlines:
+
 ```js
 {
-  formatter.formatAll(eventObject);
+  formatter.formatAirlines(eventObject);
+}
+```
+
+#### For Hotels:
+
+```js
+{
+  formatter.formatHotels(eventObject);
 }
 ```
 
 ---
-
-<i>This section describes the formatter function in detail. Samples can be found below. </i>
+<i>This section describes the formatter function in detail. Samples can be found below.  </i>
 
 #### Sample usage can be found in [sample.js](https://github.com/EveryMundo/em-airmodules-event-datalayer/blob/main/sample.js) on Github
 
-#### For event customers, view tracking parameters here:
-
+#### For Event customers, view tracking parameters here:
 <details>
 <summary> Click to expand table  </summary>
 
-| Field            | TL Parameter | airModules dataLayer  |
-| ---------------- | ------------ | --------------------- |
+| Event Label Field | Event Label Parameter | emDataStandards Field  |
+|------------------|--------------|-----------------------|
 | label (Optional) | l            | actionLabel           |
 | provider         | p            | provider              |
 | url              | url          | url                   |
@@ -166,106 +178,117 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 | currencyCode     | c            | currencyCode          |
 | taxAmount        | ta           | taxAmount             |
 | totalPriceUSD    | tpu          | totalPriceUSD         |
-| emClientId       | emcid        | emcid (Cookie)        |
+| emcid      | emcid        | emcid (Cookie)        |
 
 </details>
 
 </br>
 
-<b> Create an object: </b>
+<b> Create an object: </b><a name = "eventObject"></a>
 </br>
-<i> Note: null values will be replaced with empty ' ' strings.</i>
+<i> Note: null values will be replaced with empty ' ' strings. It is ideal to pass values in the format below. Other acceptable input values can be seen in the [table](#table).</i>
 
 ```js
-const eventObject = {
-  event: "viewable impression",
-  module: "emBookingPopup",
-  eventAction: "viewable - impression",
-  actionLabel: null,
-  airlineIataCode: "ul",
-  provider: "sri lankan airlines",
-  journeyType: "ow",
-  originAirportIataCode: "CMB",
-  destinationAirportIataCode: "SIN",
-  route: "cmb>sin",
-  currencyCode: "LKR",
-  totalPrice: "5.21",
-  totalPriceUSD: null,
-  fareClass: "ec",
-  departureDate: "03/13/2021",
-  returnDate: "2021-06-14",
-  daysUntilFlight: "25", //25
+
+  const eventObject = {
+  event: 'viewable-impression',
+  module: 'em-booking-popup',
+  eventAction: 'viewable-impression',
+  actionLabel: '',
+  airlineIataCode: 'UL',
+  provider: 'SriLankanAirlines',
+  journeyType: 'ONE_WAY',
+  originAirportIataCode: 'CMB',
+  destinationAirportIataCode: 'SIN',
+  route: 'CMB>SIN',
+  currencyCode: 'LKR',
+  totalPrice: 5.21,
+  totalPriceUSD: '',
+  fareClass: 'ECONOMY',
+  departureDate: '2021-03-13',
+  returnDate: '2021-06-14',
+  daysUntilFlight: 25,
   tripLength: 93,
-  isFlexibleDates: null,
-  discountCode: null,
-  deeplinkSiteEdition: null,
-  miles: null,
-  timestamp: "2021-02-16",
-  url: "https://www.srilankan.com/en-lk/",
+  isFlexibleDates: '',
+  discountCode: '',
+  deeplinkSiteEdition: '',
+  miles: '',
+  timestamp: '2021-02-16T00:00:00.000Z',
+  url: 'https: //www.srilankan.com/en-lk/',
   passenger: [
     {
       count: 1,
-      adultCount: "1",
-      youngAdultCount: null,
-      childCount: null,
-      infantInLapCount: null,
-      infantInSeatCount: null,
-    },
+      adultCount: 1,
+      youngAdultCount: '',
+      childCount: '',
+      infantInLapCount: '',
+      infantInSeatCount: ''
+    }
   ],
   page: [
     {
-      siteEdition: "en-LK",
-      countryIsoCode: "lk",
-      languageIsoCode: "en",
-    },
+      siteEdition: 'en-LK',
+      countryIsoCode: 'LK',
+      languageIsoCode: 'en'
+    }
   ],
   lodging: [
     {
-      cityCode: "sin",
-      name: "intercontinental",
-      startDate: "2021/03/13",
-      endDate: "2021-03-20",
+      cityCode: 'SIN',
+      name: 'Intercontinental',
+      startDate: '2021-03-13',
+      endDate: '2021-03-20',
       roomCount: 2,
       tripLength: 7,
-      starRating: 5,
-    },
+      starRating: 5
+    }
   ],
-};
+  moduleId: '',
+  tagName: ''
+}
+
 ```
 
-#### formatAll function:
 
-- Checks whether the incoming object includes "module" and "eventAction". If the object does not contain these fields, formatAll will add and initialize these with an empty string.
+
+#### formatAirlines function: 
+- Checks whether the incoming object includes "module" and "eventAction". If the object does not contain these fields, formatAirlines will add and initialize these with an empty string.
 - In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key
 - Pushes to the dataLayer
--
 
-| Field                                                                                                      | Accepted Values                                                                                                             | Formatted Result                                                                  |
-| ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| journey                                                                                                    | oneway, one-way, ow, one way, one_way                                                                                       | ONE_WAY                                                                           |
-|                                                                                                            | roundtrip, round-trip, round_trip, rt, round trip                                                                           | ROUND_TRIP                                                                        |
-| fareClass                                                                                                  | ec, economy, e                                                                                                              | ECONOMY                                                                           |
-|                                                                                                            | business, bc, b, businessclass                                                                                              | BUSINESS                                                                          |
-|                                                                                                            | first, fc, f, firstclass                                                                                                    | FIRST                                                                             |
-| provider                                                                                                   | String separated by <b>spaces</b> i.e 'sri lankan airlines'                                                                 | SriLankanAirlines                                                                 |
-| departureDate, returnDate, startDate, endDate                                                              | Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or '04 November 2021 5:13 EST'         | 2021-11-04                                                                        |
-| timestamp                                                                                                  | Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or '04 November 2021 5:13 EST'         | 2021-11-04T10:13:00.000Z                                                          |
-| url                                                                                                        | URL string i.e 'https://www.srilankan.com/en-lk/'                                                                           | https: //www.srilankan.com/en-lk/                                                 |
-| fields with numeric values or null i.e totalPrice, totalPriceUSD, tripLength etc.                          | integers, numeric strings, null i.e `{"totalPrice": "25"}`                                                                  | `{"totalPrice": 25}` <b>Note: </b> Null values are converted to empty string `''` |
-| events, module                                                                                             | String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    | 'em-booking-popup'                                                                |
-| eventAction                                                                                                | String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value | 'viewable-impression'                                                             |
-| lodging                                                                                                    | String i.e 'intercontinental'                                                                                               | 'Intercontinental'                                                                |
-| siteEdition                                                                                                | String separated by spaces, dashes, slashes or camelCased. i.e 'en-lk'                                                      | 'en-LK'                                                                           |
-| countryIsoCode                                                                                             | String i.e 'lk'                                                                                                             | 'LK'                                                                              |
-| languageIsoCode                                                                                            | String i.e 'en'                                                                                                             | 'en'                                                                              |
-| fields that contain string values i.e currencyCode, originAirportIataCode, destinationAirportIataCode etc. | String i.e 'mia'                                                                                                            | 'MIA'                                                                             |
+#### formatHotels function: 
+- Checks whether the incoming object includes "module" and "eventAction". If the object does not contain these fields, formatHotels will add and initialize these with an empty string.
+- In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key
+- Null values will be converted to empty string
+- Pushes to the dataLayer
+- <a name = "table"></a>
+
+| Field                                                                                                      	| Accepted Values                                                                                                             	| Formatted Result                                                                        	|
+|------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------	|
+| journey                                                                                                    	| oneway, one-way, ow, one way, one_way                                                                                       	| ONE_WAY                                                                                 	|
+|                                                                                                            	| roundtrip, round-trip, round_trip, rt, round trip                                                                           	| ROUND_TRIP                                                                              	|
+| fareClass                                                                                                  	| ec, economy, e                                                                                                              	| ECONOMY                                                                                 	|
+|                                                                                                            	| business, bc, b, businessclass                                                                                              	| BUSINESS                                                                                	|
+|                                                                                                            	| first, fc, f, firstclass                                                                                                    	| FIRST                                                                                   	|
+| provider                                                                                                   	| String separated by <b>spaces</b> i.e 'sri lankan airlines'                                                                 	| SriLankanAirlines                                                                       	|
+| departureDate, returnDate, startDate, endDate                                                              	| Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or  '04 November 2021 5:13 EST'        	| 2021-11-04                                                                              	|
+| timestamp                                                                                                  	| Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or '04 November 2021 5:13 EST'         	| 2021-11-04T10:13:00.000Z                                                                	|
+| url                                                                                                        	| URL string i.e 'https://www.srilankan.com/en-lk/'                                                                           	| https: //www.srilankan.com/en-lk/                                                       	|
+| fields with numeric values or null i.e totalPrice, totalPriceUSD, tripLength etc.                          	| integers, numeric strings, null i.e ``` {"totalPrice": "25"} ```                                                            	| ``` {"totalPrice": 25} ``` <b>Note: </b> Null values are converted to empty string `''` 	|
+| events, module                                                                                             	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                                      	|
+| eventAction                                                                                                	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable-impression'                                                                   	|
+| lodging                                                                                                    	| String i.e 'intercontinental'                                                                                               	| 'Intercontinental'                                                                      	|
+| siteEdition                                                                                                	| String separated by spaces, dashes, slashes or camelCased. i.e 'en-lk'                                                      	| 'en-LK'                                                                                 	|
+| countryIsoCode                                                                                             	| String i.e 'lk'                                                                                                             	| 'LK'                                                                                    	|
+| languageIsoCode                                                                                            	| String i.e 'en'                                                                                                             	| 'en'                                                                                    	|
+| fields that contain string values i.e currencyCode, originAirportIataCode, destinationAirportIataCode etc. 	| String i.e 'mia'                                                                                                            	| 'MIA'                                                                                   	|
+
 
 </br>
 
 ---
 
 ### Event Object Examples
-
 <i>Examples of unformatted objects and their formatted results can be found here. </i>
 
 <details>
@@ -409,6 +432,7 @@ eventObject
 </tr>
 </table>
 </details>
+
 
 <details>
 <summary>fsi</summary>
@@ -977,6 +1001,7 @@ eventObject
 </details>
 
 ---
+
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
