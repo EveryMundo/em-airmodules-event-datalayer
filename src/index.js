@@ -357,8 +357,15 @@ const convertValues = (obj) => {
  * @param  {object} obj - formatted object
  */
 const pushFormattedEventData = (obj) => {
+  let localDataLayer = [];
   if (window && window.dataLayer) {
+    if(window.dataLayer.length > 0) {
+      window.dataLayer.push(...localDataLayer)
+    }
     window.dataLayer.push(obj);
+  }
+  else{
+    localDataLayer.push(obj)
   }
 };
 
