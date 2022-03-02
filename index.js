@@ -1,2 +1,2 @@
-import formatter from "./dist";
+import formatter from "./dist/index.js";
 export { formatter };
