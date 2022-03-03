@@ -261,7 +261,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 - In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key
 - Null values will be converted to empty string
 - Pushes to the dataLayer
-- <a name = "table"></a>
+<a name = "table"></a>
 
 | Field                                                                                                      	| Accepted Values                                                                                                             	| Formatted Result                                                                        	|
 |------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------	|
