@@ -188,6 +188,52 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 </br>
 <i> Note: null values will be replaced with empty ' ' strings. It is ideal to pass values in the format below. Other acceptable input values can be seen in the [table](#table).</i>
 
+<b>Event Object for Hotels:</b>
+```js
+
+  const eventObject = {
+  event: 'viewable-impression',
+  module: 'em-booking-popup-abstract',
+  eventAction: 'viewable-impression',
+  actionLabel: '',
+  tenantCode: 'UL',
+  provider: 'Hyat',
+  regionName: 'North America',
+  countryCode: 'US',
+  cityName: 'Miami',
+  propertyCode: 'HYATT9015479',
+  propertyName: 'Hyatt Miami',
+  currencyCode: 'USD',
+  totalPrice: 900.5,
+  totalPriceUSD: 900.5,
+  startDate: '2022-04-07',
+  daysUntilBooking: 25,
+  tripLength: 4,
+  roomAvailability: true,
+  timestamp: '2021-02-16T17:41:43.200Z',
+  url: 'https:  //www.hyatt.com/en/miami',
+  passenger: [
+    {
+      count: 1,
+      adultCount: 1,
+      youngAdultCount: '',
+      childCount: '',
+      infantInLapCount: '',
+      infantInSeatCount: ''
+    }
+  ],
+  page: [
+    {
+      siteEdition: 'en-LK',
+      countryIsoCode: 'LK',
+      languageIsoCode: 'en'
+    }
+  ]
+}
+
+```
+
+<b>Event Object for Airlines & Vacation packages: </b>
 ```js
 
   const eventObject = {
@@ -277,7 +323,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 | fields with numeric values or null i.e totalPrice, totalPriceUSD, tripLength etc.                          	| integers, numeric strings, null i.e ``` {"totalPrice": "25"} ```                                                            	| ``` {"totalPrice": 25} ``` <b>Note: </b> Null values are converted to empty string `''` 	|
 | events, module                                                                                             	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                                      	|
 | eventAction                                                                                                	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable-impression'                                                                   	|
-| lodging                                                                                                    	| String i.e 'intercontinental'                                                                                               	| 'Intercontinental'                                                                      	|
+| lodging      (for vacation packages)                                                                                              	| String i.e 'intercontinental'                                                                                               	| 'Intercontinental'                                                                      	|
 | siteEdition                                                                                                	| String separated by spaces, dashes, slashes or camelCased. i.e 'en-lk'                                                      	| 'en-LK'                                                                                 	|
 | countryIsoCode                                                                                             	| String i.e 'lk'                                                                                                             	| 'LK'                                                                                    	|
 | languageIsoCode                                                                                            	| String i.e 'en'                                                                                                             	| 'en'                                                                                    	|
