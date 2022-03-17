@@ -56,41 +56,65 @@ const eventObject = {
 };
 
 const hotelEventObject = {
-event: 'viewable-impression',
-module: 'em-booking-popup-abstract',
-eventAction: 'viewable-impression',
-actionLabel: null,
-tenantCode: 'UL',
-provider: 'hyat',
-regionName: 'north america',
-countryCode: 'US',
-cityName: 'miami',
-propertyCode: 'hyatt9015479',
-propertyName: 'hyatt miami',
-currencyCode: 'USD',
-totalPrice: 900.50,
-totalPriceUSD: '900.50',
-startDate: '2022-04-01',
-startDate: '2022-04-07',
-daysUntilBooking: 25,
-tripLength: 4,
-roomAvailability: 'true',
-timestamp: '2021-02-16T17:41:43.200Z',
-url: 'https: //www.hyatt.com/en/miami',
-passenger: [{
-    count: 1,
-    adultCount: 1,
-    youngAdultCount: null,
-    childCount: null,
-    infantInLapCount: null,
-    infantInSeatCount: null
-}],
-page: [{
-    siteEdition: 'en-LK',
-    countryIsoCode: 'LK',
-    languageIsoCode: 'en'
-}]
-}
+  event: "viewable-impression",
+  module: "em-booking-popup-abstract",
+  eventAction: "viewable-impression",
+  actionLabel: null,
+  tenantCode: "UL",
+  provider: "hyat",
+  regionName: "north america",
+  countryCode: "US",
+  cityName: "miami",
+  propertyCode: "hyatt9015479",
+  propertyName: "hyatt miami",
+  currencyCode: "USD",
+  totalPrice: 900.5,
+  totalPriceUSD: "900.50",
+  startDate: "2022-04-01",
+  startDate: "2022-04-07",
+  daysUntilBooking: 25,
+  tripLength: 4,
+  roomAvailability: "true",
+  timestamp: "2021-02-16T17:41:43.200Z",
+  url: "https: //www.hyatt.com/en/miami",
+  passenger: [
+    {
+      count: 1,
+      adultCount: 1,
+      youngAdultCount: null,
+      childCount: null,
+      infantInLapCount: null,
+      infantInSeatCount: null,
+    },
+  ],
+  page: [
+    {
+      siteEdition: "en-LK",
+      countryIsoCode: "LK",
+      languageIsoCode: "en",
+    },
+  ],
+  rooms: [
+    {
+      guests: {
+        ADULT: {
+          total: "1",
+        },
+      },
+    },
+    {
+      guests: {
+        ADULT: {
+          total: "3",
+        },
+        CHILD: {
+          total: "2",
+          ages: ["0", "1"],
+        },
+      },
+    },
+  ],
+};
 
 console.log("OUTPUT FOR HOTEL OBJECT", formatter.formatHotels(hotelEventObject));
 formatter.formatHotels(hotelEventObject);

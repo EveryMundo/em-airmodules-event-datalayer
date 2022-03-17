@@ -115,9 +115,43 @@ Events
 </td>
 </tr>
 </tr>
+
+<tr>
+<td> Hotels </td>
+<td>
+
+<details> 
+<summary> Click to expand list  </summary>
+
+ - viewable-impression
+ - open-booking-popup
+ - more-deals
+ - change-origin
+ - change-trip-length
+ - sort
+ - change-rating
+ - change-destination
+ - change-departure-date
+ - change-return-date
+ - change-budget
+ - reset-filter
+ - select-night
+ - search-initiation
+ - select-property
+ - select-start-date
+ - select-end-date
+ - select-room-guest
+ - select-accesibility
+ - select-redemption
+ - select-stay-length
+ - select-offer
+  
+ </details>
+
+</td>
+</tr>
+</tr>
 </table>
-
-
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
