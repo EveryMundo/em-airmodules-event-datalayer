@@ -240,10 +240,11 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
   currencyCode: 'USD',
   totalPrice: 900.5,
   totalPriceUSD: 900.5,
-  startDate: '2022-04-07',
+  startDate: '2022-04-01',
+  endDate: '2022-04-07',
   daysUntilBooking: 25,
   tripLength: 4,
-  roomAvailability: true,
+  roomAccesibility: true,
   timestamp: '2021-02-16T17:41:43.200Z',
   url: 'https:  //www.hyatt.com/en/miami',
   passenger: [
@@ -334,13 +335,13 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 #### formatAirlines function: 
 - Checks whether the incoming object includes "module" and "eventAction". If the object does not contain these fields, formatAirlines will add and initialize these with an empty string.
 - In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key
-- Pushes to the dataLayer
+- [Pushes to the dataLayer](#dataLayer)
 
 #### formatHotels function: 
 - Checks whether the incoming object includes "module" and "eventAction". If the object does not contain these fields, formatHotels will add and initialize these with an empty string.
 - In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key
 - Null values will be converted to empty string
-- Pushes to the dataLayer
+- [Pushes to the dataLayer](#dataLayer)
 <a name = "table"></a>
 
 | Field                                                                                                      	| Accepted Values                                                                                                             	| Formatted Result                                                                        	|
@@ -365,6 +366,24 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 
 
 </br>
+
+### Pushing to the dataLayer <a name = "dataLayer"></a>
+This package uses the following function to push to the dataLayer.
+```js
+const pushFormattedEventData = (obj) => {
+  let localDataLayer = [];
+  if (window && window.dataLayer) {
+    if(window.dataLayer.length > 0) {
+      window.dataLayer.push(...localDataLayer)
+    }
+    window.dataLayer.push(obj);
+  }
+  else{
+    localDataLayer.push(obj)
+  }
+};
+```
+The function takes in the formatted object and checks whether the dataLayer exists. If it does, it will push the formatted data to the dataLayer. If not, the formatted data will be pushed into `localDataLayer` to prevent data loss.
 
 ---
 

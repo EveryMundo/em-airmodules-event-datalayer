@@ -71,10 +71,10 @@ const hotelEventObject = {
   totalPrice: 900.5,
   totalPriceUSD: "900.50",
   startDate: "2022-04-01",
-  startDate: "2022-04-07",
+  endDate: "2022-04-07",
   daysUntilBooking: 25,
   tripLength: 4,
-  roomAvailability: "true",
+  roomAccesibility: "true",
   timestamp: "2021-02-16T17:41:43.200Z",
   url: "https: //www.hyatt.com/en/miami",
   passenger: [
