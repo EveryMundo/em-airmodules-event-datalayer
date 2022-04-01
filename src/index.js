@@ -355,6 +355,9 @@ const convertValues = (obj) => {
           obj[property] = obj[property].toLowerCase() === 'true' ? true : false
         }
       }
+      if(typeof obj[property] === 'number'){
+        obj[property] = Math.round((obj[property]) * 100)/100
+      }
     }
   }
   return obj;
