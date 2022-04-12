@@ -159,7 +159,6 @@ const formatCase = (obj) => {
     "regionName",
     "countryCode",
     "cityName",
-    "propertyCode",
     "propertyName"
   ];
 

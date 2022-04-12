@@ -65,7 +65,7 @@ const hotelEventObject = {
   regionName: "north america",
   countryCode: "US",
   cityName: "miami",
-  propertyCode: "hyatt9015479",
+  propertyCode: "105565",
   propertyName: "N/a",
   currencyCode: "USD",
   totalPrice: 900.545645,

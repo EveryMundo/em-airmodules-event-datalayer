@@ -30,8 +30,47 @@ npm package which exports a formatting function that transforms the event tracki
 
 ## 📓  Notes <a name = "notes"></a>
 * The [_event object_](#eventObject) should follow the [emDataStandards](https://github.com/EveryMundo/emDataStandards)
-* The [_event object_](#eventObject) should contain as many parameters as possible. Minimum required parameters:
+* The [_event object_](#eventObject) should be sent with all parameters listed in the object. The minimum parameters that <b>require</b> values are listed in the table below. All other parameters may contain empty `''` values. 
  
+##### Table for parameters that require values (Hotels)
+
+| emDataStandards field 	| Event Label Parameter 	| Example                          	|
+|-----------------------	|-----------------------	|----------------------------------	|
+| emcid                 	| emcid                 	| T-123456                         	|
+| tenantCode            	| tc                    	| HDI                              	|
+| provider              	| p                     	| HolidayInn                       	|
+| module                	| module                	| open-booking-popup-abstract      	|
+| actionLabel           	| l                     	| open-booking-popup               	|
+| regionName            	| rn                    	| North America                    	|
+| countryCode           	|                       	| US                               	|
+| cityName              	| cn                    	| Miami                            	|
+| propertyCode          	| pc                    	| HYATT9015479                     	|
+| propertyName          	| pn                    	| HolidayInn-Miami                 	|
+| currencyCode          	|                       	| USD                              	|
+| totalPrice            	| tp                    	| 399.37                           	|
+| totalPriceUsd         	| tpu                   	| 530.62                           	|
+| startDate             	|                       	| 2022-04-01                       	|
+| endDate               	|                       	| 2022-04-07                       	|
+| daysUntilBooking      	|                       	| 25                               	|
+| tripLength            	| tl                    	| 5                                	|
+| roomAccesibility      	| ra                    	| false                            	|
+| timestamp             	|                       	| 2021-02-16T17:41:43.200Z         	|
+| url                   	| url                   	| https://www.holidayinn.com/miami 	|
+| passengerCount        	|                       	| 1                                	|
+| adultCount            	| ad                    	| 1                                	|
+| youngAdultCount       	|                    	| 2                                	|
+| childCount            	| cc                    	| 2                                	|
+| infantInLapCount      	|                       	| 1                                	|
+| infantInSeatCount     	|                       	| 1                                	|
+| pageTypeCode          	| ptc                   	| CI                               	|
+| siteEdition           	| se                    	| en-HK                            	|
+| countryIsoCode        	|                       	| HK                               	|
+| languageIsoCode       	|                       	| en                               	|
+| tagName*               	|                       	|                                  	|
+| discountCode*          	|                       	|                                  	|
+*currently unavailable in the dataLayer
+##### Table for parameters that require values (Airlines)
+
 | emDataStandards Field 	| Event Label Parameter 	| Example                                                 |
 |-----------------------	|-----------------------	|-------------------------------------------------------	|
 | provider              	| p                     	| AmericanAirlines                                      	|
