@@ -13,6 +13,7 @@ const formatAirlines = (obj) => {
   ) {
     return (
       addParameters(obj),
+      formatTenantType(obj),
       convertValues(obj),
       formatJourney(obj),
       formatFareClass(obj),
@@ -35,6 +36,7 @@ const formatHotels = (obj) => {
   ) {
     return (
       convertValues(obj),
+      formatTenantType(obj),
       formatProvider(obj),
       formatCase(obj),
       formatDate(obj),
@@ -296,8 +298,11 @@ const formatDate = (obj) => {
     if (obj.hasOwnProperty(key)) {
       if (key === "timestamp") {
         obj[key] = new Date(obj[key]).toISOString();
-      } else {
+      } else if(obj[key] !== '') {
         obj[key] = new Date(obj[key]).toISOString().substr(0, 10);
+      }
+      else{
+        obj[key] = ''
       }
     }
     if (obj.lodging !== undefined) {
@@ -362,6 +367,21 @@ const convertValues = (obj) => {
   return obj;
 };
 
+/**
+ * Fetches tenant type from tenant-code-to-type mapper API
+ * @param  {object} obj - formatted object
+ * @return {object} - returns object containing tenant type
+ */
+const formatTenantType = async (obj) => {
+  const tenantCode = obj['tenantCode']
+  const tenantTypeData = await fetch(`https://tenant-code-to-type-mapper.everymundo.workers.dev/?code=${tenantCode}`, {headers: {
+    'Access-Control-Allow-Origin': '*'
+  }})
+  const tenantType = await tenantTypeData.text()
+  obj.tenantType = tenantType;
+  
+  return obj
+}
 /**
  * Pushes formatted object to datalayer
  * @param  {object} obj - formatted object

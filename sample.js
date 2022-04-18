@@ -61,6 +61,7 @@ const hotelEventObject = {
   eventAction: "viewable-impression",
   actionLabel: null,
   tenantCode: "UL",
+  tenantType: "",
   provider: "hyat",
   regionName: "north america",
   countryCode: "US",
