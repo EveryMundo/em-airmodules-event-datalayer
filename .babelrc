@@ -1,3 +1,18 @@
 {
-  "presets": [["@babel/preset-env", { "modules": false }]]
-}
+  "presets": [["@babel/preset-env", {
+    "targets": {     
+     // Uncomment the line below to stop the support of ie11 and shipping less code       
+     // "browsers": "> 0.5%, not IE 11, not dead"  
+    
+    },
+    "modules": false
+   }]
+  ],
+  "plugins": [
+    [
+     "@babel/transform-runtime",
+     {
+       "regenerator": true       
+     }
+   ]
+  ]}
