@@ -33,11 +33,11 @@ npm package which exports a formatting function that transforms the event tracki
 * The [_event object_](#eventObject) should be sent with all parameters listed in the object. The minimum parameters that <b>require</b> values are listed in the table below. All other parameters may contain empty `''` values. 
  
 ##### Table for parameters that require values (Hotels)
-
 | emDataStandards field 	| Event Label Parameter 	| Example                          	|
 |-----------------------	|-----------------------	|----------------------------------	|
 | emcid                 	| emcid                 	| T-123456                         	|
 | tenantCode            	| tc                    	| HDI                              	|
+| tenantType            	| tt                    	| hotel                            	|
 | provider              	| p                     	| HolidayInn                       	|
 | module                	| module                	| open-booking-popup-abstract      	|
 | actionLabel           	| l                     	| open-booking-popup               	|
@@ -46,7 +46,7 @@ npm package which exports a formatting function that transforms the event tracki
 | cityName              	| cn                    	| Miami                            	|
 | propertyCode          	| pc                    	| HYATT9015479                     	|
 | propertyName          	| pn                    	| HolidayInn-Miami                 	|
-| currencyCode          	|                       	| USD                              	|
+| currencyCode          	| c                     	| USD                              	|
 | totalPrice            	| tp                    	| 399.37                           	|
 | totalPriceUsd         	| tpu                   	| 530.62                           	|
 | startDate             	|                       	| 2022-04-01                       	|
@@ -56,9 +56,9 @@ npm package which exports a formatting function that transforms the event tracki
 | roomAccesibility      	| ra                    	| false                            	|
 | timestamp             	|                       	| 2021-02-16T17:41:43.200Z         	|
 | url                   	| url                   	| https://www.holidayinn.com/miami 	|
-| passengerCount        	|                       	| 1                                	|
+| passengerCount        	| pc                    	| 1                                	|
 | adultCount            	| ad                    	| 1                                	|
-| youngAdultCount       	|                    	| 2                                	|
+| youngAdultCount       	|                       	| 2                                	|
 | childCount            	| cc                    	| 2                                	|
 | infantInLapCount      	|                       	| 1                                	|
 | infantInSeatCount     	|                       	| 1                                	|
@@ -66,8 +66,10 @@ npm package which exports a formatting function that transforms the event tracki
 | siteEdition           	| se                    	| en-HK                            	|
 | countryIsoCode        	|                       	| HK                               	|
 | languageIsoCode       	|                       	| en                               	|
-| tagName*               	|                       	|                                  	|
-| discountCode*          	|                       	|                                  	|
+| tagName*              	|                       	|                                  	|
+| discountCode*         	|                       	|                                  	|
+
+
 *currently unavailable in the dataLayer
 ##### Table for parameters that require values (Airlines)
 
@@ -270,15 +272,16 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
   eventAction: 'viewable-impression',
   actionLabel: '',
   tenantCode: 'UL',
+  tenantType: '',
   provider: 'Hyat',
   regionName: 'North America',
   countryCode: 'US',
   cityName: 'Miami',
-  propertyCode: 'HYATT9015479',
-  propertyName: 'Hyatt Miami',
+  propertyCode: 105565,
+  propertyName: 'N/a',
   currencyCode: 'USD',
-  totalPrice: 900.5,
-  totalPriceUSD: 900.5,
+  totalPrice: 900.55,
+  totalPriceUSD: 900.55,
   startDate: '2022-04-01',
   endDate: '2022-04-07',
   daysUntilBooking: 25,
@@ -286,7 +289,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
   roomAccesibility: true,
   timestamp: '2021-02-16T17:41:43.200Z',
   url: 'https:  //www.hyatt.com/en/miami',
-  passenger: [
+  guest: [
     {
       count: 1,
       adultCount: 1,
@@ -295,6 +298,12 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
       infantInLapCount: '',
       infantInSeatCount: ''
     }
+  ],
+  room: [ 
+    { 
+      total: 1, 
+      type: '' 
+    } 
   ],
   page: [
     {
@@ -442,59 +451,53 @@ The function takes in the formatted object and checks whether the dataLayer exis
 
 eventObject
  {
-  event: "viewable impression",
-  module: "emBookingPopup",
-  eventAction: "viewable - impression",
+  event: "viewable-impression",
+  module: "em-booking-popup-abstract",
+  eventAction: "viewable impression",
   actionLabel: null,
-  airlineIataCode: "ul",
-  provider: "sri lankan airlines",
-  journeyType: "ow",
-  originAirportIataCode: "CMB",
-  destinationAirportIataCode: "SIN",
-  route: "cmb>sin",
-  currencyCode: "LKR",
-  totalPrice: "5.21",
-  totalPriceUSD: null,
-  fareClass: "ec",
-  departureDate: "03/13/2021",
-  returnDate: "2021-06-14",
-  daysUntilFlight: "25", //25
-  tripLength: 93,
-  isFlexibleDates: null,
-  discountCode: null,
-  deeplinkSiteEdition: null,
-  miles: null,
-  timestamp: "2021-02-16",
-  url: "https://www.srilankan.com/en-lk/",
-  passenger: [
+  tenantCode: "UL",
+  tenantType: "",
+  provider: "hyat",
+  regionName: "north america",
+  countryCode: "US",
+  cityName: "miami",
+  propertyCode: "105565",
+  propertyName: "N/a",
+  currencyCode: "USD",
+  totalPrice: 900.545645,
+  totalPriceUSD: "900.545645",
+  startDate: "2022-04-01",
+  endDate: "2022-04-07",
+  daysUntilBooking: 25,
+  tripLength: 4,
+  roomAccesibility: "true",
+  timestamp: "2021-02-16T17:41:43.200Z",
+  url: "https: //www.hyatt.com/en/miami",
+  guest: [
     {
       count: 1,
-      adultCount: "1",
+      adultCount: 1,
       youngAdultCount: null,
       childCount: null,
       infantInLapCount: null,
       infantInSeatCount: null,
     },
   ],
+  room: [
+    { 
+      total: 1, 
+      type: ""
+     },
+    ],
   page: [
     {
       siteEdition: "en-LK",
-      countryIsoCode: "lk",
+      countryIsoCode: "LK",
       languageIsoCode: "en",
     },
   ],
-  lodging: [
-    {
-      cityCode: "sin",
-      name: "intercontinental",
-      startDate: "2021/03/13",
-      endDate: "2021-03-20",
-      roomCount: 2,
-      tripLength: 7,
-      starRating: 5,
-    },
-  ],
 };
+
 
 ```
 
@@ -506,30 +509,28 @@ eventObject
 eventObject
 {
   event: 'viewable-impression',
-  module: 'em-booking-popup',
+  module: 'em-booking-popup-abstract',
   eventAction: 'viewable-impression',
   actionLabel: '',
-  airlineIataCode: 'UL',
-  provider: 'SriLankanAirlines',
-  journeyType: 'ONE_WAY',
-  originAirportIataCode: 'CMB',
-  destinationAirportIataCode: 'SIN',
-  route: 'CMB>SIN',
-  currencyCode: 'LKR',
-  totalPrice: 5.21,
-  totalPriceUSD: '',
-  fareClass: 'ECONOMY',
-  departureDate: '2021-03-13',
-  returnDate: '2021-06-14',
-  daysUntilFlight: 25,
-  tripLength: 93,
-  isFlexibleDates: '',
-  discountCode: '',
-  deeplinkSiteEdition: '',
-  miles: '',
-  timestamp: '2021-02-16T00:00:00.000Z',
-  url: 'https: //www.srilankan.com/en-lk/',
-  passenger: [
+  tenantCode: 'UL',
+  tenantType: 'hotel',
+  provider: 'Hyat',
+  regionName: 'North America',
+  countryCode: 'US',
+  cityName: 'Miami',
+  propertyCode: 105565,
+  propertyName: 'N/a',
+  currencyCode: 'USD',
+  totalPrice: 900.55,
+  totalPriceUSD: 900.55,
+  startDate: '2022-04-01',
+  endDate: '2022-04-07',
+  daysUntilBooking: 25,
+  tripLength: 4,
+  roomAccesibility: true,
+  timestamp: '2021-02-16T17:41:43.200Z',
+  url: 'https:  //www.hyatt.com/en/miami',
+  guest: [
     {
       count: 1,
       adultCount: 1,
@@ -539,26 +540,14 @@ eventObject
       infantInSeatCount: ''
     }
   ],
+  room: [ { total: 1, type: '' } ],
   page: [
     {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
       languageIsoCode: 'en'
     }
-  ],
-  lodging: [
-    {
-      cityCode: 'SIN',
-      name: 'Intercontinental',
-      startDate: '2021-03-13',
-      endDate: '2021-03-20',
-      roomCount: 2,
-      tripLength: 7,
-      starRating: 5
-    }
-  ],
-  moduleId: '',
-  tagName: ''
+  ]
 }
 
 ```

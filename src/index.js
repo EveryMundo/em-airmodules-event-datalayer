@@ -193,7 +193,7 @@ const formatCase = (obj) => {
     "reset-filter",
     "search-initiation",
     "search",
-    "select-accesibility",
+    "select-accessibility",
     "select-date",
     "select-end-date",
     "select-experience",

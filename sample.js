@@ -58,7 +58,7 @@ const eventObject = {
 const hotelEventObject = {
   event: "viewable-impression",
   module: "em-booking-popup-abstract",
-  eventAction: "viewable-impression",
+  eventAction: "viewable impression",
   actionLabel: null,
   tenantCode: "UL",
   tenantType: "",
@@ -78,7 +78,7 @@ const hotelEventObject = {
   roomAccesibility: "true",
   timestamp: "2021-02-16T17:41:43.200Z",
   url: "https: //www.hyatt.com/en/miami",
-  passenger: [
+  guest: [
     {
       count: 1,
       adultCount: 1,
@@ -88,31 +88,17 @@ const hotelEventObject = {
       infantInSeatCount: null,
     },
   ],
+  room: [
+    { 
+      total: 1, 
+      type: ""
+     },
+    ],
   page: [
     {
       siteEdition: "en-LK",
       countryIsoCode: "LK",
       languageIsoCode: "en",
-    },
-  ],
-  rooms: [
-    {
-      guests: {
-        ADULT: {
-          total: "1",
-        },
-      },
-    },
-    {
-      guests: {
-        ADULT: {
-          total: "3",
-        },
-        CHILD: {
-          total: "2",
-          ages: ["0", "1"],
-        },
-      },
     },
   ],
 };
