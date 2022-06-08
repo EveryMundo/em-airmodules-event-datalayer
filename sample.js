@@ -96,7 +96,7 @@ const hotelEventObject = {
     ],
   page: [
     {
-      siteEdition: "en-LK",
+      siteEdition: "enHk",
       countryIsoCode: "LK",
       languageIsoCode: "en",
     },

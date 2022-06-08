@@ -257,14 +257,18 @@ const formatCase = (obj) => {
           key === "siteEdition" ||
           key === "countryIsoCode")
       ) {
+
+        let siteEdition = obj.page[0].siteEdition
+          .replace(/([a-z])([A-Z])/g, "$1-$2")
+          .replace(/[\s_]+/g, "-")
+          .split("-");
+
         obj.page[0].countryIsoCode =
           obj.page[0].countryIsoCode?.toUpperCase() ?? "";
         obj.page[0].languageIsoCode =
           obj.page[0].languageIsoCode?.toLowerCase() ?? "";
-        obj.page[0].siteEdition =
-          obj.page[0].languageIsoCode?.toLowerCase() +
-            "-" +
-            obj.page[0].countryIsoCode?.toUpperCase() ?? "";
+        obj.page[0].siteEdition = siteEdition[1] !== undefined ? siteEdition[0] + '-' + siteEdition[1].toUpperCase() : siteEdition[0] ?? "";
+
       }
     }if (obj.lodging !== undefined) {
 
