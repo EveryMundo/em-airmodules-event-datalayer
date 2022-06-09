@@ -301,7 +301,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
   ],
   room: [ 
     { 
-      total: 1, 
+      count: 1, 
       type: '' 
     } 
   ],
