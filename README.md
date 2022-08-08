@@ -151,6 +151,7 @@ Events
  - search
  - change-status
  - select-stop
+ - select-article
  </details>
 
 </td>
@@ -301,7 +302,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
   ],
   room: [ 
     { 
-      count: 1, 
+      total: 1, 
       type: '' 
     } 
   ],

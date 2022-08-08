@@ -214,7 +214,8 @@ const formatCase = (obj) => {
     "sort",
     "toggle-farelist",
     "zoom",
-    "viewable-impression"
+    "viewable-impression",
+    "select-article"
   ];
 
 
