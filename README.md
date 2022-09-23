@@ -33,41 +33,40 @@ npm package which exports a formatting function that transforms the event tracki
 * The [_event object_](#eventObject) should be sent with all parameters listed in the object. The minimum parameters that <b>require</b> values are listed in the table below. All other parameters may contain empty `''` values. 
  
 ##### Table for parameters that require values (Hotels)
-| emDataStandards field 	| Event Label Parameter 	| Example                          	|
-|-----------------------	|-----------------------	|----------------------------------	|
-| emcid                 	| emcid                 	| T-123456                         	|
-| tenantCode            	| tc                    	| HDI                              	|
-| tenantType            	| tt                    	| hotel                            	|
-| provider              	| p                     	| HolidayInn                       	|
-| module                	| module                	| open-booking-popup-abstract      	|
-| actionLabel           	| l                     	| open-booking-popup               	|
-| regionName            	| rn                    	| North America                    	|
-| countryCode           	|                       	| US                               	|
-| cityName              	| cn                    	| Miami                            	|
-| propertyCode          	| pc                    	| HYATT9015479                     	|
-| propertyName          	| pn                    	| HolidayInn-Miami                 	|
-| currencyCode          	| c                     	| USD                              	|
-| totalPrice            	| tp                    	| 399.37                           	|
-| totalPriceUsd         	| tpu                   	| 530.62                           	|
-| startDate             	|                       	| 2022-04-01                       	|
-| endDate               	|                       	| 2022-04-07                       	|
-| daysUntilBooking      	|                       	| 25                               	|
-| tripLength            	| tl                    	| 5                                	|
-| roomAccesibility      	| ra                    	| false                            	|
-| timestamp             	|                       	| 2021-02-16T17:41:43.200Z         	|
-| url                   	| url                   	| https://www.holidayinn.com/miami 	|
-| passengerCount        	| pc                    	| 1                                	|
-| adultCount            	| ad                    	| 1                                	|
-| youngAdultCount       	|                       	| 2                                	|
-| childCount            	| cc                    	| 2                                	|
-| infantInLapCount      	|                       	| 1                                	|
-| infantInSeatCount     	|                       	| 1                                	|
-| pageTypeCode          	| ptc                   	| CI                               	|
-| siteEdition           	| se                    	| en-HK                            	|
-| countryIsoCode        	|                       	| HK                               	|
-| languageIsoCode       	|                       	| en                               	|
-| tagName*              	|                       	|                                  	|
-| discountCode*         	|                       	|                                  	|
+| emDataStandards field  	| Event Label Parameter 	| Example                          	| Definition                                                                                             	|
+|------------------------	|-----------------------	|----------------------------------	|--------------------------------------------------------------------------------------------------------	|
+| emcid                  	| emcid                 	| T-123456                         	| Unique identifier                                                                                      	|
+| tenantCode             	| tc                    	| HDI                              	| Tenant Code                                                                                            	|
+| tenantType             	| tt                    	| hotel                            	| Tenant Type (Hotel, Airline, Event)                                                                    	|
+| provider               	| p                     	| HolidayInn                       	| Tenant Name                                                                                            	|
+| module                 	| module                	| open-booking-popup-abstract      	| Name of the event                                                                                      	|
+| actionLabel            	| l                     	| open-booking-popup               	| Name of the event action                                                                               	|
+| regionName             	| rn                    	| North America                    	| Name of the region for the selected property (North America, South America, East Asia...)              	|
+| countryCode            	|                       	| US                               	| The country code for the selected property (in 2 letter codes from ISO 3166-1)                         	|
+| cityName               	| cn                    	| Miami                            	| Name of the city for the selected property (Miami, Orlando, Tampa...)                                  	|
+| propertyCode           	| pc                    	| HYATT9015479                     	| Code of the selected property (Hotel code, event code...)                                              	|
+| propertyName           	| pn                    	| HolidayInn-Miami                 	| Name of the selected property. e.g Name of the Hotel (Holiday Inn - Miami, Hyatt Regency Hong Kong...) 	|
+| currencyCode           	| c                     	| USD                              	| The currency (in 3-letter ISO 4217 format) of the price.                                               	|
+| totalPrice             	| tp                    	| 399.37                           	| The total price for the reservation or ticket, including applicable taxes, shipping, etc               	|
+| totalPriceUsd          	| tpu                   	| 530.62                           	| The total price for the reservation or ticket in USD, including applicable taxes, shipping, etc.       	|
+| startDate              	|                       	| 2022-04-01                       	| Date of check in                                                                                       	|
+| endDate                	|                       	| 2022-04-07                       	| Date of check out                                                                                      	|
+| daysUntilBooking       	|                       	| 25                               	| Amount of days from the current date to the startDate (Check-in date)                                  	|
+| tripLength             	| tl                    	| 5                                	| Length of stay / trip                                                                                  	|
+| roomAccesibility       	| ra                    	| false                            	| Room accessibility requirement                                                                         	|
+| timestamp              	|                       	| 2021-02-16T17:41:43.200Z         	| timestamp of the event sent                                                                            	|
+| url                    	| url                   	| https://www.holidayinn.com/miami 	| Full url in lowercase (without query parameters to avoid collecting personal data by mistake)          	|
+| adult                  	|                       	| 1                                	| Amount of adult guests                                                                                 	|
+| child                  	|                       	| 1                                	| Amount of child guests                                                                                 	|
+| count (in guest array) 	|                       	| 3                                	| Amount of guests for a specific category                                                               	|
+| count (in room array)  	|                       	|                                  	| Amount of rooms selected                                                                               	|
+| type                   	|                       	| Suite                            	| Room type                                                                                              	|
+| pageTypeCode           	| ptc                   	| CI                               	| Page Type Code: HP, CICO, FCI, TCI, CICI, COCI, COCO, FCO, TCO, EXT, CP, 404, SM, BS, FS, FA           	|
+| siteEdition            	| se                    	| en-HK                            	| Site edition combination of ISO codes for language and country. The country reflects the market        	|
+| countryIsoCode         	|                       	| HK                               	| The country code (in 2 letter codes from ISO 3166-1)                                                   	|
+| languageIsoCode        	|                       	| en                               	| The language ISO 629-1 code                                                                            	|
+| tagName*               	|                       	|                                  	| Name given to SFM / FC                                                                                 	|
+| discountCode*          	|                       	| AFFBFAN                          	| Discount promotion code                                                                                	|
 
 
 *currently unavailable in the dataLayer
@@ -293,16 +292,12 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
   guest: [
     {
       count: 1,
-      adultCount: 1,
-      youngAdultCount: '',
-      childCount: '',
-      infantInLapCount: '',
-      infantInSeatCount: ''
+      adult: 1
     }
   ],
   room: [ 
     { 
-      total: 1, 
+      count: 1, 
       type: '' 
     } 
   ],
@@ -477,16 +472,12 @@ eventObject
   guest: [
     {
       count: 1,
-      adultCount: 1,
-      youngAdultCount: null,
-      childCount: null,
-      infantInLapCount: null,
-      infantInSeatCount: null,
+      adult 1
     },
   ],
   room: [
     { 
-      total: 1, 
+      count: 1, 
       type: ""
      },
     ],
@@ -534,14 +525,10 @@ eventObject
   guest: [
     {
       count: 1,
-      adultCount: 1,
-      youngAdultCount: '',
-      childCount: '',
-      infantInLapCount: '',
-      infantInSeatCount: ''
+      adult: 1
     }
   ],
-  room: [ { total: 1, type: '' } ],
+  room: [ { count: 1, type: '' } ],
   page: [
     {
       siteEdition: 'en-LK',
