@@ -1,4 +1,4 @@
-import formatter from "../src/index";
+import formatter from "../src/index.js"
 
 const hotelEventObject = {
   event: "viewable-impression",
@@ -8,7 +8,8 @@ const hotelEventObject = {
   tenantCode: "UL",
   tenantType: "",
   provider: "hyat",
-  regionName: "north america",
+  regionName: "North america",
+  eventExperience: "The lounge , player pod",
   countryCode: "US",
   cityName: "miami",
   propertyCode: "105565",

@@ -17,7 +17,6 @@ const formatAirlines = (obj) => {
       convertValues(obj),
       formatJourney(obj),
       formatFareClass(obj),
-      formatProvider(obj),
       formatCase(obj),
       formatDate(obj),
       formatUrl(obj),
@@ -37,7 +36,6 @@ const formatHotels = (obj) => {
     return (
       convertValues(obj),
       formatTenantType(obj),
-      formatProvider(obj),
       formatCase(obj),
       formatDate(obj),
       formatUrl(obj),
@@ -46,6 +44,28 @@ const formatHotels = (obj) => {
   }
   return "Module name or eventAction missing.";
 }
+
+const formatEvents = (obj) => {
+  if (
+    obj.hasOwnProperty("module") &&
+    obj.module != "" &&
+    obj.hasOwnProperty("eventAction") &&
+    obj.eventAction != ""
+  ) {
+    return (
+      formatTenantType(obj),
+      convertValues(obj),
+      formatJourney(obj),
+      formatFareClass(obj),
+      formatCase(obj),
+      formatDate(obj),
+      formatUrl(obj),
+      pushFormattedEventData(obj)
+    );
+  }
+  return "Module name or eventAction missing.";
+};
+
 
 /**
  * Adds moduleId and tagName parameters if they are not in the given object.
@@ -107,6 +127,7 @@ const formatFareClass = (obj) => {
 
 /**
  * Formats provider. Can only format the provider name if it is separated by spaces.
+ * @deprecated - providers are now separated by spaces only
  * @param {object} obj - data layer object.
  * @return {object} - Returns formatted provider name.
  */
@@ -155,13 +176,20 @@ const formatCase = (obj) => {
     "languageIsoCode",
     "siteEdition",
     "name",
+    "provider",
     //Hotel values
     "tenantCode",
     "actionLabel",
     "regionName",
     "countryCode",
     "cityName",
-    "propertyName"
+    "propertyName",
+    //Event values
+    "eventName",
+    "eventLocation",
+    "eventSession",
+    "eventExperienceCategory",
+    "eventExperience"
   ];
 
   let listOfEvents = [
@@ -218,6 +246,17 @@ const formatCase = (obj) => {
     "select-article"
   ];
 
+  const titleCase = [
+    "regionName",
+    "cityName",
+    "propertyName",
+    "eventName",
+    "eventLocation",
+    "eventSession",
+    "eventExperienceCategory",
+    "eventExperience",
+    "provider"
+  ];
 
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
@@ -238,10 +277,11 @@ const formatCase = (obj) => {
           obj.hasOwnProperty("event") && obj.event != ""
             ? obj.event : obj.eventAction;
       }
-      else if (key === "regionName" || key === "cityName" || key === "propertyName") {
-        //To titlecase
-        obj[key] = obj[key].replace(
-          /\w\S*/g, match => {
+      else if (titleCase.includes(key)) {
+        //To titlecase. Check if key is eventExperience and contains multiple values -> else replace to titlecase.
+        obj[key] = (key=== "eventExperience" && (obj[key].match(/(multiple|,)/gi))) 
+        ? "MULTIPLE" 
+        : obj[key].replace(/\w\S*/g, match => {
             return  match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
           }
         );
@@ -404,5 +444,5 @@ const pushFormattedEventData = (obj) => {
   }
 };
 
-const formatter = { formatAirlines, formatHotels };
+const formatter = { formatAirlines, formatHotels, formatEvents };
 export default formatter

@@ -27,6 +27,7 @@
 ## 🧐 About <a name = "about"></a>
 
 npm package which exports a formatting function that transforms the event tracking object into a dataLayer format as defined in the [emDataStandards](https://github.com/EveryMundo/emDataStandards/blob/master/dataLayer/airmodules.datalayer.js). This function then pushes to the [dataLayer](https://support.google.com/tagmanager/answer/6164391?hl=en). 
+More details can be viewed here: [Tracking Package Documentation](https://everymundo.atlassian.net/l/cp/SoJN6WH7)
 
 ## 📓  Notes <a name = "notes"></a>
 * The [_event object_](#eventObject) should follow the [emDataStandards](https://github.com/EveryMundo/emDataStandards)
@@ -205,7 +206,7 @@ npm install @everymundo/airmodules-event-datalayer
 ### Usage
 
 ```js
-import { formatter } from "@everymundo/airmodules-event-datalayer";
+import { formatter } from "@everymundo/airmodules-event-datalayer"
 ```
 
 ### Function call
@@ -223,6 +224,14 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 ```js
 {
   formatter.formatHotels(eventObject);
+}
+```
+
+#### For Events:
+
+```js
+{
+  formatter.formaEvents(eventObject);
 }
 ```
 
@@ -246,6 +255,15 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 | tenantCode       | tnc          | tenantCode            |
 | eventName        | en           | eventName             |
 | eventLocation    | el           | eventLocation         |
+| eventSession    | es           | eventSession        |
+| eventExperienceCategory       |        eec    | eventExperienceCategory              |
+| eventExperience   |      eex     | eventExperience        |
+| eventNameFilter       | enf           | eventNameFilter             |
+| eventNameFilter       | enf           | eventNameFilter             |
+| eventLocationFilter      | elf           | eventLocationFilter            |
+| eventSessionFilter    | esf           | eventSessionFilter         |
+| eventExperienceCategoryFilter   |      | eventExperienceCategoryFilter         |
+| eventExperienceFilter    |          | eventExperienceFilter         |
 | eventDate        | ed           | eventDate             |
 | experience       | ex           | experience            |
 | ticketCount      | tc           | ticketCount           |
@@ -253,7 +271,6 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 | currencyCode     | c            | currencyCode          |
 | taxAmount        | ta           | taxAmount             |
 | totalPriceUSD    | tpu          | totalPriceUSD         |
-| emcid      | emcid        | emcid (Cookie)        |
 
 </details>
 
@@ -321,7 +338,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
   eventAction: 'viewable-impression',
   actionLabel: '',
   airlineIataCode: 'UL',
-  provider: 'SriLankanAirlines',
+  provider: 'Srilankan Airlines',
   journeyType: 'ONE_WAY',
   originAirportIataCode: 'CMB',
   destinationAirportIataCode: 'SIN',
@@ -374,6 +391,43 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 
 ```
 
+<b>Event Object for Events: </b>
+```js
+
+const eventObject = {
+    event: 'search-initiation',
+    module: 'em-booking-popup-abstract',
+    eventAction: 'search-initiation',
+    actionLabel: null,
+    tenantCode: 'ETA',
+    provider: 'tennis australia',
+    eventName: 'Semifinal',
+    eventLocation: 'Laver Arena',
+    eventSession: 'Night',
+    eventExperienceCategory: 'Ticket Only',
+    eventExperience: 'MULTIPLE',
+    currencyCode: 'LKR',
+    totalPrice: null,
+    totalPriceUSD: null,
+    fareClass: 'ECONOMY',
+    startDate: '2021-03-13',
+    endDate: '2021-03-14',
+    timestamp: '2021-02-16T17:41:43.200Z',
+    url: 'https: //www.srilankan.com/en-lk/',
+    passenger: [{
+        count: 1,
+        adultCount: 1,
+        youngAdultCount: null,
+        childCount: null
+    }],
+    page: [{
+        siteEdition: 'en-LK',
+        countryIsoCode: 'LK',
+        languageIsoCode: 'en'
+    }]
+};
+```
+
 
 
 #### formatAirlines function: 
@@ -386,6 +440,13 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 - In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key
 - Null values will be converted to empty string
 - [Pushes to the dataLayer](#dataLayer)
+
+#### formatEvents function: 
+- Checks whether the incoming object includes "module" and "eventAction". If the object does not contain these fields, formatEvents will add and initialize these with an empty string.
+- In the case that countryIsoCode, LanguageIsoCode, siteEdition or name are missing from their parent field, an empty value will be assigned to the respective key
+- Null values will be converted to empty string
+- Multiple values (e.g The Lounge, Player Pod) for eventExperience will be formatted to `MULTIPLE`.
+- [Pushes to the dataLayer](#dataLayer)
 <a name = "table"></a>
 
 | Field                                                                                                      	| Accepted Values                                                                                                             	| Formatted Result                                                                        	|
@@ -395,7 +456,7 @@ import { formatter } from "@everymundo/airmodules-event-datalayer";
 | fareClass                                                                                                  	| ec, economy, e                                                                                                              	| ECONOMY                                                                                 	|
 |                                                                                                            	| business, bc, b, businessclass                                                                                              	| BUSINESS                                                                                	|
 |                                                                                                            	| first, fc, f, firstclass                                                                                                    	| FIRST                                                                                   	|
-| provider                                                                                                   	| String separated by <b>spaces</b> i.e 'sri lankan airlines'                                                                 	| SriLankanAirlines                                                                       	|
+| provider                                                                                                   	| String separated by <b>spaces</b> i.e 'sri lankan airlines'                                                                 	| Srilankan Airlines                                                                       	|
 | departureDate, returnDate, startDate, endDate                                                              	| Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or  '04 November 2021 5:13 EST'        	| 2021-11-04                                                                              	|
 | timestamp                                                                                                  	| Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or '04 November 2021 5:13 EST'         	| 2021-11-04T10:13:00.000Z                                                                	|
 | url                                                                                                        	| URL string i.e 'https://www.srilankan.com/en-lk/'                                                                           	| https: //www.srilankan.com/en-lk/                                                       	|
