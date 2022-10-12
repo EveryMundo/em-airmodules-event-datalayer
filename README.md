@@ -96,14 +96,17 @@ Events
 <details> 
 <summary> Click to expand list  </summary>
 
- - viewable-impression
- - search-initiation
- - select-location
- - select-date
- - select-experience
- - change-budget
- - reset-filter
- - sort
+- viewable-impression
+- search-initiation
+- open-booking-popup
+- select-date
+- select-session
+- select-category
+- select-experience
+- select-location
+- change-budget
+- sort
+- reset-filter
 
 </details>
 
