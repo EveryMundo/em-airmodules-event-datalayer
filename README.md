@@ -33,7 +33,11 @@ More details can be viewed here: [Tracking Package Documentation](https://everym
 * The [_event object_](#eventObject) should follow the [emDataStandards](https://github.com/EveryMundo/emDataStandards)
 * The [_event object_](#eventObject) should be sent with all parameters listed in the object. The minimum parameters that <b>require</b> values are listed in the table below. All other parameters may contain empty `''` values. 
  
-##### Table for parameters that require values (Hotels)
+#### Tables for parameters that require values
+
+<details> 
+<summary> Hotels </summary>
+
 | emDataStandards field  	| Event Label Parameter 	| Example                          	| Definition                                                                                             	|
 |------------------------	|-----------------------	|----------------------------------	|--------------------------------------------------------------------------------------------------------	|
 | emcid                  	| emcid                 	| T-123456                         	| Unique identifier                                                                                      	|
@@ -69,9 +73,12 @@ More details can be viewed here: [Tracking Package Documentation](https://everym
 | tagName*               	|                       	|                                  	| Name given to SFM / FC                                                                                 	|
 | discountCode*          	|                       	| AFFBFAN                          	| Discount promotion code                                                                                	|
 
-
 *currently unavailable in the dataLayer
-##### Table for parameters that require values (Airlines)
+
+</details>
+
+<details> 
+<summary> Airlines  </summary>
 
 | emDataStandards Field 	| Event Label Parameter 	| Example                                                 |
 |-----------------------	|-----------------------	|-------------------------------------------------------	|
@@ -82,6 +89,49 @@ More details can be viewed here: [Tracking Package Documentation](https://everym
 | pageTypeCode          	| ptc                   	| HP                                                 	    |
 | airlineIataCode       	| aic                   	| AA                                                    	|
 | emcid            	      | emcid                 	| T-HgP91dNuv   
+
+</details>
+
+<details> 
+<summary> Events  </summary>
+
+|          emDataStandards field          	| Event Label Parameter 	|              Example              	|                                            Definition                                            	|
+|:---------------------------------------:	|:---------------------:	|:---------------------------------:	|:------------------------------------------------------------------------------------------------:	|
+| tenantCode                              	| tc                    	| HDI                               	| Tenant Code                                                                                      	|
+| tenantType                              	| tt                    	| hotel                             	| Tenant Type (Hotel, Airline, Event)                                                              	|
+| provider                                	| p                     	| Tennis Australia                  	| Tenant Name                                                                                      	|
+| event                                   	|                       	| search-initiation                 	| Name of the event                                                                                	|
+| module                                  	| module                	| open-booking-popup-abstract       	| Name of the interacted module                                                                    	|
+| eventAction                             	| ea                    	| open-booking-popup                	| Name of the event action used in Google Analytics Reports                                        	|
+| actionLabel                             	| l                     	| open-booking-popup                	| Name of the event action                                                                         	|
+| eventName                               	|                       	| Semifinal                         	| Name of the event                                                                                	|
+| eventLocation                           	|                       	| Laver Arena                       	| Location for the selected event                                                                  	|
+| eventSession                            	|                       	| Night                             	| Time of the event session                                                                        	|
+| eventExperienceCategory                 	|                       	| Ticket Only                       	| Name of the selected experience category                                                         	|
+| eventNameFilter                         	|                       	| Semifinal                         	| Name of the filtered event                                                                       	|
+| eventLocationFilter                     	|                       	| Laver Arena                       	| Name of the filtered event location                                                              	|
+| eventSessionFilter                      	|                       	| Night                             	| Name of the filtered session                                                                     	|
+| eventExperienceCategoryFilter           	|                       	| Ticket Only                       	| Name of the filtered experience category                                                         	|
+| eventExperienceFilter                   	|                       	| MULTIPLE                          	| Types of event experiences selected                                                              	|
+| fareClass                               	| fc                    	|  ECONOMY                          	| Fare class type (ECONOMY, BUSINESS, PREMIUM_ECONOMY, FIRST)                                      	|
+| currencyCode                            	| c                     	| USD                               	| The currency (in 3-letter ISO 4217 format) of the price.                                         	|
+| totalPrice                              	| tp                    	| 399.37                            	| The total price for the reservation or ticket, including applicable taxes, shipping, etc         	|
+| totalPriceUsd                           	| tpu                   	| 530.62                            	| The total price for the reservation or ticket in USD, including applicable taxes, shipping, etc. 	|
+| startDate                               	|                       	| 2022-04-01                        	| Date of check in                                                                                 	|
+| endDate                                 	|                       	| 2022-04-07                        	| Date of check out                                                                                	|
+| timestamp                               	|                       	| 2021-02-16T17:41:43.200Z          	| timestamp of the event sent                                                                      	|
+| url                                     	| url                   	| https: //www.srilankan.com/en-lk/ 	| Full url in lowercase (without query parameters to avoid collecting personal data by mistake)    	|
+| adultCount, youngAdultCount, childCount 	| ac, yac, cc           	| 1                                 	| Amount of adult/young adult/child passengers                                                     	|
+| count                                   	|                       	| 3                                 	| Amount of guests for a specific category                                                         	|
+| siteEdition                             	| se                    	| en-HK                             	| Site edition combination of ISO codes for language and country. The country reflects the market  	|
+| countryIsoCode                          	|                       	| HK                                	| The country code (in 2 letter codes from ISO 3166-1)                                             	|
+| languageIsoCode                         	|                       	| en                                	| The language ISO 629-1 code                                                                      	|
+| tagName*                                	|                       	|                                   	| Name given to SFM / FC                                                                           	|
+| discountCode*                           	|                       	| AFFBFAN                           	| Discount promotion code                                                                          	|
+| discountCode*                           	|                       	| AFFBFAN                           	| Discount promotion code                                                                          	|
+</details>
+
+
 
 
 *   The _event_ and _eventAction_ parameter of the [_event object_](#eventObject) should have values that belong to the list. Please ensure that the passed value belongs to this list: 

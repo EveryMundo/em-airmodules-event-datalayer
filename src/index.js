@@ -280,7 +280,7 @@ const formatCase = (obj) => {
       else if (titleCase.includes(key)) {
         //To titlecase. Check if key is eventExperience and contains multiple values -> else replace to titlecase.
         obj[key] = (key=== "eventExperience" && (obj[key].match(/(multiple|,)/gi))) 
-        ? "MULTIPLE" 
+        ? "MULTIPLE" :  obj[key].toLowerCase().includes("n/a") ? ''
         : obj[key].replace(/\w\S*/g, match => {
             return  match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
           }
