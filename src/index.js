@@ -371,9 +371,9 @@ const formatDate = (obj) => {
  */
 const formatUrl = (obj) => {
   if (obj.hasOwnProperty("url")) {
-    if(window && window.parent.location.href){
-      obj.url = window.parent.location.href
-    }
+    obj.url = obj["url"] !== '' ? obj.url : (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href
     obj.url = obj.url.split(":").join(": ");
   }
   return obj;
