@@ -365,15 +365,38 @@ const formatDate = (obj) => {
 };
 
 /**
+ * Checks whether the document/page is in an iFrame
+ * @return {boolean} - Returns truthy or falsy value
+ */
+const checkIframe = () =>{
+  try{
+    if(window.self !== window.top || window.location !== window.parent.location){
+      return true
+    }
+    else{
+      return false
+    }
+  }catch(e){
+    return true
+  }
+}
+
+/**
  * Formats url spacing.
  * @param {object} obj - data layer object.
  * @return {object} - Returns url spaced between : and /.
  */
 const formatUrl = (obj) => {
   if (obj.hasOwnProperty("url")) {
-    obj.url = obj["url"] !== '' ? obj.url : (window.location != window.parent.location)
-            ? document.referrer
-            : document.location.href
+    if(obj["url"] !== ''){
+      obj.url
+    }
+    else if(checkIframe()){
+      obj.url = window.parentURL ? window.parentURL : document.referrer
+    }
+    else{
+      obj.url = document.location.href
+    }
     obj.url = obj.url.split(":").join(": ");
   }
   return obj;
