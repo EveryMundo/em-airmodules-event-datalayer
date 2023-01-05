@@ -459,13 +459,24 @@ const formatTenantType = async (obj) => {
  */
 const pushFormattedEventData = (obj) => {
   let localDataLayer = [];
+      //Use timeout in case utag has not loaded(?)
+  setTimeout(()=> {
+    if(window && window.utag){
+      utag.link(obj)
+      console.log("window.utag.link within timeout: ", window.utag.link(obj))
+      console.log("utag.link within timeout: ", utag.link(obj))
+    }
+  }, 2000)
+  console.log("Using window.utag.link returns: ",window.utag.link(obj))
+  console.log("Using utag.link returns: ", utag.link(obj))
+  console.log("window.utag returns: ", window.utag)
   if (window && window.dataLayer) {
     if(window.dataLayer.length > 0) {
       window.dataLayer.push(...localDataLayer)
     }
     window.dataLayer.push(obj);
   }
-  else{
+else{
     localDataLayer.push(obj)
   }
 };
