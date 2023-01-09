@@ -392,7 +392,7 @@ const formatUrl = (obj) => {
       obj.url
     }
     else if(checkIframe()){
-      obj.url = window.parentURL ? window.parentURL : document.referrer
+      obj.url = (window.parentURL !== '') ? window.parentURL : document.referrer || window.parent.location.href
     }
     else{
       obj.url = document.location.href
@@ -459,17 +459,20 @@ const formatTenantType = async (obj) => {
  */
 const pushFormattedEventData = (obj) => {
   let localDataLayer = [];
-      //Use timeout in case utag has not loaded(?)
-  setTimeout(()=> {
-    if(window && window.utag){
-      utag.link(obj)
-      console.log("window.utag.link within timeout: ", window.utag.link(obj))
-      console.log("utag.link within timeout: ", utag.link(obj))
-    }
-  }, 2000)
-  console.log("Using window.utag.link returns: ",window.utag.link(obj))
-  console.log("Using utag.link returns: ", utag.link(obj))
-  console.log("window.utag returns: ", window.utag)
+  let ulink = window.ulink = []
+  if(window && window.utag){
+    utag.link(obj)
+    window.ulink.push(obj)
+    // ulink.push(obj)
+  }
+  //Use timeout in case utag has not loaded(?)
+  // else if(window && !window.utag){
+  //   setTimeout(()=> {
+  //     if(window && window.utag){
+  //       utag.link(obj)
+  //     }
+  //   }, 2000)
+  // }
   if (window && window.dataLayer) {
     if(window.dataLayer.length > 0) {
       window.dataLayer.push(...localDataLayer)
