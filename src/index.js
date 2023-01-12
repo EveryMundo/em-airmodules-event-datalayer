@@ -459,28 +459,22 @@ const formatTenantType = async (obj) => {
  */
 const pushFormattedEventData = (obj) => {
   let localDataLayer = [];
-  let ulink = window.ulink = []
-  if(window && window.utag){
-    utag.link(obj)
-    window.ulink.push(obj)
-    // ulink.push(obj)
-  }
-  //Use timeout in case utag has not loaded(?)
-  // else if(window && !window.utag){
-  //   setTimeout(()=> {
-  //     if(window && window.utag){
-  //       utag.link(obj)
-  //     }
-  //   }, 2000)
-  // }
-  if (window && window.dataLayer) {
-    if(window.dataLayer.length > 0) {
-      window.dataLayer.push(...localDataLayer)
+  if (!window) {
+    localDataLayer.push(obj);
+  } else {
+    window.ulink = window.ulink? window.ulink:[];
+    if (window.utag) {
+      window.utag.link(obj);
+      window.ulink.push(obj);
     }
-    window.dataLayer.push(obj);
-  }
-else{
-    localDataLayer.push(obj)
+    if (window.dataLayer) {
+      if (window.dataLayer.length > 0) {
+        window.dataLayer.push(...localDataLayer);
+      }
+      window.dataLayer.push(obj);
+    } else {
+      localDataLayer.push(obj);
+    }
   }
 };
 
