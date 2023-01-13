@@ -458,9 +458,8 @@ const formatTenantType = async (obj) => {
  * @param  {object} obj - formatted object
  */
 const pushFormattedEventData = (obj) => {
-  let localDataLayer = [];
   if (!window) {
-    localDataLayer.push(obj);
+    console.error('window is not defined');
   } else {
     window.ulink = window.ulink? window.ulink:[];
     if (window.utag) {
@@ -468,12 +467,14 @@ const pushFormattedEventData = (obj) => {
       window.ulink.push(obj);
     }
     if (window.dataLayer) {
-      if (window.dataLayer.length > 0) {
-        window.dataLayer.push(...localDataLayer);
+      if(window.localDataLayer && window.localDataLayer.length > 0) {
+        window.dataLayer.push(...window.localDataLayer);
+        window.localDataLayer = [];
       }
       window.dataLayer.push(obj);
     } else {
-      localDataLayer.push(obj);
+      window.localDataLayer = [];
+      window.localDataLayer.push(obj);
     }
   }
 };
