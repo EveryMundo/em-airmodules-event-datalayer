@@ -461,10 +461,8 @@ const pushFormattedEventData = (obj) => {
   if (!window) {
     console.error('window is not defined');
   } else {
-    window.ulink = window.ulink? window.ulink:[];
     if (window.utag) {
       window.utag.link(obj);
-      window.ulink.push(obj);
     }
     if (window.dataLayer) {
       if(window.localDataLayer && window.localDataLayer.length > 0) {
