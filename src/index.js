@@ -1,3 +1,4 @@
+import {tenantList} from "./tenantlist.js"
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -439,20 +440,60 @@ const convertValues = (obj) => {
 };
 
 /**
- * Fetches tenant type from tenant-code-to-type mapper API
+ * Returns tenant type based on tenant code. Checks whether tenant code belongs in tenant list. 
  * @param  {object} obj - formatted object
  * @return {object} - returns object containing tenant type
  */
-const formatTenantType = async (obj) => {
-  const tenantCode = obj['tenantCode']
-  const tenantTypeData = await fetch(`https://tenant-code-to-type-mapper.everymundo.workers.dev/?code=${tenantCode}`, {headers: {
-    'Access-Control-Allow-Origin': '*'
-  }})
-  const tenantType = await tenantTypeData.text()
-  obj.tenantType = tenantType;
-  
-  return obj
-}
+const formatTenantType = (obj) => {
+  const tenantCode = obj.hasOwnProperty('tenantCode') ? obj['tenantCode'] : obj.hasOwnProperty('airlineIataCode') ? obj['airlineIataCode'] : '' 
+  const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1) //Take substring for customers with multiple tenants
+
+  //Check if tenant belongs in list
+  if(Object.keys(tenantList).includes(tenantCode)){
+    return obj.tenantType = tenantList[tenantCode]
+  }
+  //If the tenant code does not belong to list
+  else if(!Object.keys(tenantList).includes(tenantCode)){
+     //Check if substring of tenant code belongs in list
+     if(Object.keys(tenantList).includes(tenantCodeSubstr)){
+      return obj.tenantType = tenantList[tenantCodeSubstr]
+    }
+    else{
+    switch(tenantCode[0]){
+      case "A":
+        obj.tenantType = "airline"
+        break;
+      case "X":
+        obj.tenantType = "airline alliance"
+        break;
+      case "L":
+        obj.tenantType = "airport"
+        break;
+      case "P":
+        obj.tenantType = "package"
+        break;
+      case "H":
+        obj.tenantType = "hotel"
+        break;
+      case "E":
+        obj.tenantType = "event"
+        break; 
+      case "B":
+        obj.tenantType = "bus"
+        break;
+      case "D":
+        obj.tenantType = "tourism board & dmo"
+        break;
+      case "T":
+        obj.tenantType = "train"
+       break;
+      default:
+        obj.tenantType = ''
+      console.log('tenantCode does not adhere to the naming convention.')
+    }
+    return obj 
+  }}
+  };
 /**
  * Pushes formatted object to datalayer
  * @param  {object} obj - formatted object
