@@ -473,6 +473,16 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 - --
 
 ### Tables
+<h4 align="center"> Page Template Codes </h4>
+ 
+| Page Template Code 	| Definition  	|
+|--------------------	|-------------	|
+| HP                 	| Homepage    	|
+| CP                 	| Custom Page 	|
+| CO                 	| Country     	|
+| CI                 	| City        	|
+| PR                 	| Property    	|
+
 
 <h4 align="center"> Description of event object fields </h4>
 

@@ -14,11 +14,11 @@ const formatAirlines = (obj) => {
   ) {
     return (
       addParameters(obj),
-      formatTenantType(obj),
       convertValues(obj),
       formatJourney(obj),
       formatFareClass(obj),
       formatCase(obj),
+      formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
       pushFormattedEventData(obj)
@@ -36,8 +36,8 @@ const formatHotels = (obj) => {
   ) {
     return (
       convertValues(obj),
-      formatTenantType(obj),
       formatCase(obj),
+      formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
       pushFormattedEventData(obj)
@@ -54,11 +54,11 @@ const formatEvents = (obj) => {
     obj.eventAction != ""
   ) {
     return (
-      formatTenantType(obj),
       convertValues(obj),
       formatJourney(obj),
       formatFareClass(obj),
       formatCase(obj),
+      formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
       pushFormattedEventData(obj)
@@ -309,8 +309,12 @@ const formatCase = (obj) => {
           obj.page[0].countryIsoCode?.toUpperCase() ?? "";
         obj.page[0].languageIsoCode =
           obj.page[0].languageIsoCode?.toLowerCase() ?? "";
-        obj.page[0].siteEdition = siteEdition[1] !== undefined ? siteEdition[0] + '-' + siteEdition[1].toUpperCase() : siteEdition[0] ?? "";
-
+        obj.page[0].siteEdition =
+          siteEdition[1] !== undefined
+            ? siteEdition[0] + "-" + siteEdition[1].toUpperCase()
+            : (obj.page[0].siteEdition === "" && (obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== ''))
+            ? obj.page[0].languageIsoCode + "-" + obj.page[0].countryIsoCode
+            : siteEdition[0] ?? "";
       }
     }if (obj.lodging !== undefined) {
 
@@ -459,7 +463,7 @@ const formatTenantType = (obj) => {
       return obj.tenantType = tenantList[tenantCodeSubstr]
     }
     else{
-    switch(tenantCode[0]){
+    switch(tenantCode[0].toUpperCase()){
       case "A":
         obj.tenantType = "airline"
         break;
