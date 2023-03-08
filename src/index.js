@@ -244,7 +244,8 @@ const formatCase = (obj) => {
     "toggle-farelist",
     "zoom",
     "viewable-impression",
-    "select-article"
+    "select-article",
+    "select-resident-status"
   ];
 
   const titleCase = [

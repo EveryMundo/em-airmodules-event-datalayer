@@ -315,6 +315,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | select-status            	|
 | select-stop              	|
 | select-article           	|
+| select-resident-status    |
 ---
 
 <a name="airlineValuesTable"><h4 align="center"> Sample Values </h4>
