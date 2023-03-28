@@ -550,6 +550,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | select-redemption        	|
 | select-stay-length       	|
 | select-offer             	|
+| no-fares-available        |
 
 ---
 <a name="hotelValuesTable"></a><h4 align="center"> Sample Values </h4>

@@ -245,7 +245,8 @@ const formatCase = (obj) => {
     "zoom",
     "viewable-impression",
     "select-article",
-    "select-resident-status"
+    "select-resident-status",
+    "no-fares-available"
   ];
 
   const titleCase = [
