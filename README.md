@@ -316,6 +316,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | select-stop              	|
 | select-article           	|
 | select-resident-status    |
+| no-fares-available        |
 ---
 
 <a name="airlineValuesTable"><h4 align="center"> Sample Values </h4>
@@ -768,6 +769,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | select-budget       	|
 | sort                	|
 | reset-filter        	|
+| no-fares-available        |
 
 ---
 
