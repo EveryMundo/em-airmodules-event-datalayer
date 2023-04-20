@@ -246,7 +246,13 @@ const formatCase = (obj) => {
     "viewable-impression",
     "select-article",
     "select-resident-status",
-    "no-fares-available"
+    "no-fares-available",
+    "insert-first-name",
+    "insert-last-name",
+    "select-origin",
+    "insert-email",
+    "insert-phone-number",
+    "subscribe"
   ];
 
   const titleCase = [
