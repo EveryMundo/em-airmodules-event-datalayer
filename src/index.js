@@ -401,11 +401,11 @@ const checkIframe = () =>{
  */
 const formatUrl = (obj) => {
   if (obj.hasOwnProperty("url")) {
-    if(obj["url"] !== ''){
-      obj.url
-    }
-    else if(checkIframe()){
+    if(checkIframe()){
       obj.url = (window.parentURL !== '') ? window.parentURL : document.referrer || window.parent.location.href
+    }
+    else if(obj["url"] !== ''){
+      obj.url
     }
     else{
       obj.url = document.location.href
@@ -518,6 +518,7 @@ const pushFormattedEventData = (obj) => {
       window.utag.link(obj);
     }
     if (window.dataLayer) {
+      console.log('TP dataLayer initialized')
       if(window.localDataLayer && window.localDataLayer.length > 0) {
         window.dataLayer.push(...window.localDataLayer);
         window.localDataLayer = [];
