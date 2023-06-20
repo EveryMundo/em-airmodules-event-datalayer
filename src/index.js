@@ -19,9 +19,9 @@ const formatAirlines = (obj) => {
       formatFareClass(obj),
       formatCase(obj),
       formatTenantType(obj),
-      formatDate(obj),
-      formatUrl(obj),
-      pushFormattedEventData(obj)
+      formatDate(obj)
+      // formatUrl(obj),
+      // pushFormattedEventData(obj)
     );
   }
   return "Module name or eventAction missing.";
@@ -38,9 +38,9 @@ const formatHotels = (obj) => {
       convertValues(obj),
       formatCase(obj),
       formatTenantType(obj),
-      formatDate(obj),
-      formatUrl(obj),
-      pushFormattedEventData(obj)
+      formatDate(obj)
+      // formatUrl(obj),
+      // pushFormattedEventData(obj)
     );
   }
   return "Module name or eventAction missing.";
@@ -155,7 +155,8 @@ const formatProvider = (obj) => {
 
 /**
  * Formats casing for different key values.
- * Events, Module, eventAction - kebab-case
+ * Events, eventAction - underscore
+ * Module, actionLabel - kebab-case
  * lodging name - Titlecased
  * Rest - Capital
  * @param {object} obj - data layer object.
@@ -267,77 +268,57 @@ const formatCase = (obj) => {
     "provider"
   ];
 
+  const toSnakeCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
+  const toKebabCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
+  const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase());
+
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
-      if (key === "event" || key === "module" || key === "actionLabel") {
-        obj[key] = obj[key]
-          .replace(/([a-z])([A-Z])/g, "$1-$2")
-          .replace(/[\s_]+/g, "-")
-          .toLowerCase();
-          
-          const found = listOfEvents.includes(obj["event"])
-          
-          if(!found && key === "event"){
-            obj["event"] = "Event value does not exist"
-            console.log("Error: Please check event value")
-          }
+      if (key === "event") {
+        const found = listOfEvents.includes(toKebabCase(obj[key]));
+        if (!found) {
+          obj[key] = "Event value does not exist";
+          console.log("Error: Please check event value");
+        }else{
+          obj[key] = toSnakeCase(obj[key]);
+        }
+      } else if (key === "module" || key === "actionLabel") {
+        obj[key] = toKebabCase(obj[key]);
       } else if (key === "eventAction") {
-        obj.eventAction =
-          obj.hasOwnProperty("event") && obj.event != ""
-            ? obj.event : obj.eventAction;
-      }
-      else if (titleCase.includes(key)) {
-        //To titlecase. Check if key is eventExperience and contains multiple values -> else replace to titlecase.
-        obj[key] = (key=== "eventExperience" && (obj[key].match(/(multiple|,)/gi))) 
-        ? "MULTIPLE" :  obj[key].toLowerCase().includes("n/a") ? ''
-        : obj[key].replace(/\w\S*/g, match => {
-            return  match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
-          }
-        );
+        obj.eventAction = obj.hasOwnProperty("event") && obj.event !== "" ? obj.event : obj.eventAction;
+      } else if (titleCase.includes(key)) {
+        if (key === "eventExperience" && obj[key].match(/(multiple|,)/gi)) {
+          obj[key] = "MULTIPLE";
+        } else {
+          obj[key] = obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key]);
+        }
       } else {
-        obj[key] = obj[key].toUpperCase()
-      }}
-
-  
-
-     if (obj.page !== undefined) {
-      if (
-        obj.page[0].hasOwnProperty(key) &&
-        (key === "languageIsoCode" ||
-          key === "siteEdition" ||
-          key === "countryIsoCode")
-      ) {
-
-        let siteEdition = obj.page[0].siteEdition
-          .replace(/([a-z])([A-Z])/g, "$1-$2")
-          .replace(/[\s_]+/g, "-")
-          .split("-");
-
-        obj.page[0].countryIsoCode =
-          obj.page[0].countryIsoCode?.toUpperCase() ?? "";
-        obj.page[0].languageIsoCode =
-          obj.page[0].languageIsoCode?.toLowerCase() ?? "";
-        obj.page[0].siteEdition =
-          siteEdition[1] !== undefined
-            ? siteEdition[0] + "-" + siteEdition[1].toUpperCase()
-            : (obj.page[0].siteEdition === "" && (obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== ''))
-            ? obj.page[0].languageIsoCode + "-" + obj.page[0].countryIsoCode
-            : siteEdition[0] ?? "";
+        obj[key] = obj[key].toUpperCase();
       }
-    }if (obj.lodging !== undefined) {
+    }
 
-      if (obj.lodging[0].hasOwnProperty(key) && key == "cityCode") {
-        obj.lodging[0].cityCode = obj.lodging[0].cityCode?.toUpperCase() ?? "";
+    if (obj.page !== undefined && obj.page[0]?.hasOwnProperty(key) && (key === "languageIsoCode" || key === "siteEdition" || key === "countryIsoCode")) {
+      let siteEdition = toKebabCase(obj.page[0].siteEdition).split("-");
+      obj.page[0].countryIsoCode = obj.page[0]?.countryIsoCode?.toUpperCase() ?? "";
+      obj.page[0].languageIsoCode = obj.page[0]?.languageIsoCode?.toLowerCase() ?? "";
+      obj.page[0].siteEdition = siteEdition[1] !== undefined
+        ? siteEdition[0] + "-" + siteEdition[1].toUpperCase()
+        : (obj.page[0].siteEdition === "" && obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== "")
+        ? obj.page[0].languageIsoCode + "-" + obj.page[0].countryIsoCode
+        : siteEdition[0] ?? "";
+    }
+
+    if (obj.lodging !== undefined && obj.lodging[0]?.hasOwnProperty(key)) {
+      if (key === "cityCode") {
+        obj.lodging[0].cityCode = obj.lodging[0]?.cityCode?.toUpperCase() ?? "";
       }
-      if (obj.lodging[0].hasOwnProperty(key) && key === "name") {
-        obj.lodging[0].name =
-          obj.lodging[0].name?.charAt(0).toUpperCase() +
-            obj.lodging[0].name?.substr(1).toLowerCase() ?? "";
+      if (key === "name") {
+        obj.lodging[0].name = obj.lodging[0]?.name?.charAt(0).toUpperCase() + obj.lodging[0]?.name?.substr(1).toLowerCase() ?? "";
       }
-  }});
+    }
+  });
   return obj;
-};
-
+}
 /**
  * Formats date to ISO format.
  * @param {object} obj - data layer object.

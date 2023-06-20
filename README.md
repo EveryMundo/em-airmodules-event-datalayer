@@ -156,9 +156,9 @@ const eventObject = {
 
 ```js
 const eventObject = {
-  event: 'viewable-impression',
+  event: 'viewable_impression',
   module: 'em-booking-popup',
-  eventAction: 'viewable-impression',
+  eventAction: 'viewable_impression',
   actionLabel: '',
   airlineIataCode: 'UL',
   provider: 'SriLankanAirlines',
@@ -235,9 +235,9 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 
 |          emDataStandards field          	|            Example            	|                                            Definition                                           	|                                            Definition                                            	|
 |:---------------------------------------:	|:-----------------------------:	|:-----------------------------------------------------------------------------------------------:	|:------------------------------------------------------------------------------------------------:	|
-| event                                   	| T-123456                      	| Name of the event performed                                                                     	| Tenant Code                                                                                      	|
+| event                                   	| T_123456                      	| Name of the event performed                                                                     	| Tenant Code                                                                                      	|
 | module                                  	| em-booking-mask               	| Name of the module                                                                              	| Tenant Type (Hotel, Airline, Event)                                                              	|
-| eventAction                             	| open-booking-popup            	| Name of the event action used in Google Analytics Reports                                       	| Tenant Name                                                                                      	|
+| eventAction                             	| open_booking_popup            	| Name of the event action used in Google Analytics Reports                                       	| Tenant Name                                                                                      	|
 | actionLabel                             	| book-now                      	| Reporting dimension for additional information for events                                       	| Name of the event                                                                                	|
 | airlineIataCode                         	| AA                            	| IATA identifier for the airline                                                                 	| Name of the interacted module                                                                    	|
 | provider                                	| American Airlines             	| Name of the airline                                                                             	| Name of the event action used in Google Analytics Reports                                        	|
@@ -339,8 +339,9 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | timestamp                                                                                                  	| Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or '04 November 2021 5:13 EST'         	| 2021-11-04T10:13:00.000Z                                              	|
 | url                                                                                                        	| URL string i.e 'https://www.srilankan.com/en-lk/'                                                                           	| https: //www.srilankan.com/en-lk/                                     	|
 | fields with numeric values or null i.e totalPrice, totalPriceUSD, tripLength etc.                          	| integers, numeric strings, null i.e {"totalPrice": "25"}                                                                    	| {"totalPrice": 25} Note: Null values are converted to empty string '' 	|
-| events, module                                                                                             	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                    	|
-| eventAction                                                                                                	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable-impression'                                                 	|
+| events                                                                                             	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'                                                    	| 'viewable_impression'                                                    	|
+| module                                                                                             	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                    	|
+| eventAction                                                                                                	| String separated by spaces, dashes, or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable_impression'                                                 	|
 | lodging (for vacation packages)                                                                            	| String i.e 'intercontinental'                                                                                               	| 'Intercontinental'                                                    	|
 | siteEdition                                                                                                	| String separated by spaces, dashes, slashes or camelCased. i.e 'en-lk'                                                      	| 'en-LK'                                                               	|
 | countryIsoCode                                                                                             	| String i.e 'lk'                                                                                                             	| 'LK'                                                                  	|
@@ -415,9 +416,9 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 
 ```js
 const eventObject = {
-  event: 'viewable-impression',
+  event: 'viewable_impression',
   module: 'em-booking-popup-abstract',
-  eventAction: 'viewable-impression',
+  eventAction: 'viewable_impression',
   actionLabel: '',
   tenantCode: 'UL',
   tenantType: '',
@@ -577,8 +578,9 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | timestamp                                                                         	| Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or '04 November 2021 5:13 EST'         	| 2022-08-04T10:13:00.000Z                                                                         	|
 | url                                                                               	| URL string i.e 'https://www.hyatt.com/en/miami'                                                                             	| https:  //www.hyatt.com/en/miami                                                                 	|
 | fields with numeric values or null i.e totalPrice, totalPriceUSD, tripLength etc. 	| integers, numeric strings, null i.e {"totalPrice": "25"}                                                                    	| {"totalPrice": 25} Note: Null values are converted to empty string ''                            	|
-| events, module                                                                    	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                                               	|
-| eventAction                                                                       	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable-impression'                                                                            	|
+| events                                                                                             	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'                                                    	| 'viewable_impression'                                                    	|
+| module                                                                    	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                                               	|
+| eventAction                                                                       	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable_impression'                                                                            	|
 | siteEdition                                                                       	| String separated by spaces, dashes, slashes or camelCased. i.e 'en-lk'                                                      	| 'en-LK'                                                                                          	|
 | countryIsoCode                                                                    	| String i.e 'lk'                                                                                                             	| 'LK'                                                                                             	|
 | languageIsoCode                                                                   	| String i.e 'en'                                                                                                             	| 'en'                                                                                             	|
@@ -668,9 +670,9 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 ```js
 
   const eventObject = {
-    'event': 'search-initiation',
+    'event': 'search_initiation',
     'module': 'em-booking-popup-abstract',
-    'eventAction': 'search-initiation',
+    'eventAction': 'search_initiation',
     'actionLabel': null,
     'tenantCode': 'ETA',
     'provider': 'Tennis Australia',
@@ -734,9 +736,9 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | tenantCode                              	| HDI                               	| Tenant Code                                                                                           	|
 | tenantType                              	| hotel                             	| Tenant Type (Hotel, Airline, Event)                                                                   	|
 | provider                                	| Tennis Australia                  	| Tenant Name                                                                                           	|
-| event                                   	| search-initiation                 	| Name of the event                                                                                     	|
+| event                                   	| search_initiation                 	| Name of the event                                                                                     	|
 | module                                  	| open-booking-popup-abstract       	| Name of the interacted module                                                                         	|
-| eventAction                             	| search-initiation                 	| Name of the event action used in Google Analytics Reports. It is the same value as the “event” field. 	|
+| eventAction                             	| search_initiation                 	| Name of the event action used in Google Analytics Reports. It is the same value as the “event” field. 	|
 | actionLabel                             	| Book Now                          	| Name of the event action                                                                              	|
 | eventName                               	| Semifinal                         	| Name of the Event                                                                                     	|
 | eventLocation                           	| Laver Arena                       	| Location for the selected Event                                                                       	|
@@ -804,8 +806,9 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | timestamp                                                                                                                                                                 	| Dates separated by spaces, slashes, or dashes i.e 2021/11/04, 2021 11 04, 2021-11-04 or '04 November 2021 5:13 EST'         	| 2022-08-04T10:13:00.000Z                                                                         	|
 | url                                                                                                                                                                       	| URL string i.e 'https://www.hyatt.com/en/miami'                                                                             	| https:  //www.hyatt.com/en/miami                                                                 	|
 | fields with numeric values or null i.e totalPrice, totalPriceUSD, tripLength etc.                                                                                         	| integers, numeric strings, null i.e {"totalPrice": "25"}                                                                    	| {"totalPrice": 25} Note: Null values are converted to empty string ''                            	|
-| events, module                                                                                                                                                            	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                                               	|
-| eventAction                                                                                                                                                               	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable-impression'                                                                            	|
+| events                                                                                             	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'                                                    	| 'viewable_impression'                                                    	|
+| module                                                                                                                                                            	| String separated by spaces, dashes or camelCased. i.e 'em booking popup'                                                    	| 'em-booking-popup'                                                                               	|
+| eventAction                                                                                                                                                               	| String separated by spaces, dashes or camelCased. i.e 'viewable impression'. Formatted automatically from given event value 	| 'viewable_impression'                                                                            	|
 | siteEdition                                                                                                                                                               	| String separated by spaces, dashes, slashes or camelCased. i.e 'en-lk'                                                      	| 'en-LK'                                                                                          	|
 | countryIsoCode                                                                                                                                                            	| String i.e 'lk'                                                                                                             	| 'LK'                                                                                             	|
 | languageIsoCode                                                                                                                                                           	| String i.e 'en'                                                                                                             	| 'en'                                                                                             	|
