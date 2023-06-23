@@ -19,9 +19,9 @@ const formatAirlines = (obj) => {
       formatFareClass(obj),
       formatCase(obj),
       formatTenantType(obj),
-      formatDate(obj)
-      // formatUrl(obj),
-      // pushFormattedEventData(obj)
+      formatDate(obj),
+      formatUrl(obj),
+      pushFormattedEventData(obj)
     );
   }
   return "Module name or eventAction missing.";
@@ -38,9 +38,9 @@ const formatHotels = (obj) => {
       convertValues(obj),
       formatCase(obj),
       formatTenantType(obj),
-      formatDate(obj)
-      // formatUrl(obj),
-      // pushFormattedEventData(obj)
+      formatDate(obj),
+      formatUrl(obj),
+      pushFormattedEventData(obj)
     );
   }
   return "Module name or eventAction missing.";
