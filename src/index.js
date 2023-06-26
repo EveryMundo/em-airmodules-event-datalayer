@@ -513,4 +513,6 @@ const pushFormattedEventData = (obj) => {
 };
 
 const formatter = { formatAirlines, formatHotels, formatEvents };
+
+export { formatter }
 export default formatter
