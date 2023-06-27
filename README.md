@@ -279,50 +279,50 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 
 <a name="eventActionsAirlines"></a><h4 align="center"> List of Event Actions </h4>
 
-| Event Action             	|
-|--------------------------	|
-| viewable-impression      	|
-| fsi                      	|
-| open-booking-popup       	|
-| select-origin            	|
-| select-destination       	|
-| select-departure-date    	|
-| select-return-date       	|
-| select-journey-type      	|
-| select-miles             	|
-| expand-form              	|
-| collapse-form            	|
-| sort                     	|
-| more-deals               	|
-| select-tab               	|
-| filter-airlines          	|
-| select-budget            	|
-| select-fare-class        	|
-| collapse-histogram       	|
-| select-month             	|
-| expand-flight            	|
-| reset-filter             	|
-| toggle-farelist          	|
-| expand-map               	|
-| select-map-destination   	|
-| selected-travel-interest 	|
-| zoom                     	|
-| select-interest          	|
-| click-out                	|
-| read-article             	|
-| select-location          	|
-| search                   	|
-| select-status            	|
-| select-stop              	|
-| select-article           	|
-| select-resident-status    |
-| no-fares-available        |
-| insert-first-name    	    |
-| insert-last-name   	      |
-| select-origin    	        |
-| insert-email       	      |
-| insert-phone-number       |
-| subscribe        	        |
+| Event Action              |
+|--------------------------|
+| viewable_impression       |
+| fsi                       |
+| open_booking_popup        |
+| select_origin             |
+| select_destination        |
+| select_departure_date     |
+| select_return_date        |
+| select_journey_type       |
+| select_miles              |
+| expand_form               |
+| collapse_form             |
+| sort                      |
+| more_deals                |
+| select_tab                |
+| filter_airlines           |
+| select_budget             |
+| select_fare_class         |
+| collapse_histogram        |
+| select_month              |
+| expand_flight             |
+| reset_filter              |
+| toggle_farelist           |
+| expand_map                |
+| select_map_destination    |
+| selected_travel_interest  |
+| zoom                      |
+| select_interest           |
+| click_out                 |
+| read_article              |
+| select_location           |
+| search                    |
+| select_status             |
+| select_stop               |
+| select_article            |
+| select_resident_status    |
+| no_fares_available        |
+| insert_first_name         |
+| insert_last_name          |
+| select_origin             |
+| insert_email              |
+| insert_phone_number       |
+| subscribe                 |
 ---
 
 <a name="airlineValuesTable"><h4 align="center"> Sample Values </h4>
@@ -535,36 +535,36 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 
 <a name="eventActionsHotels"></a><h4 align="center"> List of Event Actions </h4>
 
-| Event Action             	|
-|--------------------------	|
-| viewable-impression      	|
-| search-initiation        	|
-| open-booking-popup       	|
-| more-deals               	|
-| select-origin            	|
-| select-trip-length       	|
-| sort                     	|
-| select-rating            	|
-| select-destination       	|
-| select-budget            	|
-| reset-filter             	|
-| select-night             	|
-| search-initiation        	|
-| select-property          	|
-| select-start-date        	|
-| select-end-date          	|
-| select-room-guest        	|
-| select-accesibility      	|
-| select-redemption        	|
-| select-stay-length       	|
-| select-offer             	|
-| no-fares-available        |
-| insert-first-name    	    |
-| insert-last-name   	      |
-| select-origin    	        |
-| insert-email       	      |
-| insert-phone-number       |
-| subscribe        	        |
+| Event Action              |
+|--------------------------|
+| viewable_impression       |
+| search_initiation         |
+| open_booking_popup        |
+| more_deals                |
+| select_origin             |
+| select_trip_length        |
+| sort                      |
+| select_rating             |
+| select_destination        |
+| select_budget             |
+| reset_filter              |
+| select_night              |
+| search_initiation         |
+| select_property           |
+| select_start_date         |
+| select_end_date           |
+| select_room_guest         |
+| select_accessibility      |
+| select_redemption         |
+| select_stay_length        |
+| select_offer              |
+| no_fares_available        |
+| insert_first_name         |
+| insert_last_name          |
+| select_origin             |
+| insert_email              |
+| insert_phone_number       |
+| subscribe                 |
 
 ---
 <a name="hotelValuesTable"></a><h4 align="center"> Sample Values </h4>
@@ -770,26 +770,26 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 
 <a name="eventActionsEvents"></a><h4 align="center"> List of Event Actions </h4>
 
-| Event Action        	|
-|---------------------	|
-| viewable-impression 	|
-| search-initiation   	|
-| open-booking-popup  	|
-| select-date         	|
-| select-session      	|
-| select-category     	|
-| select-experience   	|
-| select-location     	|
-| select-budget       	|
-| sort                	|
-| reset-filter        	|
-| no-fares-available    |
-| insert-first-name    	|
-| insert-last-name   	  |
-| select-origin    	    |
-| insert-email       	  |
-| insert-phone-number   |
-| subscribe        	    |
+| Event Action         |
+|---------------------|
+| viewable_impression  |
+| search_initiation    |
+| open_booking_popup   |
+| select_date          |
+| select_session       |
+| select_category      |
+| select_experience    |
+| select_location      |
+| select_budget        |
+| sort                 |
+| reset_filter         |
+| no_fares_available   |
+| insert_first_name    |
+| insert_last_name     |
+| select_origin        |
+| insert_email         |
+| insert_phone_number  |
+| subscribe            |
 
 
 ---
