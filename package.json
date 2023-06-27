@@ -2,13 +2,18 @@
   "name": "@everymundo/airmodules-event-datalayer",
   "version": "1.2.20",
   "description": "Package for airmodules",
-  "module": "index.esm.js",
-  "main": "index.js",
-  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel src --watch -d dist",
-    "build": "babel  --config-file ./.babelrc_script.json src -d dist  && babel --config-file ./.babelrc_esm.json src -d dist/esm/",
+    "build": "babel --config-file ./.babelrc_cjs.json src -d dist/cjs && babel --config-file ./.babelrc_esm.json src -d dist/esm/ && node scripts/fixup-modules.js",
     "babel": "./node_modules/.bin/babel"
   },
   "keywords": [
