@@ -59,7 +59,6 @@ The tracking package is used for formatting datalayer object values. This npm pa
 | actionLabel        	| sample value       	|
 |-----------------------	|------------	|
 |select-budget | 1000
-| zoom                  	| in or out  	|
 | select-interest       	| snorkeling 	|
 | select-destination    	| MIA        	|
 | select-departure-date 	| 2023-04-01 	|
@@ -303,10 +302,8 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | expand_flight             |
 | reset_filter              |
 | toggle_farelist           |
-| expand_map                |
 | select_map_destination    |
 | selected_travel_interest  |
-| zoom                      |
 | select_interest           |
 | click_out                 |
 | read_article              |
@@ -323,6 +320,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | insert_email              |
 | insert_phone_number       |
 | subscribe                 |
+| enter-promo-code          |
 ---
 
 <a name="airlineValuesTable"><h4 align="center"> Sample Values </h4>
@@ -565,6 +563,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | insert_email              |
 | insert_phone_number       |
 | subscribe                 |
+| enter-promo-code          |
 
 ---
 <a name="hotelValuesTable"></a><h4 align="center"> Sample Values </h4>
@@ -790,6 +789,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | insert_email         |
 | insert_phone_number  |
 | subscribe            |
+| enter-promo-code     |
 
 
 ---

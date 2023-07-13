@@ -5,6 +5,21 @@ import {tenantList} from "./tenantlist.js"
  * @return {function name(params) { }}} - Returns the formatted object using all format functions
  */
 
+const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+const { log } = console;
+
+globalObj.tp_v = '1.3.1';
+globalObj.tp_debug = false
+
+console.log = function (...args) {
+  if (globalObj && globalObj.tp_debug === true) {
+    log('tp_debug is currently active')
+    log(...args);
+  } else {
+    // do nothing
+  }
+};
+
 const formatAirlines = (obj) => {
   if (
     obj.hasOwnProperty("module") &&
@@ -47,12 +62,13 @@ const formatHotels = (obj) => {
 }
 
 const formatEvents = (obj) => {
-  if (
+  if(
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
     obj.hasOwnProperty("eventAction") &&
     obj.eventAction != ""
-  ) {
+  )
+   {
     return (
       convertValues(obj),
       formatJourney(obj),
@@ -213,7 +229,6 @@ const formatCase = (obj) => {
     "collapse-histogram",
     "expand-flight",
     "expand-form",
-    "expand-map",
     "filter-airlines",
     "flight",
     "fsi",
@@ -243,7 +258,6 @@ const formatCase = (obj) => {
     "selected-travel-interest",
     "sort",
     "toggle-farelist",
-    "zoom",
     "viewable-impression",
     "select-article",
     "select-resident-status",
@@ -253,7 +267,8 @@ const formatCase = (obj) => {
     "select-origin",
     "insert-email",
     "insert-phone-number",
-    "subscribe"
+    "subscribe",
+    "enter-promo-code"
   ];
 
   const titleCase = [
@@ -493,18 +508,18 @@ const formatTenantType = (obj) => {
  */
 const pushFormattedEventData = (obj) => {
   if (!window) {
-    console.error('window is not defined');
+    error('window is not defined');
   } else {
     if (window.utag) {
       window.utag.link(obj);
     }
     if (window.dataLayer) {
-      console.log('TP dataLayer initialized')
       if(window.localDataLayer && window.localDataLayer.length > 0) {
         window.dataLayer.push(...window.localDataLayer);
         window.localDataLayer = [];
       }
-      window.dataLayer.push(obj);
+      window.dataLayer.push(obj);  
+      console.log("Event obj: ", obj)
     } else {
       window.localDataLayer = [];
       window.localDataLayer.push(obj);
