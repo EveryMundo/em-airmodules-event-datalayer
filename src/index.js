@@ -30,9 +30,9 @@ const formatAirlines = (obj) => {
     return (
       addParameters(obj),
       convertValues(obj),
+      formatCase(obj),
       formatJourney(obj),
       formatFareClass(obj),
-      formatCase(obj),
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
@@ -424,28 +424,28 @@ const convertValues = (obj) => {
     if (obj.hasOwnProperty(property)) {
       if (typeof obj[property] === "object") {
         convertValues(obj[property]);
-        if (obj[property] == null) {
+        if (obj[property] == null || !obj[property]) {
           obj[property] = "";
         }
-      } else if (
-        typeof obj[property] === "string" &&
-        !isNaN(obj[property]) &&
-        !isNaN(parseFloat(obj[property]))
-      ) {
+      } else if (typeof obj[property] === "string") {
+        if (!isNaN(obj[property]) && !isNaN(parseFloat(obj[property]))) {
           obj[property] = +obj[property];
-      }
-      else{
-        if(typeof obj[property] === "string" && (obj[property] === "false" || obj[property] === "true" )){
-          obj[property] = obj[property].toLowerCase() === 'true' ? true : false
+        } else if (obj[property] === "false" || obj[property] === "true") {
+          obj[property] = obj[property].toLowerCase() === "true" ? true : false;
         }
+      } else {
+        // Default the property to an empty string if it's not a string
+        obj[property] = "";
       }
-      if(typeof obj[property] === 'number'){
-        obj[property] = Math.round((obj[property]) * 100)/100
+
+      if (typeof obj[property] === "number") {
+        obj[property] = Math.round(obj[property] * 100) / 100;
       }
     }
   }
   return obj;
 };
+
 
 /**
  * Returns tenant type based on tenant code. Checks whether tenant code belongs in tenant list. 
@@ -453,55 +453,60 @@ const convertValues = (obj) => {
  * @return {object} - returns object containing tenant type
  */
 const formatTenantType = (obj) => {
-  const tenantCode = obj.hasOwnProperty('tenantCode') ? obj['tenantCode'] : obj.hasOwnProperty('airlineIataCode') ? obj['airlineIataCode'] : '' 
-  const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1) //Take substring for customers with multiple tenants
+  const tenantCode = obj.hasOwnProperty("tenantCode ") ? obj["tenantCode"] : obj.hasOwnProperty("airlineIataCode") ? obj["airlineIataCode"] : "";
+  if (typeof tenantCode === "string" && tenantCode.length > 0) {
+    const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1); // Take substring for customers with multiple tenants
 
-  //Check if tenant belongs in list
-  if(Object.keys(tenantList).includes(tenantCode)){
-    return obj.tenantType = tenantList[tenantCode]
+    //Check if tenant belongs in list
+    if (Object.keys(tenantList).includes(tenantCode)) {
+      return (obj.tenantType = tenantList[tenantCode]);
+    }
+    //If the tenant code does not belong to list
+    else if (!Object.keys(tenantList).includes(tenantCode)) {
+      //Check if substring of tenant code belongs in list
+      if (Object.keys(tenantList).includes(tenantCodeSubstr)) {
+        return (obj.tenantType = tenantList[tenantCodeSubstr]);
+      } else {
+        switch (tenantCode[0]?.toUpperCase()) {
+          case "A":
+            obj.tenantType = "airline";
+            break;
+          case "X":
+            obj.tenantType = "airline alliance";
+            break;
+          case "L":
+            obj.tenantType = "airport";
+            break;
+          case "P":
+            obj.tenantType = "package";
+            break;
+          case "H":
+            obj.tenantType = "hotel";
+            break;
+          case "E":
+            obj.tenantType = "event";
+            break;
+          case "B":
+            obj.tenantType = "bus";
+            break;
+          case "D":
+            obj.tenantType = "tourism board & dmo";
+            break;
+          case "T":
+            obj.tenantType = "train";
+            break;
+          default:
+            obj.tenantType = "";
+            console.log("tenantCode does not adhere to the naming convention.");
+        }
+      }
+    } else {
+      obj.tenantType = "";
+      console.log("Invalid tenantCode: Not a non-empty string.");
+    }
+    return obj;
   }
-  //If the tenant code does not belong to list
-  else if(!Object.keys(tenantList).includes(tenantCode)){
-     //Check if substring of tenant code belongs in list
-     if(Object.keys(tenantList).includes(tenantCodeSubstr)){
-      return obj.tenantType = tenantList[tenantCodeSubstr]
-    }
-    else{
-    switch(tenantCode[0].toUpperCase()){
-      case "A":
-        obj.tenantType = "airline"
-        break;
-      case "X":
-        obj.tenantType = "airline alliance"
-        break;
-      case "L":
-        obj.tenantType = "airport"
-        break;
-      case "P":
-        obj.tenantType = "package"
-        break;
-      case "H":
-        obj.tenantType = "hotel"
-        break;
-      case "E":
-        obj.tenantType = "event"
-        break; 
-      case "B":
-        obj.tenantType = "bus"
-        break;
-      case "D":
-        obj.tenantType = "tourism board & dmo"
-        break;
-      case "T":
-        obj.tenantType = "train"
-       break;
-      default:
-        obj.tenantType = ''
-      console.log('tenantCode does not adhere to the naming convention.')
-    }
-    return obj 
-  }}
-  };
+};
 /**
  * Pushes formatted object to datalayer
  * @param  {object} obj - formatted object
