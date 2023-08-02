@@ -6,17 +6,18 @@ import {tenantList} from "./tenantlist.js"
  */
 
 const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
-const { log } = console;
 
 globalObj.tp_v = '1.3.1';
-globalObj.tp_debug = false
+globalObj.tp_debug = false;
 
-console.log = function (...args) {
-  if (globalObj && globalObj.tp_debug === true) {
-    log('tp_debug is currently active')
-    log(...args);
-  } else {
-    // do nothing
+const logger = {
+  log: (...args) => {
+    if (globalObj && globalObj.tp_debug === true) {
+      console.debug('tp_debug is currently active');
+      console.log(...args);
+    } else {
+      // do nothing
+    }
   }
 };
 
@@ -293,7 +294,7 @@ const formatCase = (obj) => {
         const found = listOfEvents.includes(toKebabCase(obj[key]));
         if (!found) {
           obj[key] = "Event value does not exist";
-          console.log("Error: Please check event value");
+          logger.log("Error: Please check event value");
         }else{
           obj[key] = toSnakeCase(obj[key]);
         }
@@ -497,12 +498,12 @@ const formatTenantType = (obj) => {
             break;
           default:
             obj.tenantType = "";
-            console.log("tenantCode does not adhere to the naming convention.");
+            logger.log("tenantCode does not adhere to the naming convention.");
         }
       }
     } else {
       obj.tenantType = "";
-      console.log("Invalid tenantCode: Not a non-empty string.");
+      logger.log("Invalid tenantCode: Not a non-empty string.");
     }
     return obj;
   }
@@ -524,7 +525,7 @@ const pushFormattedEventData = (obj) => {
         window.localDataLayer = [];
       }
       window.dataLayer.push(obj);  
-      console.log("Event obj: ", obj)
+      logger.log("Event obj: ", obj)
     } else {
       window.localDataLayer = [];
       window.localDataLayer.push(obj);
