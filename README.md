@@ -145,7 +145,8 @@ const eventObject = {
     }
   ],
   moduleId: '',
-  tagName: ''
+  tagName: '',
+  pageTypeName: ''
 }
 ```
 
@@ -208,7 +209,8 @@ const eventObject = {
     }
   ],
   moduleId: '',
-  tagName: ''
+  tagName: '',
+  pageTypeName: 'CUSTOM_PAGE'
 }
 
 ```
@@ -274,6 +276,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 |                starRating               |               5              |                               An official rating for the property                               |
 |                 moduleId                |          XADPLIK7890         |                                  Unique ID used for the module                                  |
 |                 tagName                 |                              |                Name given to Standard Fare Modules (SFM) / Front Components (FC)                |
+|                 pageTypeName                 |   CUSTOM_PAGE, HOME_PAGE,..                           |                Name of the type of page template                 |
 ---
 
 <a name="eventActionsAirlines"></a><h4 align="center"> List of Event Actions </h4>
@@ -345,7 +348,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | countryIsoCode                                                                                             	| String i.e 'lk'                                                                                                             	| 'LK'                                                                  	|
 | languageIsoCode                                                                                            	| String i.e 'en'                                                                                                             	| 'en'                                                                  	|
 | fields that contain string values i.e currencyCode, originAirportIataCode, destinationAirportIataCode etc. 	| String i.e 'mia'                                                                                                            	| 'MIA'                                                                 	|
-
+|                 pageTypeName                 |   String i.e 'custom page'                           |                'CUSTOM_PAGE'              |
 </details>
 
 ----
@@ -403,7 +406,8 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
       countryIsoCode: '',
       languageIsoCode: ''
     }
-  ]
+  ],
+  pageTypeName: ''
 }
 
 ```
@@ -454,7 +458,8 @@ const eventObject = {
       countryIsoCode: 'LK',
       languageIsoCode: 'en'
     }
-  ]
+  ],
+  pageTypeName: 'CUSTOM_PAGE'
 }
 
 ```
@@ -480,15 +485,15 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 - --
 
 ### Tables
-<h4 align="center"> Page Template Codes </h4>
+<h4 align="center"> Page Type Codes </h4>
  
-| Page Template Code 	| Definition  	|
-|--------------------	|-------------	|
-| HP                 	| Homepage    	|
-| CP                 	| Custom Page 	|
-| CO                 	| Country     	|
-| CI                 	| City        	|
-| PR                 	| Property    	|
+| Page Type Code 	| Page Type Name | Definition  	|
+|--------------------	| ------------- |-------------	|
+| HP                 	|HOME_PAGE | Homepage    	|
+| CP                 	|CUSTOM_PAGE | Custom Page 	|
+| CO                 	|COUNTRY | Country     	|
+| CI                 		|CITY | City        	|
+| PR                 	|PROPERTY | Property    	|
 
 
 <h4 align="center"> Description of event object fields </h4>
@@ -527,7 +532,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | languageIsoCode        	| en                               	| The language ISO 629-1 code                                                                            	|
 | tagName               	|                                  	| Name given to Standard Fare Modules (SFM) / Front Components (FC)                                                                                	|
 | discountCode          	| AFFBFAN                          	| Discount promotion code                                                                                	|
-
+|                 pageTypeName                 |   CUSTOM_PAGE                           |                Name of the type of page template              |
 
 ---
 
@@ -603,7 +608,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | languageIsoCode                                                                   	| en                                                                                                                          	| The language ISO 629-1 code                                                                      	|
 | tagName*                                                                          	|                                                                                                                             	| Name given to Standard Fare Modules (SFM) / Front Components (FC)                                                                           	|
 | discountCode                                                                     	| AFFBFAN                                                                                                                     	| Discount promotion code                                                                          	|
-
+|                 pageTypeName                 |  string i.e 'custom page'                           |                CUSTOM_PAGE            |
 *_The variable is required if there is a name or tag associated with the module other than the module name. E.g. A module that only display miles and has been named "Miles"_
 </details>
 
@@ -657,7 +662,8 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
         'siteEdition': '',
         'countryIsoCode': '',
         'languageIsoCode': ''
-    }]
+    }],
+    'pageTypeName': ''
 }
 
 ```
@@ -702,7 +708,8 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
         'siteEdition': 'en-LK',
         'countryIsoCode': 'LK',
         'languageIsoCode': 'en'
-    }]
+    }],
+    'pageTypeName': 'CUSTOM_PAGE'
 }
 ```
 </details>
@@ -762,7 +769,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | languageIsoCode                         	| en                                	| The language ISO 629-1 code                                                                           	|
 | tagName*                                	|                                   	| Name given by Standard Fare Modules or Front Components.                                              	|
 | discountCode                           	| AFFBFAN                           	| Discount promotion code                                                                               	|
-
+|                 pageTypeName                 |   CUSTOM_PAGE                           |                Name of the type of page template              |
 *_The variable is required if there is a name or tag associated with the module other than the module name. E.g. A module that only display miles and has been named "Miles"_
 
 ---
@@ -830,7 +837,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 | languageIsoCode                                                                                                                                                           	| en                                                                                                                          	| The language ISO 629-1 code                                                                      	|
 | tagName*                                                                                                                                                                  	|                                                                                                                             	| Name given by Standard Fare Modules or Front Components.                                         	|
 | discountCode                                                                                                                                                             	| AFFBFAN                                                                                                                     	| Discount promotion code                                                                          	|
-
+|                 pageTypeName                 |   String i.e 'custom page'                           |                CUSTOM_PAGE              |
 
 *_The variable is required if there is a name or tag associated with the module other than the module name. E.g. A module that only display miles and has been named "Miles"_
 </details>

@@ -30,7 +30,9 @@ const eventObject = {
         siteEdition: 'en-LK',
         countryIsoCode: 'LK',
         languageIsoCode: 'en'
-    }]
+    }],
+    pageTypeCode: '',
+    pageTypeName: ''
 };
 
 console.log("OUTPUT FOR EVENT OBJECT", formatter.formatEvents(eventObject));

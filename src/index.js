@@ -196,6 +196,8 @@ const formatCase = (obj) => {
     "siteEdition",
     "name",
     "provider",
+    "pageTypeCode",
+    "pageTypeName",
     //Hotel values
     "tenantCode",
     "actionLabel",
@@ -296,7 +298,7 @@ const formatCase = (obj) => {
           obj[key] = "Event value does not exist";
           logger.log("Error: Please check event value");
         }else{
-          obj[key] = toSnakeCase(obj[key]);
+          obj[key] = toSnakeCase(obj[key])
         }
       } else if (key === "module" || key === "actionLabel") {
         obj[key] = toKebabCase(obj[key]);
@@ -308,7 +310,10 @@ const formatCase = (obj) => {
         } else {
           obj[key] = obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key]);
         }
-      } else {
+      } else if (key === "pageTypeCode" || key === "pageTypeName") {
+      obj[key] = toSnakeCase(obj[key]).toUpperCase();
+      }
+      else {
         obj[key] = obj[key].toUpperCase();
       }
     }

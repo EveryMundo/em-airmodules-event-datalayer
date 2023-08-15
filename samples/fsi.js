@@ -54,6 +54,8 @@ const eventObject =
       starRating: 5,
     },
   ],
+  pageTypeCode: '',
+  pageTypeName: ''
 };
 
   console.log("OUTPUT FOR AIRLINE OBJECT", formatter.formatAirlines(eventObject));

@@ -47,6 +47,8 @@ const hotelEventObject = {
       languageIsoCode: "en",
     },
   ],
+  pageTypeCode: '',
+  pageTypeName: ''
 };
 
 console.log("OUTPUT FOR HOTEL OBJECT", formatter.formatHotels(hotelEventObject));
