@@ -7,7 +7,7 @@ import {tenantList} from "./tenantlist.js"
 
 const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
 
-globalObj.tp_v = '1.3.1';
+globalObj.tp_v = '1.3.5';
 globalObj.tp_debug = false;
 
 const logger = {
