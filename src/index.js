@@ -7,7 +7,7 @@ import {tenantList} from "./tenantlist.js"
 
 const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
 
-globalObj.tp_v = '1.3.5';
+globalObj.tp_v = '1.3.6';
 globalObj.tp_debug = false;
 
 const logger = {
@@ -347,37 +347,58 @@ const formatCase = (obj) => {
  */
 
 const formatDate = (obj) => {
-  let dateArr = [
+  const dateFields = [
     "departureDate",
     "returnDate",
     "timestamp",
     "startDate",
     "endDate",
   ];
-  dateArr.forEach((key) => {
-    if (obj.hasOwnProperty(key)) {
-      if (key === "timestamp") {
-        obj[key] = new Date(obj[key]).toISOString();
-      } else if(obj[key] !== '') {
-        obj[key] = new Date(obj[key]).toISOString().substr(0, 10);
+
+  const isValidDate = (date) => {
+    return date instanceof Date && !isNaN(date);
+  };
+
+  const formatDateField = (field) => {
+    if (obj.hasOwnProperty(field)) {
+      let value = obj[field];
+      if (value !== '' && value !== undefined) {
+        if (field === 'timestamp') {
+          value = new Date(value);
+          value = isValidDate(value) ? value.toISOString() : '';
+        } else {
+          value = new Date(value);
+          value = isValidDate(value) ? value.toISOString().substr(0, 10) : '';
+        }
+      } else {
+        value = '';
       }
-      else{
-        obj[key] = ''
+      obj[field] = value;
+    }
+  };
+
+  for (const key of dateFields) {
+    formatDateField(key);
+  }
+
+  if (obj.lodging !== undefined && obj.lodging.length > 0) {
+    const lodgingObj = obj.lodging[0];
+
+    if (lodgingObj) {
+      if (lodgingObj.hasOwnProperty("startDate")) {
+        const startDateValue = new Date(lodgingObj.startDate);
+        lodgingObj.startDate = isValidDate(startDateValue) ? startDateValue.toISOString().substr(0, 10) : '';
+      }
+      if (lodgingObj.hasOwnProperty("endDate")) {
+        const endDateValue = new Date(lodgingObj.endDate);
+        lodgingObj.endDate = isValidDate(endDateValue) ? endDateValue.toISOString().substr(0, 10) : '';
       }
     }
-    if (obj.lodging !== undefined) {
-      if (
-        obj.lodging[0].hasOwnProperty(key) &&
-        (key === "startDate" || key === "endDate")
-      ) {
-        obj.lodging[0][key] = new Date(obj.lodging[0][key])
-          .toISOString()
-          .substr(0, 10);
-      }
-    }
-  });
+  }
+
   return obj;
 };
+
 
 /**
  * Checks whether the document/page is in an iFrame
