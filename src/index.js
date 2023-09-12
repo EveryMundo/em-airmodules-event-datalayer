@@ -59,6 +59,7 @@ const formatHotels = (obj) => {
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
+      addCustomParameters(obj),
       pushFormattedEventData(obj)
     );
   }
@@ -438,6 +439,23 @@ const formatUrl = (obj) => {
       obj.url = document.location.href
     }
     obj.url = obj.url.split(":").join(": ");
+  }
+  return obj;
+};
+
+/**
+ * Adds custom parameters to the data layer object.
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns url spaced between : and /.
+ */
+const addCustomParameters = (obj) => {
+  // Add daysUntilBooking parameter
+  if (obj.hasOwnProperty("startDate") && obj.startDate !== "") {
+    const startDate = new Date(obj.startDate);
+    const today = new Date();
+    const timeDiff = startDate.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    obj['daysUntilBooking'] = daysDiff;
   }
   return obj;
 };
