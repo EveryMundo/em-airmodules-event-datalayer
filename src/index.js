@@ -23,6 +23,7 @@ const logger = {
 };
 
 const formatAirlines = (obj) => {
+  logger.log("Incoming obj: ", obj)
   if (
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -45,6 +46,7 @@ const formatAirlines = (obj) => {
 };
 
 const formatHotels = (obj) => {
+  logger.log("Incoming obj: ", obj)
   if (
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -57,6 +59,7 @@ const formatHotels = (obj) => {
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
+      addCustomParameters(obj),
       pushFormattedEventData(obj)
     );
   }
@@ -64,6 +67,7 @@ const formatHotels = (obj) => {
 }
 
 const formatEvents = (obj) => {
+  logger.log("Incoming obj: ", obj)
   if(
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -440,6 +444,23 @@ const formatUrl = (obj) => {
 };
 
 /**
+ * Adds custom parameters to the data layer object.
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns url spaced between : and /.
+ */
+const addCustomParameters = (obj) => {
+  // Add daysUntilBooking parameter
+  if (!obj.hasOwnProperty("daysUntilBooking") && obj.hasOwnProperty("startDate") && obj.startDate !== "") {
+    const startDate = new Date(obj.startDate);
+    const today = new Date();
+    const timeDiff = startDate.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    obj['daysUntilBooking'] = daysDiff;
+  }
+  return obj;
+};
+
+/**
  * Recursive Function.
  * Replaces null values to empty string.
  * Converts numeric string values to their number value.
@@ -461,13 +482,11 @@ const convertValues = (obj) => {
         } else if (obj[property] === "false" || obj[property] === "true") {
           obj[property] = obj[property].toLowerCase() === "true" ? true : false;
         }
+      } else if (typeof obj[property] === "number") {
+        obj[property] = Math.round(obj[property] * 100) / 100;
       } else {
         // Default the property to an empty string if it's not a string
         obj[property] = "";
-      }
-
-      if (typeof obj[property] === "number") {
-        obj[property] = Math.round(obj[property] * 100) / 100;
       }
     }
   }
@@ -543,6 +562,7 @@ const pushFormattedEventData = (obj) => {
   if (!window) {
     error('window is not defined');
   } else {
+    logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(obj)))
     if (window.utag) {
       window.utag.link(obj);
     }
@@ -552,7 +572,6 @@ const pushFormattedEventData = (obj) => {
         window.localDataLayer = [];
       }
       window.dataLayer.push(obj);  
-      logger.log("Event obj: ", obj)
     } else {
       window.localDataLayer = [];
       window.localDataLayer.push(obj);
