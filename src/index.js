@@ -450,7 +450,7 @@ const formatUrl = (obj) => {
  */
 const addCustomParameters = (obj) => {
   // Add daysUntilBooking parameter
-  if (obj.hasOwnProperty("startDate") && obj.startDate !== "") {
+  if (!obj.hasOwnProperty("daysUntilBooking") && obj.hasOwnProperty("startDate") && obj.startDate !== "") {
     const startDate = new Date(obj.startDate);
     const today = new Date();
     const timeDiff = startDate.getTime() - today.getTime();
