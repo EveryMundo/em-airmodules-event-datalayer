@@ -1,4 +1,5 @@
 import {tenantList} from "./tenantlist.js"
+import { version } from './version.js'
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -7,7 +8,7 @@ import {tenantList} from "./tenantlist.js"
 
 const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
 
-globalObj.tp_v = '1.3.6';
+globalObj.tp_v = version;
 globalObj.tp_debug = false;
 
 const logger = {
