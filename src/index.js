@@ -482,13 +482,11 @@ const convertValues = (obj) => {
         } else if (obj[property] === "false" || obj[property] === "true") {
           obj[property] = obj[property].toLowerCase() === "true" ? true : false;
         }
+      } else if (typeof obj[property] === "number") {
+        obj[property] = Math.round(obj[property] * 100) / 100;
       } else {
         // Default the property to an empty string if it's not a string
         obj[property] = "";
-      }
-
-      if (typeof obj[property] === "number") {
-        obj[property] = Math.round(obj[property] * 100) / 100;
       }
     }
   }
