@@ -23,6 +23,7 @@ const logger = {
 };
 
 const formatAirlines = (obj) => {
+  logger.log("Incoming obj: ", obj)
   if (
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -45,6 +46,7 @@ const formatAirlines = (obj) => {
 };
 
 const formatHotels = (obj) => {
+  logger.log("Incoming obj: ", obj)
   if (
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -64,6 +66,7 @@ const formatHotels = (obj) => {
 }
 
 const formatEvents = (obj) => {
+  logger.log("Incoming obj: ", obj)
   if(
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -543,6 +546,7 @@ const pushFormattedEventData = (obj) => {
   if (!window) {
     error('window is not defined');
   } else {
+    logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(obj)))
     if (window.utag) {
       window.utag.link(obj);
     }
@@ -552,7 +556,6 @@ const pushFormattedEventData = (obj) => {
         window.localDataLayer = [];
       }
       window.dataLayer.push(obj);  
-      logger.log("Event obj: ", obj)
     } else {
       window.localDataLayer = [];
       window.localDataLayer.push(obj);
