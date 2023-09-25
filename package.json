@@ -15,7 +15,7 @@
     "start": "babel src --watch -d dist",
     "build": "babel --config-file ./.babelrc_cjs.json src -d dist/cjs && babel --config-file ./.babelrc_esm.json src -d dist/esm/ && node scripts/fixup-modules.js",
     "babel": "./node_modules/.bin/babel",
-    "version": "genversion src/version.js -e && git add src/version.js"
+    "version": "genversion src/version.js && genversion --source ./ dist/esm/version.js && genversion -u --source ./ dist/cjs/version.js && git add src/version.js"
   },
   "keywords": [
     "everymundo"
