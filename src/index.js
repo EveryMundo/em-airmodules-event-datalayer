@@ -1,5 +1,5 @@
 import {tenantList} from "./tenantlist.js"
-import version  from './version.js'
+import {version}  from './version.js'
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
