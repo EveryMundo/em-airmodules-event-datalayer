@@ -10,4 +10,4 @@ echo "export const version = '$VERSION';" > src/version.js
 echo "export const version = '$VERSION';" > dist/esm/version.js
 
 # Create version.js file in dist/cjs/ folder
-echo "module.exports = { version: '$VERSION' };" > dist/cjs/version.js
+echo "exports.version = '$VERSION' };" > dist/cjs/version.js
