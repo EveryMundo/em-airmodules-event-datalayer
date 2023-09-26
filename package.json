@@ -1,6 +1,6 @@
 {
   "name": "@everymundo/airmodules-event-datalayer",
-  "version": "1.3.12",
+  "version": "1.4.3",
   "description": "Package for airmodules",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -15,7 +15,7 @@
     "start": "babel src --watch -d dist",
     "build": "babel --config-file ./.babelrc_cjs.json src -d dist/cjs && babel --config-file ./.babelrc_esm.json src -d dist/esm/ && node scripts/fixup-modules.js",
     "babel": "./node_modules/.bin/babel",
-    "version": "genversion src/version.js -e && git add src/version.js"
+    "version": "./writeVersion.sh && git add src/version.js"
   },
   "keywords": [
     "everymundo"
@@ -34,8 +34,7 @@
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.0",
-    "@babel/preset-react": "^7.18.6",
-    "genversion": "^3.1.1"
+    "@babel/preset-react": "^7.18.6"
   },
   "repository": {
     "type": "git",
