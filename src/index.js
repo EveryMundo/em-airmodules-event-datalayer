@@ -128,23 +128,39 @@ const formatJourney = (obj) => {
 };
 
 /**
- * Formats fareClass to ECONOMY, BUSINESS, or FIRST.
+ * Formats fareClass to ECONOMY, BUSINESS, or FIRST. If fareClass is nested, fill top-level fareClass value with the same nested value.
  * @param {object} obj - data layer object.
  * @return {object} - Returns formatted fare class.
  */
-
 const formatFareClass = (obj) => {
-  if (obj.hasOwnProperty("fareClass")) {
-    if (obj.fareClass.match(/(economy|ec|^e$)/gi)) {
-      obj.fareClass = "ECONOMY";
-    } else if (obj.fareClass.match(/(business|bc|^b$|businessclass)/gi)) {
-      obj.fareClass = "BUSINESS";
-    } else if (obj.fareClass.match(/(first|fc|^f$|firstclass)/gi)) {
-      obj.fareClass = "FIRST";
-    } else {
-      obj.fareClass = "";
+  const updateFareClass = (object, value) => {
+    if (object.fareClass) {
+      const fareClass = object.fareClass.toLowerCase();
+      const fareClassMap = {
+        economy: "ECONOMY",
+        ec: "ECONOMY",
+        e: "ECONOMY",
+        business: "BUSINESS",
+        bc: "BUSINESS",
+        b: "BUSINESS",
+        businessclass: "BUSINESS",
+        first: "FIRST",
+        fc: "FIRST",
+        f: "FIRST",
+        firstclass: "FIRST",
+      };
+      value.fareClass = fareClassMap[fareClass] || value.fareClass;
+    }
+
+    for (const key in object) {
+      if (typeof object[key] === "object") {
+        updateFareClass(object[key], value);
+      }
     }
   }
+
+  updateFareClass(obj, obj);
+
   return obj;
 };
 
@@ -473,7 +489,7 @@ const convertValues = (obj) => {
     if (obj.hasOwnProperty(property)) {
       if (typeof obj[property] === "object") {
         convertValues(obj[property]);
-        if (obj[property] == null || !obj[property]) {
+        if (obj[property] === null || obj[property] === undefined) {
           obj[property] = "";
         }
       } else if (typeof obj[property] === "string") {
@@ -492,6 +508,45 @@ const convertValues = (obj) => {
   }
   return obj;
 };
+// const convertValues = (obj) => {
+//   if (Array.isArray(obj)) {
+//     for (let i = 0; i < obj.length; i++) {
+//       obj[i] = convertValues(obj[i]);
+//     }
+//   } else if (typeof obj === "object") {
+//     for (const property in obj) {
+//       if (obj.hasOwnProperty(property)) {
+//         const value = obj[property];
+
+//         if (typeof value === "object") {
+//           obj[property] = convertValues(value);
+
+//           // Convert null or undefined values to an empty string
+//           if (obj[property] == null) {
+//             obj[property] = "";
+//           }
+//         } else if (typeof value === "string") {
+//           if (!isNaN(value) && !isNaN(parseFloat(value))) {
+//             // Convert numeric strings to numbers
+//             obj[property] = +value;
+//           } else if (value.toLowerCase() === "true" || value.toLowerCase() === "false") {
+//             // Convert "true" and "false" strings to boolean values
+//             obj[property] = value.toLowerCase() === "true";
+//           }
+//         } else if (typeof value === "number") {
+//           // Round numeric values to two decimal places
+//           obj[property] = Math.round(value * 100) / 100;
+//         } else {
+//           // Default the property to an empty string if it's not a recognized type
+//           obj[property] = "";
+//         }
+//       }
+//     }
+//   }
+
+//   return obj;
+// };
+
 
 
 /**

@@ -41,7 +41,7 @@ The tracking package is used for formatting datalayer object values. This npm pa
 | provider        	|
 | eventAction     	|
 | module          	|
-| moduleId        	|
+| moduleId*        	|
 | tagName*         	|
 | url             	|
 | timestamp       	|
@@ -49,7 +49,7 @@ The tracking package is used for formatting datalayer object values. This npm pa
 | countryIsoCode  	|
 | languageIsoCode 	|
 
-*_The variable is required if there is a name or tag associated with the module other than the module name. E.g. A module that only display miles and has been named "Miles"_
+*_tagName is required if there is a name or tag associated with the module other than the module name. E.g. A module that only display miles and has been named "Miles". moduleId is only required for DPA modules_
 
 * The interaction events, such as select-departure-date, will only populate the relevant parameters to the event itself and what has already been filtered in the module. The fsi and search-initiation events must include every parameter available in the interaction.
 
@@ -274,7 +274,7 @@ Use the following function(s) based on the tenant type (<i>vertical</i>) and pas
 |                roomCount                |               2              |                                     Amount of rooms selected                                    |
 |                tripLength               |               7              |                                       Length of stay/trip                                       |
 |                starRating               |               5              |                               An official rating for the property                               |
-|                 moduleId                |          XADPLIK7890         |                                  Unique ID used for the module                                  |
+|                 moduleId                |          XADPLIK7890         |                                  Unique ID used for the module. Only required for DPA                                  |
 |                 tagName                 |                              |                Name given to Standard Fare Modules (SFM) / Front Components (FC)                |
 |                 pageTypeName                 |   CUSTOM_PAGE, HOME_PAGE,..                           |                Name of the type of page template                 |
 ---
