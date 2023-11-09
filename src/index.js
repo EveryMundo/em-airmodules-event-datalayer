@@ -444,18 +444,13 @@ const checkIframe = () =>{
  * @return {object} - Returns url spaced between : and /.
  */
 const formatUrl = (obj) => {
-  if (obj.hasOwnProperty("url")) {
-    if(checkIframe()){
-      obj.url = (window.parentURL !== '') ? window.parentURL : document.referrer || window.parent.location.href
-    }
-    else if(obj["url"] !== ''){
-      obj.url
-    }
-    else{
-      obj.url = document.location.href
-    }
-    obj.url = obj.url.split(":").join(": ");
+  if (!obj.hasOwnProperty("url") || obj.url === undefined) {
+    obj.url = document?.location?.href || '';
+  } else if (obj.url === '' || checkIframe()) {
+    obj.url = window.parentURL || document.referrer || window.parent.location.href || document?.location?.href || '';
   }
+    obj.url = obj?.url?.split(":").join(": ") ?? obj.url
+
   return obj;
 };
 
