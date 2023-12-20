@@ -34,6 +34,7 @@ const formatAirlines = (obj) => {
       addParameters(obj),
       convertValues(obj),
       formatCase(obj),
+      formatPageTypeName(obj),
       formatJourney(obj),
       formatFareClass(obj),
       formatTenantType(obj),
@@ -56,6 +57,7 @@ const formatHotels = (obj) => {
     return (
       convertValues(obj),
       formatCase(obj),
+      formatPageTypeName(obj),
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
@@ -80,6 +82,7 @@ const formatEvents = (obj) => {
       formatJourney(obj),
       formatFareClass(obj),
       formatCase(obj),
+      formatPageTypeName(obj),
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
@@ -554,6 +557,26 @@ const formatTenantType = (obj) => {
     return obj;
   }
 };
+
+    const formatPageTypeName = (obj) => {
+      try {
+        if (!obj.page[0].hasOwnProperty("pageTypeName")) {
+          obj.page[0].pageTypeName = '';
+        }
+    
+        obj.page[0].pageTypeName =
+          obj.page[0].pageTypeName ||
+          (window?.EM?.context?.datasource?.step?.page?.[0]?.pageTypeName?.toUpperCase()) ||
+          (window?.EM?.dataLayer?.[0]?.page?.typeName?.toUpperCase()) ||
+          '';
+    
+        return obj.page[0].pageTypeName;
+      } catch (error) {
+        console.error('Error in formatPageTypeName:', error.message);
+        return obj;
+      }
+      return obj
+    };
 /**
  * Pushes formatted object to datalayer
  * @param  {object} obj - formatted object

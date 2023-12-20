@@ -97,7 +97,8 @@ const eventObject = {
     {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
-      languageIsoCode: 'en'
+      languageIsoCode: 'en',
+      pageTypeName: 'CUSTOM_PAGE'
     }
   ],
   lodging: [
@@ -112,8 +113,7 @@ const eventObject = {
     }
   ],
   moduleId: '',
-  tagName: '',
-  pageTypeName: 'CUSTOM_PAGE'
+  tagName: ''
 }
 ```
 </details>
@@ -196,7 +196,8 @@ const eventObject = {
     {
       siteEdition: '',
       countryIsoCode: '',
-      languageIsoCode: ''
+      languageIsoCode: '',
+      pageTypeName: ''
     }
   ],
   lodging: [
@@ -211,8 +212,7 @@ const eventObject = {
     }
   ],
   moduleId: '',
-  tagName: '',
-  pageTypeName: ''
+  tagName: ''
 }
 
 ```
@@ -260,10 +260,10 @@ const eventObject = {
     {
       siteEdition: '',
       countryIsoCode: '',
-      languageIsoCode: ''
+      languageIsoCode: '',
+      pageTypeName: ''
     }
   ],
-  pageTypeName: ''
 }
 
 ```
@@ -311,10 +311,10 @@ const eventObject = {
     {
       siteEdition: '',
       countryIsoCode: '',
-      languageIsoCode: ''
+      languageIsoCode: '',
+      pageTypeName: ''
     }
   ],
-  pageTypeName: ''
 }
 
 ```
@@ -720,7 +720,8 @@ const eventObject = {
     {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
-      languageIsoCode: 'en'
+      languageIsoCode: 'en',
+      pageTypeName: 'CUSTOM_PAGE'
     }
   ],
   lodging: [
@@ -736,7 +737,6 @@ const eventObject = {
   ],
   moduleId: '',
   tagName: '',
-  pageTypeName: 'CUSTOM_PAGE'
 }
 
 ```
@@ -784,10 +784,10 @@ const eventObject = {
     {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
-      languageIsoCode: 'en'
+      languageIsoCode: 'en',
+      pageTypeName: 'CUSTOM_PAGE'
     }
-  ],
-  pageTypeName: 'CUSTOM_PAGE'
+  ]
 }
 
 ```
@@ -830,9 +830,9 @@ const eventObject = {
     'page': [{
         'siteEdition': 'en-LK',
         'countryIsoCode': 'LK',
-        'languageIsoCode': 'en'
+        'languageIsoCode': 'en',
+        'pageTypeName': 'CUSTOM_PAGE'
     }],
-    'pageTypeName': 'CUSTOM_PAGE'
 }
 ```
 </details>
