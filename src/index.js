@@ -1,5 +1,5 @@
 import {tenantList} from "./tenantlist.js"
-import { version } from './version.js'
+import {version}  from './version.js'
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -23,7 +23,7 @@ const logger = {
 };
 
 const formatAirlines = (obj) => {
-  logger.log("Incoming obj: ", obj)
+  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)))
   if (
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -46,7 +46,7 @@ const formatAirlines = (obj) => {
 };
 
 const formatHotels = (obj) => {
-  logger.log("Incoming obj: ", obj)
+  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)))
   if (
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
@@ -67,7 +67,7 @@ const formatHotels = (obj) => {
 }
 
 const formatEvents = (obj) => {
-  logger.log("Incoming obj: ", obj)
+  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)))
   if(
     obj.hasOwnProperty("module") &&
     obj.module != "" &&
