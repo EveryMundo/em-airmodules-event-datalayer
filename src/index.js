@@ -204,6 +204,8 @@ const formatCase = (obj) => {
     "siteEdition",
     "name",
     "provider",
+    "brand",
+    "model",
     "pageTypeCode",
     "pageTypeName",
     //Hotel values
@@ -218,7 +220,7 @@ const formatCase = (obj) => {
     "eventLocation",
     "eventSession",
     "eventExperienceCategory",
-    "eventExperience"
+    "eventExperience",
   ];
 
   let listOfEvents = [
@@ -279,7 +281,8 @@ const formatCase = (obj) => {
     "insert-email",
     "insert-phone-number",
     "subscribe",
-    "enter-promo-code"
+    "enter-promo-code",
+    "low-fare-calendar-outbound-inbound"
   ];
 
   const titleCase = [
@@ -343,6 +346,18 @@ const formatCase = (obj) => {
       }
       if (key === "name") {
         obj.lodging[0].name = obj.lodging[0]?.name?.charAt(0).toUpperCase() + obj.lodging[0]?.name?.substr(1).toLowerCase() ?? "";
+      }
+    }
+
+    if (obj.carRentals !== undefined && obj.carRentals[0]?.hasOwnProperty(key)) {
+      if (key === "provider") {
+        obj.carRentals[0].provider = toTitleCase(obj.carRentals[0].provider) ?? "";
+      }
+      if (key === "brand") {
+        obj.carRentals[0].brand = obj.carRentals[0].brand.toUpperCase() ?? "";
+      }
+      if (key === "model") {
+        obj.carRentals[0].model = obj.carRentals[0].model.toLowerCase() ?? "";
       }
     }
   });
