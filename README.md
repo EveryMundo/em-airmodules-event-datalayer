@@ -409,7 +409,7 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 | select_location           |
 | search                    |
 | select_status             |
-| select_stop               |
+| select_stops               |
 | select_article            |
 | select_resident_status    |
 | no_fares_available        |
@@ -419,7 +419,10 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 | insert_email              |
 | insert_phone_number       |
 | subscribe                 |
-| enter-promo-code          |
+| enter_promo_code          |
+| low_fare_calendar_outbound_inbound |
+| 
+
 
 <b> For Hotels </b>
 | Event              |
@@ -452,7 +455,7 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 | insert_email              |
 | insert_phone_number       |
 | subscribe                 |
-| enter-promo-code          |
+| enter_promo_code          |
 
 
 <b> For Events </b>
