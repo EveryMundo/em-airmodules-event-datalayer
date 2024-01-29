@@ -305,6 +305,9 @@ const formatCase = (obj) => {
           obj[key] = toSnakeCase(obj[key])
         }
       } else if (key === "module" || key === "actionLabel") {
+          if (typeof obj[key] === "number") {
+            obj[key] = obj[key].toString(); // Convert number to string
+          }
         obj[key] = toKebabCase(obj[key]);
       } else if (key === "eventAction") {
         obj.eventAction = obj.hasOwnProperty("event") && obj.event !== "" ? obj.event : obj.eventAction;
@@ -575,7 +578,7 @@ const formatTenantType = (obj) => {
         obj.page[0].pageTypeName =
           obj.page[0].pageTypeName ||
           (window?.EM?.context?.datasource?.step?.page?.[0]?.pageTypeName?.toUpperCase()) ||
-          (window?.EM?.dataLayer?.[0]?.page?.typeName?.toUpperCase()) ||
+          (window?.EM?.dataLayer?.[0]?.page?.typeName?.toUpperCase()) || window?.EM?.context?.datasource?.step?.toUpperCase() ||
           '';
     
         return obj.page[0].pageTypeName;
