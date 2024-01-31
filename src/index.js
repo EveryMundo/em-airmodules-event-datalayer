@@ -269,6 +269,7 @@ const formatCase = (obj) => {
     "select-session",
     "select-start-date",
     "select-status",
+    "select-stop",
     "select-stops",
     "select-tab",
     "select-trip-length",

@@ -409,7 +409,8 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 | select_location           |
 | search                    |
 | select_status             |
-| select_stops               |
+| select_stop               |
+| select_stops              |
 | select_article            |
 | select_resident_status    |
 | no_fares_available        |
