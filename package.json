@@ -1,6 +1,6 @@
 {
   "name": "@everymundo/airmodules-event-datalayer",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "description": "Package for airmodules",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
