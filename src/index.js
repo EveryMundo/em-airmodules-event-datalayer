@@ -294,71 +294,71 @@ const formatCase = (obj) => {
   const toSnakeCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
   const toKebabCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
   const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase());
-
+  
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
-      if (key === "event") {
-        const found = listOfEvents.includes(toKebabCase(obj[key]));
-        if (!found) {
-          obj[key] = "Event value does not exist";
-          logger.log("Error: Please check event value");
-        }else{
-          obj[key] = toSnakeCase(obj[key])
-        }
-      } else if (key === "module" || key === "actionLabel") {
-          if (typeof obj[key] === "number") {
-            obj[key] = obj[key].toString(); // Convert number to string
+      switch (key) {
+        case "event":
+          const eventValue = toKebabCase(obj[key]);
+          if (!listOfEvents.includes(eventValue)) {
+            obj[key] = "Event value does not exist";
+            logger.log("Error: Please check event value");
+          } else {
+            obj[key] = eventValue === 'select-stop' ? 'select_stops' : toSnakeCase(obj[key]);
           }
-        obj[key] = toKebabCase(obj[key]);
-      } else if (key === "eventAction") {
-        obj.eventAction = obj.hasOwnProperty("event") && obj.event !== "" ? obj.event : obj.eventAction;
-      } else if (titleCase.includes(key)) {
-        if (key === "eventExperience" && obj[key].match(/(multiple|,)/gi)) {
-          obj[key] = "MULTIPLE";
-        } else {
-          obj[key] = obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key]);
-        }
-      } else if (key === "pageTypeCode" || key === "pageTypeName") {
-      obj[key] = toSnakeCase(obj[key]).toUpperCase();
-      }
-      else {
-        obj[key] = obj[key].toUpperCase();
+          break;
+        case "module":
+        case "actionLabel":
+          obj[key] = typeof obj[key] === "number" ? obj[key].toString() : toKebabCase(obj[key]);
+          break;
+        case "eventAction":
+          obj.eventAction = obj.hasOwnProperty("event") && obj.event !== "" ? obj.event : obj.eventAction;
+          break;
+        case "pageTypeCode":
+        case "pageTypeName":
+          obj[key] = toSnakeCase(obj[key]).toUpperCase();
+          break;
+        default:
+          obj[key] = titleCase.includes(key) ? (key === "eventExperience" && obj[key].match(/(multiple|,)/gi) ? "MULTIPLE" : obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key])) : obj[key].toUpperCase();
       }
     }
-
+  
     if (obj.page !== undefined && obj.page[0]?.hasOwnProperty(key) && (key === "languageIsoCode" || key === "siteEdition" || key === "countryIsoCode")) {
-      let siteEdition = toKebabCase(obj.page[0].siteEdition).split("-");
-      obj.page[0].countryIsoCode = obj.page[0]?.countryIsoCode?.toUpperCase() ?? "";
-      obj.page[0].languageIsoCode = obj.page[0]?.languageIsoCode?.toLowerCase() ?? "";
+      const siteEdition = toKebabCase(obj.page[0].siteEdition).split("-");
+      obj.page[0].countryIsoCode = (obj.page[0]?.countryIsoCode || "").toUpperCase();
+      obj.page[0].languageIsoCode = (obj.page[0]?.languageIsoCode || "").toLowerCase();
       obj.page[0].siteEdition = siteEdition[1] !== undefined
-        ? siteEdition[0] + "-" + siteEdition[1].toUpperCase()
+        ? `${siteEdition[0]}-${siteEdition[1].toUpperCase()}`
         : (obj.page[0].siteEdition === "" && obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== "")
-        ? obj.page[0].languageIsoCode + "-" + obj.page[0].countryIsoCode
-        : siteEdition[0] ?? "";
+        ? `${obj.page[0].languageIsoCode}-${obj.page[0].countryIsoCode}`
+        : (siteEdition[0] || "");
     }
-
+  
     if (obj.lodging !== undefined && obj.lodging[0]?.hasOwnProperty(key)) {
       if (key === "cityCode") {
-        obj.lodging[0].cityCode = obj.lodging[0]?.cityCode?.toUpperCase() ?? "";
+        obj.lodging[0].cityCode = (obj.lodging[0]?.cityCode || "").toUpperCase();
       }
       if (key === "name") {
-        obj.lodging[0].name = obj.lodging[0]?.name?.charAt(0).toUpperCase() + obj.lodging[0]?.name?.substr(1).toLowerCase() ?? "";
+        obj.lodging[0].name = (obj.lodging[0]?.name || "").charAt(0).toUpperCase() + (obj.lodging[0]?.name || "").substr(1).toLowerCase();
       }
     }
-
+  
     if (obj.carRentals !== undefined && obj.carRentals[0]?.hasOwnProperty(key)) {
-      if (key === "provider") {
-        obj.carRentals[0].provider = toTitleCase(obj.carRentals[0].provider) ?? "";
-      }
-      if (key === "brand") {
-        obj.carRentals[0].brand = obj.carRentals[0].brand.toUpperCase() ?? "";
-      }
-      if (key === "model") {
-        obj.carRentals[0].model = obj.carRentals[0].model.toLowerCase() ?? "";
+      switch (key) {
+        case "provider":
+          obj.carRentals[0].provider = toTitleCase(obj.carRentals[0].provider || "");
+          break;
+        case "brand":
+          obj.carRentals[0].brand = (obj.carRentals[0].brand || "").toUpperCase();
+          break;
+        case "model":
+          obj.carRentals[0].model = (obj.carRentals[0].model || "").toLowerCase();
+          break;
       }
     }
   });
-  return obj;
+
+  return obj;  
 }
 /**
  * Formats date to ISO format.
