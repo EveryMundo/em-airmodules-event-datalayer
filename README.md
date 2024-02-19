@@ -415,7 +415,6 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 | no_fares_available        |
 | insert_first_name         |
 | insert_last_name          |
-| select_origin             |
 | insert_email              |
 | insert_phone_number       |
 | subscribe                 |
@@ -451,7 +450,6 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 | no_fares_available        |
 | insert_first_name         |
 | insert_last_name          |
-| select_origin             |
 | insert_email              |
 | insert_phone_number       |
 | subscribe                 |

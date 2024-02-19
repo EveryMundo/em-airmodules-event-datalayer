@@ -135,18 +135,19 @@ const formatJourney = (obj) => {
  * @param {object} obj - data layer object.
  * @return {object} - Returns formatted fare class.
  */
-
 const formatFareClass = (obj) => {
-  if (obj.hasOwnProperty("fareClass")) {
-    if (obj.fareClass.match(/(economy|ec|^e$)/gi)) {
-      obj.fareClass = "ECONOMY";
-    } else if (obj.fareClass.match(/(business|bc|^b$|businessclass)/gi)) {
-      obj.fareClass = "BUSINESS";
-    } else if (obj.fareClass.match(/(first|fc|^f$|firstclass)/gi)) {
-      obj.fareClass = "FIRST";
-    } else {
-      obj.fareClass = "";
-    }
+  if (obj.hasOwnProperty('fareClass')) {
+    const fareClassPatterns = [
+      { pattern: /(premium\s*economy|pr)/gi, class: 'PREMIUM_ECONOMY' },
+      { pattern: /(economy|ec|^e$)/gi, class: 'ECONOMY' },
+      { pattern: /(business|bc|^b$|businessclass)/gi, class: 'BUSINESS' },
+      { pattern: /(first|fc|^f$|firstclass)/gi, class: 'FIRST' }
+    ];
+
+    obj.fareClass = fareClassPatterns.reduce((acc, curr) => {
+      return curr.pattern.test(obj.fareClass) ? curr.class : acc;
+    }, '');
+
   }
   return obj;
 };
