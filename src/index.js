@@ -237,7 +237,6 @@ const formatCase = (obj) => {
     "insert-first-name",
     "insert-last-name",
     "insert-phone-number",
-    "low-fare-calendar-outbound-inbound",
     "more-deals",
     "no-fares-available",
     "open-booking-popup",

@@ -419,8 +419,6 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 | insert_phone_number       |
 | subscribe                 |
 | enter_promo_code          |
-| low_fare_calendar_outbound_inbound |
-| 
 
 
 <b> For Hotels </b>
