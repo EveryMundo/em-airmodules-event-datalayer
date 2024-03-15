@@ -138,10 +138,10 @@ const saveToLocalStorage = (key, value) => {
  * @return {object} - Returns an object with the list of airport codes and their corresponding country codes
  */
 const fetchAirportCountries = async iataCode => {
-  const url = globalObj.environment == 'dev' || globalObj.environment == 'prepro'
+  const url = globalObj.environment == 'development'
     ? `https://openair-dev.airtrfx.com/hangar-service/v2/${iataCode}/airports/search`
     : `https://openair-california.airtrfx.com/hangar-service/${iataCode}/si/airports/search`;
-  const apiKey = globalObj.environment == 'dev' || globalObj.environment == 'prepro'
+  const apiKey = globalObj.environment == 'development'
     ? 'BI6YTjWfcj8/IDOtpCjpLrJmLSKtCx2+AAQEpdggtgvNnrZhlDztX3/EwDfS16j4'
     : 'HeQpRjsFI5xlAaSx2onkjc1HTK0ukqA1IrVvd5fvaMhNtzLTxInTpeYB1MK93pah';
   const response = await fetch(url, {
