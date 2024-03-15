@@ -40,6 +40,7 @@ const formatAirlines = (obj) => {
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
+      addCalculatedParameters(obj),
       pushFormattedEventData(obj)
     );
   }
@@ -106,6 +107,85 @@ const addParameters = (obj) => {
   if (!obj.hasOwnProperty("tagName")) {
     obj.tagName = "";
   }
+  return obj;
+};
+
+/**
+ * Saves to localStorage
+ * @param {object} key - Key of item
+ * @param {object} value - Value of item
+ */
+const saveToLocalStorage = (key, value) => {
+  const standardizedVal = typeof value === 'object' || Array.isArray(value)
+  ? JSON.stringify(value)
+  : value;
+  localStorage.setItem(key, standardizedVal);
+}
+
+
+/**
+ * Fetches the list of country codes for each airport code from the hangar API
+ * @param {string} iataCode - Iata code of airline
+ * @return {object} - Returns an object with the list of airport codes and their corresponding country codes
+ */
+const fetchAirportCountries = async iataCode => {
+  const url = this.environment == 'dev' || this.environment == 'prepro'
+    ? `https://openair-dev.airtrfx.com/hangar-service/v2/${iataCode}/airports/search`
+    : `https://openair-california.airtrfx.com/hangar-service/${iataCode}/si/airports/search`;
+  const apiKey = this.environment == 'dev' || this.environment == 'prepro'
+    ? 'BI6YTjWfcj8/IDOtpCjpLrJmLSKtCx2+AAQEpdggtgvNnrZhlDztX3/EwDfS16j4'
+    : 'HeQpRjsFI5xlAaSx2onkjc1HTK0ukqA1IrVvd5fvaMhNtzLTxInTpeYB1MK93pah';
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'EM-API-KEY': apiKey,
+      'Content-Type': 'application/json'
+    },
+    body: '{"outputFields": ["countryIsoCode","iataCode"],"setting": { "airportSource": "TRFX" },"language": "en"}'
+  });
+  return await response.json();
+}
+
+/**
+ * Loads the list of country codes for each airport code
+ * @param {string} iataCode - Iata code of airline
+ * @return {Map} - Returns a map of airport codes and their corresponding country codes
+ */
+const loadAirportCountries = async iataCode => {
+  let airportCountryCodesList = JSON.parse(localStorage.getItem("airportCountryCodes"));
+  if (!airportCountryCodesList) {
+    const airportCountries = await fetchAirportCountries(iataCode);
+    airportCountryCodesList = airportCountries
+      .map(_ => [_.iataCode, (_.country && _.country.isoCode) || null])
+      .sort((a, b) => a[0].localeCompare(b[0]));
+    saveToLocalStorage('airportCountryCodes', list);
+  }
+  const airportCountryCodes = new Map(airportCountryCodesList);
+  return airportCountryCodes;
+}
+
+/**
+ * Adds custom parameters that need to be calculated to the event object
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns the formatted object with the parameters as needed.
+ */
+
+const addCalculatedParameters = async obj => {
+  obj.originCountryCode = "";
+  obj.destinationCountryCode = "";
+  obj.flightType = "";
+  const airportCountries = await loadAirportCountries(obj.provider);
+  if (obj.originAirportIataCode) {
+    obj.originCountryCode = airportCountries.get(obj.originAirportIataCode);
+  }
+  if (obj.destinationAirportIataCode) {
+    obj.destinationCountryCode = airportCountries.get(obj.destinationAirportIataCode);
+  }
+  obj.originCountryCode && obj.destinationCountryCode
+  ? obj.originCountryCode === obj.destinationCountryCode
+  ? obj.flightType = "domestic"
+  : obj.flightType = "international"
+  : obj.flightType = "";
   return obj;
 };
 
