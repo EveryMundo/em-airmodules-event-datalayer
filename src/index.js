@@ -158,7 +158,7 @@ const loadAirportCountries = async iataCode => {
     airportCountryCodesList = airportCountries
       .map(_ => [_.iataCode, (_.country && _.country.isoCode) || null])
       .sort((a, b) => a[0].localeCompare(b[0]));
-    saveToLocalStorage('airportCountryCodes', list);
+    saveToLocalStorage('airportCountryCodes', airportCountryCodesList);
   }
   const airportCountryCodes = new Map(airportCountryCodesList);
   return airportCountryCodes;
