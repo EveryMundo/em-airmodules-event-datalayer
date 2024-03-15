@@ -10,7 +10,7 @@ const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window
 
 globalObj.tp_v = version;
 globalObj.tp_debug = false;
-
+globalObj.environment = globalObj.environment? globalObj.environment :  getEnvironmentFromDomain();
 const logger = {
   log: (...args) => {
     if (globalObj && globalObj.tp_debug === true) {
@@ -110,6 +110,16 @@ const addParameters = (obj) => {
   return obj;
 };
 
+  /**
+  * Returns environment based on url's domain.
+  * @returns {string} The environment based on url's domain.
+  */
+const getEnvironmentFromDomain = () =>{
+  const domain = window.location.hostname;
+	const environment = domain.includes("dev") || domain.includes("prepro") ? "development" : "production";
+	return environment;
+}
+
 /**
  * Saves to localStorage
  * @param {object} key - Key of item
@@ -122,17 +132,16 @@ const saveToLocalStorage = (key, value) => {
   localStorage.setItem(key, standardizedVal);
 }
 
-
 /**
  * Fetches the list of country codes for each airport code from the hangar API
  * @param {string} iataCode - Iata code of airline
  * @return {object} - Returns an object with the list of airport codes and their corresponding country codes
  */
 const fetchAirportCountries = async iataCode => {
-  const url = this.environment == 'dev' || this.environment == 'prepro'
+  const url = globalObj.environment == 'dev' || globalObj.environment == 'prepro'
     ? `https://openair-dev.airtrfx.com/hangar-service/v2/${iataCode}/airports/search`
     : `https://openair-california.airtrfx.com/hangar-service/${iataCode}/si/airports/search`;
-  const apiKey = this.environment == 'dev' || this.environment == 'prepro'
+  const apiKey = globalObj.environment == 'dev' || globalObj.environment == 'prepro'
     ? 'BI6YTjWfcj8/IDOtpCjpLrJmLSKtCx2+AAQEpdggtgvNnrZhlDztX3/EwDfS16j4'
     : 'HeQpRjsFI5xlAaSx2onkjc1HTK0ukqA1IrVvd5fvaMhNtzLTxInTpeYB1MK93pah';
   const response = await fetch(url, {
