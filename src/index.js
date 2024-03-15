@@ -1,5 +1,6 @@
 import {tenantList} from "./tenantlist.js"
 import {version}  from './version.js'
+import { currentEnvironment} from './config.js'
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -10,6 +11,7 @@ const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window
 
 globalObj.tp_v = version;
 globalObj.tp_debug = false;
+globalObj.environment = globalObj.environment? globalObj.environment :  currentEnvironment;
 
 const logger = {
   log: (...args) => {
@@ -40,6 +42,7 @@ const formatAirlines = (obj) => {
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
+      addCalculatedParameters(obj),
       pushFormattedEventData(obj)
     );
   }
@@ -106,6 +109,117 @@ const addParameters = (obj) => {
   if (!obj.hasOwnProperty("tagName")) {
     obj.tagName = "";
   }
+  return obj;
+};
+
+/**
+ * Saves to localStorage
+ * @param {object} key - Key of item
+ * @param {object} value - Value of item
+ */
+const saveToLocalStorage = (key, value) => {
+  const standardizedVal = typeof value === 'object' || Array.isArray(value)
+  ? JSON.stringify(value)
+  : value;
+  localStorage.setItem(key, standardizedVal);
+}
+
+/**
+ * Fetches the list of country codes for each airport code from the hangar API
+ * @param {string} iataCode - Iata code of airline
+ * @return {object} - Returns an object with the list of airport codes and their corresponding country codes
+ */
+const fetchAirportCountries = async iataCode => {
+  try {
+    // Assuming currentEnvironment is correctly defined in your scope
+    const url = `${currentEnvironment.apiUrl}${iataCode.toLowerCase()}/airports/search`;
+    console.log(url); // For debugging purposes, might be removed in production
+    const apiKey = currentEnvironment.apiKey;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'EM-API-KEY': apiKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        outputFields: ["countryIsoCode", "iataCode"],
+        setting: { "airportSource": "TRFX" },
+        language: "en"
+      })
+    });
+
+    if (!response.ok) {
+      // Handle HTTP errors
+      console.error(`Error fetching airport countries: ${response.statusText}`);
+      return {}; // Return an empty object or array as needed
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    // Handle network errors or JSON parsing errors
+    console.error(`Error in fetchAirportCountries: ${error.message}`);
+    return {}; // Return an empty object or array as needed
+  }
+};
+
+
+/**
+ * Loads the list of country codes for each airport code
+ * @param {string} iataCode - Iata code of airline
+ * @return {Map} - Returns a map of airport codes and their corresponding country codes
+ */
+
+const loadAirportCountries = async iataCode => {
+  let airportCountryCodesList = JSON.parse(localStorage.getItem("airportCountryCodes")) || [];
+
+  const hasIataCode = airportCountryCodesList.some(([code]) => code === iataCode);
+
+  if (!hasIataCode) {
+    try {
+      const airportCountries = await fetchAirportCountries(iataCode);
+      if (Array.isArray(airportCountries) && airportCountries.length > 0) {
+        const newEntries = airportCountries
+          .filter(airport => airport.iataCode && airport.country && airport.country.isoCode)
+          .map(airport => [airport.iataCode, airport.country.isoCode]);
+
+        airportCountryCodesList = [...airportCountryCodesList, ...newEntries]
+          .sort((a, b) => a[0].localeCompare(b[0]));
+
+        saveToLocalStorage('airportCountryCodes', airportCountryCodesList);
+      } else {
+        console.warn('No airport countries found or data in unexpected format.');
+      }
+    } catch (error) {
+      console.error(`Error loading airport countries for ${iataCode}: ${error}`);
+    }
+  }
+  return new Map(airportCountryCodesList);
+};
+
+/**
+ * Adds custom parameters that need to be calculated to the event object
+ * @param {object} obj - data layer object.
+ * @return {object} - Returns the formatted object with the parameters as needed.
+ */
+
+const addCalculatedParameters = async obj => {
+  obj.originCountryCode = "";
+  obj.destinationCountryCode = "";
+  obj.flightType = "";
+  const airportCountries = await loadAirportCountries(obj.airlineIataCode || obj.tenantCode);
+  if (obj.originAirportIataCode) {
+    obj.originCountryCode = airportCountries.get(obj.originAirportIataCode);
+  }
+  if (obj.destinationAirportIataCode) {
+    obj.destinationCountryCode = airportCountries.get(obj.destinationAirportIataCode);
+  }
+  obj.originCountryCode && obj.destinationCountryCode
+  ? obj.originCountryCode === obj.destinationCountryCode
+  ? obj.flightType = "domestic"
+  : obj.flightType = "international"
+  : obj.flightType = "";
   return obj;
 };
 
