@@ -217,8 +217,8 @@ const addCalculatedParameters = async obj => {
   }
   obj.originCountryCode && obj.destinationCountryCode
   ? obj.originCountryCode === obj.destinationCountryCode
-  ? obj.flightType = "domestic"
-  : obj.flightType = "international"
+  ? obj.flightType = "DOMESTIC"
+  : obj.flightType = "INTERNATIONAL"
   : obj.flightType = "";
   return obj;
 };
