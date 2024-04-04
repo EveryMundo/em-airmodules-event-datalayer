@@ -1,6 +1,6 @@
 import {tenantList} from "./tenantlist.js"
 import {version}  from './version.js'
-import { currentEnvironment} from './config.js'
+import { hangarConfig } from './config.js'
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -11,7 +11,6 @@ const globalObj = typeof globalThis !== 'undefined' ? globalThis : typeof window
 
 globalObj.tp_v = version;
 globalObj.tp_debug = false;
-globalObj.environment = globalObj.environment? globalObj.environment :  currentEnvironment;
 
 const logger = {
   log: (...args) => {
@@ -131,10 +130,9 @@ const saveToLocalStorage = (key, value) => {
  */
 const fetchAirportCountries = async iataCode => {
   try {
-    // Assuming currentEnvironment is correctly defined in your scope
-    const url = `${currentEnvironment.apiUrl}${iataCode.toLowerCase()}/airports/search`;
-    console.log(url); // For debugging purposes, might be removed in production
-    const apiKey = currentEnvironment.apiKey;
+    // Assuming current  is correctly defined in your scope
+    const url = `${hangarConfig.apiUrl}${iataCode.toLowerCase()}${hangarConfig.apiPath}`;
+    const apiKey = hangarConfig.apiKey;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -564,7 +562,7 @@ const formatUrl = (obj) => {
     else if(obj["url"] !== ''){
       obj.url
     }
-    else{
+    else {
       obj.url = document.location.href
     }
     obj.url = obj.url.split(":").join(": ");
