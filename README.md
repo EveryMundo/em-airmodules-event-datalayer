@@ -377,106 +377,108 @@ Refer to [Event Object Parameters](#parameters) below for a detailed explanation
 
 <b> For Airlines </b>
 
-| Event             |
-|--------------------------|
-| viewable_impression       |
-| fsi                       |
-| open_booking_popup        |
-| select_origin             |
-| select_destination        |
-| select_departure_date     |
-| select_return_date        |
-| select_journey_type       |
-| select_miles              |
-| expand_form               |
-| collapse_form             |
-| sort                      |
-| more_deals                |
-| select_tab                |
-| filter_airlines           |
-| select_budget             |
-| select_fare_class         |
-| collapse_histogram        |
-| select_month              |
-| expand_flight             |
-| reset_filter              |
-| toggle_farelist           |
-| select_map_destination    |
-| selected_travel_interest  |
-| select_interest           |
-| click_out                 |
-| read_article              |
-| select_location           |
-| search                    |
-| select_status             |
-| select_stops              |
-| select_article            |
-| select_resident_status    |
-| no_fares_available        |
-| insert_first_name         |
-| insert_last_name          |
-| insert_email              |
-| insert_phone_number       |
-| subscribe                 |
-| enter_promo_code          |
+| Event                   | Description                                                                                           |
+|-------------------------|-------------------------------------------------------------------------------------------------------|
+| viewable_impression     | An element is seen on the user's browser                                                              |
+| fsi                     | Flight search initiation                                                                              |
+| open_booking_popup      | Popup clicked                                                                                         |
+| select_origin           | Origin (From) field updated                                                                           |
+| select_destination      | Destination (To) field updated                                                                        |
+| select_departure_date   | Departure date field updated                                                                          |
+| select_return_date      | Return date field updated                                                                             |
+| select_journey_type     | Journey type field updated                                                                            |
+| select_miles            | User changes the miles limit                                                                          |
+| expand_form             | User expands the form in the booking popup                                                            |
+| collapse_form           | User collapses form in the booking popup                                                              |
+| sort                    | The sort toggle is used on the FC                                                                     |
+| more_deals              | The user clicks to see more deals than the ones displayed in the FC                                   |
+| select_tab              | User selects tab in pricing modules                                                                   |
+| filter_airlines         | User filter for selected airlines (STAR)                                                              |
+| select_budget           | A budget was selected                                                                                 |
+| select_fare_class       | User changes fare class in the module. This includes branded classes such as "Basic Economy", "Main Cabin", "Economy Light", etc. |
+| collapse_histogram      | User collapses the histogram                                                                          |
+| select_month            | User selects the month in the histogram or calendar                                                   |
+| expand_flight           | User expands flight information in the flight schedule module                                         |
+| reset_filter            | Clear button clicked                                                                                  |
+| toggle_farelist         | User interacts with the toggle of the farelist modules                                                |
+| select_map_destination  | Map destination clicked                                                                               |
+| selected_travel_interest| A travel interest was selected                                                                        |
+| select_interest         | User selects travel interest (Tracking Package)                                                       |
+| click_out               | User clicks on one link of the content module                                                         |
+| read_article            | User clicks on an article of the content module                                                       |
+| select_location         | User performs a search in the bus directory module                                                    |
+| search                  | A search was initiated                                                                                |
+| select_status           | Status is updated in the route status tracker module                                                  |
+| select_stops            | User filters for the number of stops in the map module                                                |
+| select_article          | An article was selected                                                                               |
+| select_resident_status  | Resident status was selected                                                                          |
+| no_fares_available      | The FC does not have fares to display                                                                 |
+| insert_first_name       | First name field updated                                                                              |
+| insert_last_name        | Last name field updated                                                                               |
+| insert_email            | Email field updated                                                                                   |
+| insert_phone_number     | Phone number field updated                                                                            |
+| subscribe               | Subscription option selected                                                                          |
+| enter_promo_code        | Promo code field updated                                                                              |
 
 
 <b> For Hotels </b>
-| Event              |
-|--------------------------|
-| viewable_impression       |
-| search_initiation         |
-| open_booking_popup        |
-| more_deals                |
-| select_origin             |
-| select_trip_length        |
-| sort                      |
-| select_rating             |
-| select_destination        |
-| select_budget             |
-| reset_filter              |
-| select_night              |
-| search_initiation         |
-| select_property           |
-| select_start_date         |
-| select_end_date           |
-| select_room_guest         |
-| select_accessibility      |
-| select_redemption         |
-| select_stay_length        |
-| select_offer              |
-| no_fares_available        |
-| insert_first_name         |
-| insert_last_name          |
-| insert_email              |
-| insert_phone_number       |
-| subscribe                 |
-| enter_promo_code          |
+| Event                 | Description                                           |
+|-----------------------|-------------------------------------------------------|
+| viewable_impression   | An element is seen on the user's browser              |
+| search_initiation     | Search initiation                                     |
+| open_booking_popup    | Popup clicked                                         |
+| more_deals            | The user clicks to see more deals than the ones displayed in the FC |
+| select_origin         | Origin (From) field updated                           |
+| select_trip_length    | User selects stay length of the trip                  |
+| sort                  | The sort toggle is used on the FC                     |
+| select_rating         | Hotel rating filter is used                           |
+| select_destination    | Destination (To) field updated                        |
+| select_budget         | A budget was selected                                 |
+| reset_filter          | Clear button clicked                                  |
+| select_night          | Number of nights filter is updated                    |
+| select_property       | Hotel property updated                                |
+| select_start_date     | Hotel check-in date updated                           |
+| select_end_date       | Hotel check-out date updated                          |
+| select_room_guest     | Hotel guests field updated                            |
+| select_accessibility  | User marks the accessibility check box in the module  |
+| select_redemption     | User selects redemption as payment method             |
+| select_stay_length    | User selects stay length of the trip                  |
+| select_offer          | Special offer is selected in the low fares calendar   |
+| no_fares_available    | The FC does not have fares to display                 |
+| insert_first_name     | First name field updated                              |
+| insert_last_name      | Last name field updated                               |
+| insert_email          | Email field updated                                   |
+| insert_phone_number   | Phone number field updated                            |
+| subscribe             | Subscription option selected                          |
+| enter_promo_code      | Promo code field updated                              |
+
 
 
 <b> For Events </b>
 
-| Event        |
-|---------------------|
-| viewable_impression  |
-| search_initiation    |
-| open_booking_popup   |
-| select_date          |
-| select_session       |
-| select_category      |
-| select_experience    |
-| select_location      |
-| select_budget        |
-| sort                 |
-| reset_filter         |
-| no_fares_available   |
-| insert_first_name    |
-| insert_last_name     |
-| select_origin        |
-| insert_email         |
-| insert_phone_number  |
-| subscribe            |
-| enter_promo_code     |
+| Event                 | Description                                           |
+|-----------------------|-------------------------------------------------------|
+| viewable_impression   | An element is seen on the user's browser              |
+| search_initiation     | Search initiation                                     |
+| open_booking_popup    | Popup clicked                                         |
+| select_date           | Event date updated                                    |
+| select_session        | Event sessions field updated                          |
+| select_category       | Event category selected                               |
+| select_experience     | Event experience field updated                        |
+| select_location       | Event location field updated                          |
+| select_budget         | A budget was selected                                 |
+| sort                  | Sorting option selected                               |
+| reset_filter          | Clear button clicked                                  |
+| no_fares_available    | The FC does not have fares to display                 |
+| insert_first_name     | First name field updated                              |
+| insert_last_name      | Last name field updated                               |
+| select_origin         | Origin (From) field updated                           |
+| insert_email          | Email field updated                                   |
+| insert_phone_number   | Phone number field updated                            |
+| subscribe             | Subscription option selected                          |
+| enter_promo_code      | Promo code field updated                              |
+
+
 
 </br>
 

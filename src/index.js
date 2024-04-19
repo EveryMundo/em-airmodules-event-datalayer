@@ -34,6 +34,7 @@ const formatAirlines = (obj) => {
     return (
       addParameters(obj),
       convertValues(obj),
+      formatTenant(obj, 'airline'),
       formatCase(obj),
       formatPageTypeName(obj),
       formatJourney(obj),
@@ -58,6 +59,7 @@ const formatHotels = (obj) => {
   ) {
     return (
       convertValues(obj),
+      formatTenant(obj, 'hotel'),
       formatCase(obj),
       formatPageTypeName(obj),
       formatTenantType(obj),
@@ -83,6 +85,7 @@ const formatEvents = (obj) => {
       convertValues(obj),
       formatJourney(obj),
       formatFareClass(obj),
+      formatTenant(obj, 'event'),
       formatCase(obj),
       formatPageTypeName(obj),
       formatTenantType(obj),
@@ -206,6 +209,7 @@ const addCalculatedParameters = async obj => {
   obj.originCountryCode = "";
   obj.destinationCountryCode = "";
   obj.flightType = "";
+  console.log(obj)
   const airportCountries = await loadAirportCountries(obj.airlineIataCode || obj.tenantCode);
   if (obj.originAirportIataCode) {
     obj.originCountryCode = airportCountries.get(obj.originAirportIataCode);
@@ -620,6 +624,27 @@ const convertValues = (obj) => {
   return obj;
 };
 
+const formatTenant = (obj, tenantType) => {
+  try {
+    // Attempt to retrieve the code from context or dataLayer, default to empty string if not found.
+    const code = window?.EM?.context?.airline?.code || 
+                 window?.EM?.dataLayer?.[0]?.airline?.iataCode || 
+                 '';
+
+    if (tenantType !== 'airline' && (!obj.hasOwnProperty("tenantCode") || obj.tenantCode === '')) {
+      obj.tenantCode = code.toUpperCase();
+    }
+
+    if (tenantType === 'airline' && (!obj.hasOwnProperty("airlineIataCode") || obj.airlineIataCode === '')) {
+      obj.airlineIataCode = code.toUpperCase();
+    }
+
+    return obj
+  } catch (error) {
+    console.error('Error in formatTenant:', error.message);
+    return obj; // Return the original object in case of error.
+  }
+};
 
 /**
  * Returns tenant type based on tenant code. Checks whether tenant code belongs in tenant list. 
