@@ -377,7 +377,8 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 > Recommended events are events that you implement, but that have predefined names and parameters. These events unlock existing and future reporting possibilities.
 > The following is a list of recommended events that you can track using the tracking package:
 
-<b> For Airlines </b>
+<details>
+<summary>For Airlines</summary>
 
 | Event                   | Description                                                                                           |
 |-------------------------|-------------------------------------------------------------------------------------------------------|
@@ -422,8 +423,11 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | subscribe               | Subscription option selected                                                                          |
 | enter_promo_code        | Promo code field updated                                                                              |
 
+</details>
 
-<b> For Hotels </b>
+<details>
+<summary>For Hotels</summary>
+
 | Event                 | Description                                           |
 |-----------------------|-------------------------------------------------------|
 | viewable_impression   | An element is seen on the user's browser              |
@@ -454,9 +458,10 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | subscribe             | Subscription option selected                          |
 | enter_promo_code      | Promo code field updated                              |
 
+</details>
 
-
-<b> For Events </b>
+<details>
+<summary>For Events</summary>
 
 | Event                 | Description                                           |
 |-----------------------|-------------------------------------------------------|
@@ -480,6 +485,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | subscribe             | Subscription option selected                          |
 | enter_promo_code      | Promo code field updated                              |
 
+</details>
 
 
 </br>
