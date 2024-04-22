@@ -677,7 +677,7 @@ This section provides a detailed explanation of the parameters used in the event
 
 </details>
 
-<b>How to populate the actionLabel parameter<a name="how-to-populate-the-actionlabel-parameter"></a></b>
+### How to populate the actionLabel parameter<a name="how-to-populate-the-actionlabel-parameter"></a>
 
 The 'actionLabel' serves as a descriptive label, tracking what was specifically selected based on the event. For instance, when the event is 'select-interest,' the 'actionLabel' might capture values like 'snorkeling.'
 
