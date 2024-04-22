@@ -17,13 +17,13 @@
 
 - [Overview](#overview)
 - [Getting started with the Tracking Package](#-getting-started-with-the-tracking-package-)
-- [Constructing the Event Object](#-constructing-the-event-object-)
-- [Types of events](#-types-of-events-)
-- [Event Object Parameters](#-event-object-parameters-)
-- [How to populate the actionLabel parameter](#-how-to-populate-the-actionlabel-parameter-)
-- [Examples](#-examples-)
+- [Constructing the Event Object](#-constructing-the-event-object)
+- [Types of events](#types-of-events)
+- [Event Object Parameters](#event-object-parameters)
+- [How to populate the actionLabel parameter](#how-to-populate-the-actionlabel-parameter)
+- [Examples](#examples)
 - [Testing the Tracking Implementation](#-testing-the-tracking-implementation-)
-- [FAQ](#-faq-)
+- [FAQ](#-faq)
 
 <a name="overview"></a>
 
@@ -33,9 +33,7 @@ The Tracking Package enables you to measure views and engagement across your app
 
 To track a new application, developers construct an event object for each event they wish to track and utilize this [npm package](https://www.npmjs.com/package/@everymundo/airmodules-event-datalayer) to send the event. Once sent, the tracking package formats each event object according to the specifications outlined in the [emDataStandards](https://github.com/EveryMundo/emDataStandards/blob/master/dataLayer/airmodules.datalayer.js) and pushes it to a [dataLayer object](https://support.google.com/tagmanager/answer/6164391?hl=en). Subsequently, both customers and EveryMundo have the ability to leverage a tag manager to access the data layer values and transmit events to an Analytics account.
 
-<a name="-getting-started-with-the-tracking-package-"></a>
-
-## 🏁 Getting started with the Tracking Package
+## 🏁 Getting started with the Tracking Package <a name="-getting-started-with-the-tracking-package-"></a>
 
 Follow these simple steps to quickly integrate the Tracking Package into your project for seamless event tracking.
 
@@ -149,7 +147,7 @@ These functions are designed to handle specific verticals and ensure proper form
 
 Ensure you choose the correct function based on your application's vertical to maintain consistency in data formatting and tracking. Customize the event object and parameters as needed for your specific tracking requirements.
 
-## 📓 Constructing the Event Object <a name="-constructing-the-event-object-"></a>
+## 📓 Constructing the Event Object<a name="-constructing-the-event-object"></a>
 
 Events let you measure user interactions on your app; for example, you can measure when someone, clicks on a button or interacts with a filter. The data from events is used to create reports.
 
@@ -343,7 +341,7 @@ const eventObject = {
 };
 ```
 
-Adjust the values of 'event' and 'eventAction' to accurately reflect the nature of your tracked events. Refer to [Types of Events](#-types-of-events-) below for more information. 
+Adjust the values of 'event' and 'eventAction' to accurately reflect the nature of your tracked events. Refer to [Types of Events](#types-of-events) below for more information. 
 
 
 <b>Step 3: Set Up Event Parameters</b>
@@ -367,11 +365,10 @@ const eventObject = {
 };
 ```
 
-Refer to [Event Object Parameters](#-event-object-parameters-) below for a detailed explanation of each parameter, and which ones are required.
+Refer to [Event Object Parameters](#event-object-parameters) below for a detailed explanation of each parameter, and which ones are required.
 
-<a name  ="-types-of-events-"></a>
 
-###  ️Types of events 
+### Types of events<a name="types-of-events"></a>
 > [!NOTE] 
 > Automatically collected events are events that are collected by default. These events include:
 > * <b> Pageviews:</b> A pageview is recorded when a user loads a new page
@@ -514,9 +511,9 @@ const eventObject = {
 > * Avoid tracking too many custom events. This can make your event data difficult to analyze.
 > * Only track custom events that are important to your business. This will help you to focus on the most important events and to get the most out of your tracking data.
 
-<a name  ="-event-object-parameters-"></a> 
 
-###  Event Object Parameters 
+
+### Event Object Parameters<a name="event-object-parameters"></a>  
 
 This section provides a detailed explanation of the parameters used in the event object, along with their examples, definitions, and whether they are required.
 
@@ -680,8 +677,7 @@ This section provides a detailed explanation of the parameters used in the event
 
 </details>
 
-<a name="-how-to-populate-the-actionlabel-parameter-"></a>
-<b> How to populate the actionLabel parameter </b>
+<b>How to populate the actionLabel parameter<a name="how-to-populate-the-actionlabel-parameter"></a></b>
 
 The 'actionLabel' serves as a descriptive label, tracking what was specifically selected based on the event. For instance, when the event is 'select-interest,' the 'actionLabel' might capture values like 'snorkeling.'
 
@@ -694,9 +690,8 @@ The 'actionLabel' serves as a descriptive label, tracking what was specifically 
 
 * Note that for select-destination and select-departure-date the values will also have to be included in the relevant event object parameters.
 
-<a name = "-examples-"></a>
 
-### Examples
+### Examples<a name="examples"></a>
 
 <details>
 <summary>Airlines</summary>
@@ -893,8 +888,7 @@ Interact with the modules as users would and observe the corresponding data laye
 
 Verify the successful collection and transmission of events to Google Analytics 4 (GA4) by entering collect in the Network tab. Confirm that the required data is being sent to GA4.
 
-<a name="-faq-"></a> 
-## ❓ FAQ
+## ❓ FAQ<a name="-faq"></a> 
 
 <details>
 <summary> What is the difference between the event tracking object and the dataLayer object? Why do developers not implement the dataLayer object directly? </summary>
