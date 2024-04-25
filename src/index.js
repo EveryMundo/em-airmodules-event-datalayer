@@ -614,7 +614,7 @@ const convertValues = (obj) => {
           obj[property] = obj[property].toLowerCase() === "true" ? true : false;
         }
       } else if (typeof obj[property] === "number") {
-        obj[property] = Math.round(obj[property] * 100) / 100;
+        obj[property] = parseFloat((Math.round(obj[property] * 100) / 100).toFixed(2));
       } else {
         // Default the property to an empty string if it's not a string
         obj[property] = "";
