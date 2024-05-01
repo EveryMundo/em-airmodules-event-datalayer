@@ -34,13 +34,12 @@ const formatAirlines = (obj) => {
     return (
       addParameters(obj),
       convertValues(obj),
-      formatTenant(obj, 'airline'),
+      formatDetails(obj, 'airline'),
       formatCase(obj),
-      formatPageTypeName(obj),
       formatJourney(obj),
       formatFareClass(obj),
       formatTenantType(obj),
-      formatDate(obj),
+      formatDate(obj, true),
       formatUrl(obj),
       addCalculatedParameters(obj),
       pushFormattedEventData(obj)
@@ -59,9 +58,8 @@ const formatHotels = (obj) => {
   ) {
     return (
       convertValues(obj),
-      formatTenant(obj, 'hotel'),
+      formatDetails(obj, 'hotel'),
       formatCase(obj),
-      formatPageTypeName(obj),
       formatTenantType(obj),
       formatDate(obj),
       formatUrl(obj),
@@ -85,7 +83,7 @@ const formatEvents = (obj) => {
       convertValues(obj),
       formatJourney(obj),
       formatFareClass(obj),
-      formatTenant(obj, 'event'),
+      formatDetails(obj, 'event'),
       formatCase(obj),
       formatPageTypeName(obj),
       formatTenantType(obj),
@@ -209,7 +207,6 @@ const addCalculatedParameters = async obj => {
   obj.originCountryCode = "";
   obj.destinationCountryCode = "";
   obj.flightType = "";
-  console.log(obj)
   const airportCountries = await loadAirportCountries(obj.airlineIataCode || obj.tenantCode);
   if (obj.originAirportIataCode) {
     obj.originCountryCode = airportCountries.get(obj.originAirportIataCode);
@@ -269,33 +266,6 @@ const formatFareClass = (obj) => {
 };
 
 /**
- * Formats provider. Can only format the provider name if it is separated by spaces.
- * @deprecated - providers are now separated by spaces only
- * @param {object} obj - data layer object.
- * @return {object} - Returns formatted provider name.
- */
-
-const formatProvider = (obj) => {
-  if (obj.hasOwnProperty("provider")) {
-    let airlineName = obj.provider;
-    let finalAirlineName = "";
-
-    if (airlineName.match(/[a-zA-Z0-9]+/g)) {
-      const airlineArray = airlineName ? airlineName.split(" ") : [];
-      if (airlineArray && airlineArray.length > 0) {
-        airlineArray.forEach((key) => {
-          finalAirlineName +=
-            key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
-        });
-        return (obj.provider = finalAirlineName);
-      } else {
-        return "";
-      }
-    }
-  }
-};
-
-/**
  * Formats casing for different key values.
  * Events, eventAction - underscore
  * Module, actionLabel - kebab-case
@@ -304,124 +274,32 @@ const formatProvider = (obj) => {
  * @param {object} obj - data layer object.
  * @return {object} - Returns case-converted object.
  */
+
 const formatCase = (obj) => {
-  
   let keyArr = [
-    "event",
-    "module",
-    "eventAction",
-    "airlineIataCode",
-    "originAirportIataCode",
-    "destinationAirportIataCode",
-    "currencyCode",
-    "route",
-    "countryIsoCode",
-    "cityCode",
-    "languageIsoCode",
-    "siteEdition",
-    "name",
-    "provider",
-    "brand",
-    "model",
-    "pageTypeCode",
-    "pageTypeName",
-    //Hotel values
-    "tenantCode",
-    "actionLabel",
-    "regionName",
-    "countryCode",
-    "cityName",
-    "propertyName",
-    //Event values
-    "eventName",
-    "eventLocation",
-    "eventSession",
-    "eventExperienceCategory",
-    "eventExperience",
+    "event", "module", "eventAction", "airlineIataCode", "originAirportIataCode",
+    "destinationAirportIataCode", "currencyCode", "route", "countryIsoCode",
+    "cityCode", "languageIsoCode", "siteEdition", "name", "provider", "brand",
+    "model", "pageTypeCode", "pageTypeName", "tenantCode", "actionLabel",
+    "regionName", "countryCode", "cityName", "propertyName", "eventName",
+    "eventLocation", "eventSession", "eventExperienceCategory", "eventExperience",
   ];
 
-  let listOfEvents = [
-    "click-out",
-    "collapse-form",
-    "collapse-histogram",
-    "expand-flight",
-    "expand-form",
-    "filter-airlines",
-    "flight",
-    "fsi",
-    "insert-email",
-    "insert-first-name",
-    "insert-last-name",
-    "insert-phone-number",
-    "more-deals",
-    "no-fares-available",
-    "open-booking-popup",
-    "read-article",
-    "reset-filter",
-    "search",
-    "search-initiation",
-    "select-accessibility",
-    "select-article",
-    "select-budget",
-    "select-date",
-    "select-destination",
-    "select-experience",
-    "select-fare-class",
-    "select-interest",
-    "select-journey-type",
-    "select-location",
-    "select-map-destination",
-    "select-miles",
-    "select-month",
-    "select-night",
-    "select-offer",
-    "select-origin",
-    "select-property",
-    "select-rating",
-    "select-redemption",
-    "select-resident-status",
-    "select-return-date",
-    "select-room-guest",
-    "select-session",
-    "select-start-date",
-    "select-status",
-    "select-stop",
-    "select-stops",
-    "select-tab",
-    "select-trip-length",
-    "sort",
-    "subscribe",
-    "toggle-farelist",
-    "viewable-impression"
-  ]  
-
   const titleCase = [
-    "regionName",
-    "cityName",
-    "propertyName",
-    "eventName",
-    "eventLocation",
-    "eventSession",
-    "eventExperienceCategory",
-    "eventExperience",
-    "provider"
+    "regionName", "cityName", "propertyName", "eventName", "eventLocation",
+    "eventSession", "eventExperienceCategory", "eventExperience", "provider"
   ];
 
   const toSnakeCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
   const toKebabCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
   const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase());
-  
+
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
       switch (key) {
         case "event":
-          const eventValue = toKebabCase(obj[key]);
-          if (!listOfEvents.includes(eventValue)) {
-            obj[key] = "Event value does not exist";
-            logger.log("Error: Please check event value");
-          } else {
-            obj[key] = eventValue === 'select-stop' ? 'select_stops' : toSnakeCase(obj[key]);
-          }
+          const eventValue = toSnakeCase(obj[key]);
+          obj[key] = eventValue === 'select-stop' ? 'select_stops' : eventValue;
           break;
         case "module":
         case "actionLabel":
@@ -474,62 +352,231 @@ const formatCase = (obj) => {
     }
   });
 
-  return obj;  
-}
+  return obj;
+};
+
+// const formatCase = (obj) => {
+  
+//   let keyArr = [
+//     "event",
+//     "module",
+//     "eventAction",
+//     "airlineIataCode",
+//     "originAirportIataCode",
+//     "destinationAirportIataCode",
+//     "currencyCode",
+//     "route",
+//     "countryIsoCode",
+//     "cityCode",
+//     "languageIsoCode",
+//     "siteEdition",
+//     "name",
+//     "provider",
+//     "brand",
+//     "model",
+//     "pageTypeCode",
+//     "pageTypeName",
+//     //Hotel values
+//     "tenantCode",
+//     "actionLabel",
+//     "regionName",
+//     "countryCode",
+//     "cityName",
+//     "propertyName",
+//     //Event values
+//     "eventName",
+//     "eventLocation",
+//     "eventSession",
+//     "eventExperienceCategory",
+//     "eventExperience",
+//   ];
+
+//   let listOfEvents = [
+//     "click-out",
+//     "collapse-form",
+//     "collapse-histogram",
+//     "expand-flight",
+//     "expand-form",
+//     "filter-airlines",
+//     "flight",
+//     "fsi",
+//     "insert-email",
+//     "insert-first-name",
+//     "insert-last-name",
+//     "insert-phone-number",
+//     "more-deals",
+//     "no-fares-available",
+//     "open-booking-popup",
+//     "read-article",
+//     "reset-filter",
+//     "search",
+//     "search-initiation",
+//     "select-accessibility",
+//     "select-article",
+//     "select-budget",
+//     "select-date",
+//     "select-destination",
+//     "select-experience",
+//     "select-fare-class",
+//     "select-interest",
+//     "select-journey-type",
+//     "select-location",
+//     "select-map-destination",
+//     "select-miles",
+//     "select-month",
+//     "select-night",
+//     "select-offer",
+//     "select-origin",
+//     "select-property",
+//     "select-rating",
+//     "select-redemption",
+//     "select-resident-status",
+//     "select-return-date",
+//     "select-room-guest",
+//     "select-session",
+//     "select-start-date",
+//     "select-status",
+//     "select-stop",
+//     "select-stops",
+//     "select-tab",
+//     "select-trip-length",
+//     "sort",
+//     "subscribe",
+//     "toggle-farelist",
+//     "viewable-impression"
+//   ]  
+
+//   const titleCase = [
+//     "regionName",
+//     "cityName",
+//     "propertyName",
+//     "eventName",
+//     "eventLocation",
+//     "eventSession",
+//     "eventExperienceCategory",
+//     "eventExperience",
+//     "provider"
+//   ];
+
+//   const toSnakeCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
+//   const toKebabCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
+//   const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase());
+  
+//   keyArr.forEach((key) => {
+//     if (obj.hasOwnProperty(key)) {
+//       switch (key) {
+//         case "event":
+//           const eventValue = toKebabCase(obj[key]);
+//           if (!listOfEvents.includes(eventValue)) {
+//             obj[key] = "Event value does not exist";
+//             logger.log("Error: Please check event value");
+//           } else {
+//             obj[key] = eventValue === 'select-stop' ? 'select_stops' : toSnakeCase(obj[key]);
+//           }
+//           break;
+//         case "module":
+//         case "actionLabel":
+//           obj[key] = typeof obj[key] === "number" ? obj[key].toString() : toKebabCase(obj[key]);
+//           break;
+//         case "eventAction":
+//           obj.eventAction = obj.hasOwnProperty("event") && obj.event !== "" ? obj.event : obj.eventAction;
+//           break;
+//         case "pageTypeCode":
+//         case "pageTypeName":
+//           obj[key] = toSnakeCase(obj[key]).toUpperCase();
+//           break;
+//         default:
+//           obj[key] = titleCase.includes(key) ? (key === "eventExperience" && obj[key].match(/(multiple|,)/gi) ? "MULTIPLE" : obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key])) : obj[key].toUpperCase();
+//       }
+//     }
+  
+//     if (obj.page !== undefined && obj.page[0]?.hasOwnProperty(key) && (key === "languageIsoCode" || key === "siteEdition" || key === "countryIsoCode")) {
+//       const siteEdition = toKebabCase(obj.page[0].siteEdition).split("-");
+//       obj.page[0].countryIsoCode = (obj.page[0]?.countryIsoCode || "").toUpperCase();
+//       obj.page[0].languageIsoCode = (obj.page[0]?.languageIsoCode || "").toLowerCase();
+//       obj.page[0].siteEdition = siteEdition[1] !== undefined
+//         ? `${siteEdition[0]}-${siteEdition[1].toUpperCase()}`
+//         : (obj.page[0].siteEdition === "" && obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== "")
+//         ? `${obj.page[0].languageIsoCode}-${obj.page[0].countryIsoCode}`
+//         : (siteEdition[0] || "");
+//     }
+  
+//     if (obj.lodging !== undefined && obj.lodging[0]?.hasOwnProperty(key)) {
+//       if (key === "cityCode") {
+//         obj.lodging[0].cityCode = (obj.lodging[0]?.cityCode || "").toUpperCase();
+//       }
+//       if (key === "name") {
+//         obj.lodging[0].name = (obj.lodging[0]?.name || "").charAt(0).toUpperCase() + (obj.lodging[0]?.name || "").substr(1).toLowerCase();
+//       }
+//     }
+  
+//     if (obj.carRentals !== undefined && obj.carRentals[0]?.hasOwnProperty(key)) {
+//       switch (key) {
+//         case "provider":
+//           obj.carRentals[0].provider = toTitleCase(obj.carRentals[0].provider || "");
+//           break;
+//         case "brand":
+//           obj.carRentals[0].brand = (obj.carRentals[0].brand || "").toUpperCase();
+//           break;
+//         case "model":
+//           obj.carRentals[0].model = (obj.carRentals[0].model || "").toLowerCase();
+//           break;
+//       }
+//     }
+//   });
+
+//   return obj;  
+// }
 /**
  * Formats date to ISO format.
  * @param {object} obj - data layer object.
  * @return {object} - Returns formatted dates.
  */
 
-const formatDate = (obj) => {
-  const dateFields = [
-    "departureDate",
-    "returnDate",
-    "timestamp",
-    "startDate",
-    "endDate",
-  ];
+const formatDate = (obj, isAirline = false) => {
+  const dateFields = ["departureDate", "returnDate", "timestamp", "startDate", "endDate"];
 
-  const isValidDate = (date) => {
-    return date instanceof Date && !isNaN(date);
+  const isValidDate = (date) => date instanceof Date && !isNaN(date);
+
+  const formatISODate = (date) => {
+    const newDate = new Date(date);
+    return isValidDate(newDate) ? newDate.toISOString().substr(0, 10) : '';
   };
 
-  const formatDateField = (field) => {
+  const formatISODateTime = (date) => {
+    const newDate = new Date(date);
+    return isValidDate(newDate) ? newDate.toISOString() : '';
+  };
+
+  dateFields.forEach(field => {
     if (obj.hasOwnProperty(field)) {
-      let value = obj[field];
-      if (value !== '' && value !== undefined) {
-        if (field === 'timestamp') {
-          value = new Date(value);
-          value = isValidDate(value) ? value.toISOString() : '';
-        } else {
-          value = new Date(value);
-          value = isValidDate(value) ? value.toISOString().substr(0, 10) : '';
-        }
-      } else {
-        value = '';
-      }
-      obj[field] = value;
+      obj[field] = field === 'timestamp' ? formatISODateTime(obj[field]) : formatISODate(obj[field]);
     }
-  };
+  });
 
-  for (const key of dateFields) {
-    formatDateField(key);
+  // Airline-specific calculations
+  if (isAirline) {
+    if ((!obj.hasOwnProperty("daysUntilFlight") || obj.daysUntilFlight === undefined || obj.daysUntilFlight === '') &&
+        isValidDate(new Date(obj.departureDate)) && isValidDate(new Date(obj.timestamp))) {
+      const departure = new Date(obj.departureDate);
+      const currentTimestamp = new Date(obj.timestamp);
+      obj.daysUntilFlight = Math.round((departure - currentTimestamp) / (1000 * 60 * 60 * 24));
+    }
   }
 
-  if (obj.lodging !== undefined && obj.lodging.length > 0) {
-    const lodgingObj = obj.lodging[0];
+  if ((!obj.hasOwnProperty("tripLength") || obj.tripLength === undefined || obj.tripLength === '') &&
+  isValidDate(new Date(obj.departureDate)) && isValidDate(new Date(obj.returnDate))) {
+const departure = new Date(obj.departureDate);
+const returnDate = new Date(obj.returnDate);
+obj.tripLength = Math.round((returnDate - departure) / (1000 * 60 * 60 * 24));
+}
 
-    if (lodgingObj) {
-      if (lodgingObj.hasOwnProperty("startDate")) {
-        const startDateValue = new Date(lodgingObj.startDate);
-        lodgingObj.startDate = isValidDate(startDateValue) ? startDateValue.toISOString().substr(0, 10) : '';
-      }
-      if (lodgingObj.hasOwnProperty("endDate")) {
-        const endDateValue = new Date(lodgingObj.endDate);
-        lodgingObj.endDate = isValidDate(endDateValue) ? endDateValue.toISOString().substr(0, 10) : '';
-      }
-    }
+
+  // Format lodging dates if applicable
+  if (obj.lodging && obj.lodging.length > 0) {
+    const lodgingObj = obj.lodging[0];
+    lodgingObj.startDate = lodgingObj.hasOwnProperty("startDate") ? formatISODate(lodgingObj.startDate) : '';
+    lodgingObj.endDate = lodgingObj.hasOwnProperty("endDate") ? formatISODate(lodgingObj.endDate) : '';
   }
 
   return obj;
@@ -559,18 +606,29 @@ const checkIframe = () =>{
  * @return {object} - Returns url spaced between : and /.
  */
 const formatUrl = (obj) => {
-  if (obj.hasOwnProperty("url")) {
-    if(checkIframe()){
-      obj.url = (window.parentURL !== '') ? window.parentURL : document.referrer || window.parent.location.href
-    }
-    else if(obj["url"] !== ''){
-      obj.url
-    }
-    else {
-      obj.url = document.location.href
-    }
-    obj.url = obj.url.split(":").join(": ");
+  // Use URL from dataLayer or context if available
+  const urlFromDataLayer = window?.EM?.dataLayer?.[0]?.page?.url;
+  const urlFromContext = window?.EM?.context?.datasource?.url;
+
+  if (!obj.hasOwnProperty("url") || obj["url"] === '') {
+    obj.url = urlFromDataLayer || urlFromContext || '';
   }
+
+  // Check if the URL needs to be retrieved from an iframe
+  if (obj.hasOwnProperty("url")) {
+    if (checkIframe()) {
+      obj.url = window.parentURL !== '' ? window.parentURL : document.referrer || window.parent.location.href;
+    } else if (obj["url"] === '') {
+      obj.url = document.location.href;
+    }
+
+    if (obj.url) {
+      obj.url = obj.url.split(":").join(": ");
+    } else {
+      obj.url = ''; //Fallback
+    }
+  }
+
   return obj;
 };
 
@@ -624,27 +682,64 @@ const convertValues = (obj) => {
   return obj;
 };
 
-const formatTenant = (obj, tenantType) => {
+const formatDetails = (obj, tenantType = '') => {
   try {
-    // Attempt to retrieve the code from context or dataLayer, default to empty string if not found.
-    const code = window?.EM?.context?.airline?.code || 
-                 window?.EM?.dataLayer?.[0]?.airline?.iataCode || 
-                 '';
+    // Retrieve properties from multiple sources
+    const providerName = window?.EM?.context?.airline?.name || window?.EM?.dataLayer?.[0]?.airline?.name || '';
+    const code = window?.EM?.context?.airline?.code || window?.EM?.dataLayer?.[0]?.airline?.iataCode || '';
+    const journeyType = window?.EM?.context?.dynamicContext?.productCategory;
+    const fareClass = window?.EM?.context?.dynamicContext?.productType;
+    const isFlexibleDates = window?.EM?.context?.dynamicContext?.isFlexibleDates;
+    const discountCode = window?.EM?.context?.dynamicContext?.discountCode;
+    const isRedemption = window?.EM?.context?.dynamicContext?.isRedemption;
 
-    if (tenantType !== 'airline' && (!obj.hasOwnProperty("tenantCode") || obj.tenantCode === '')) {
+    // Format airline name
+    let finalAirlineName = obj.hasOwnProperty("provider") && obj.provider ? obj.provider : providerName;
+    finalAirlineName = finalAirlineName.match(/[a-zA-Z0-9]+/g) ? finalAirlineName.split(" ").map(key => key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()).join("") : '';
+    obj.provider = finalAirlineName || obj.provider;
+
+    // Handle tenant code based on the type
+    if ((tenantType !== 'airline' && !obj.tenantCode) || obj.tenantCode === '') {
       obj.tenantCode = code.toUpperCase();
     }
-
-    if (tenantType === 'airline' && (!obj.hasOwnProperty("airlineIataCode") || obj.airlineIataCode === '')) {
+    if ((tenantType === 'airline' && !obj.airlineIataCode) || obj.airlineIataCode === '') {
       obj.airlineIataCode = code.toUpperCase();
     }
 
-    return obj
+    // Handle additional properties
+    obj.journeyType = obj.journeyType || (journeyType && (!obj.hasOwnProperty("journeyType") || obj.journeyType === '') ? journeyType : '');
+    obj.fareClass = obj.fareClass || (fareClass && (!obj.hasOwnProperty("fareClass") || obj.fareClass === '') ? fareClass : '');
+    obj.isFlexibleDates = obj.isFlexibleDates || (isFlexibleDates !== undefined && (!obj.hasOwnProperty("isFlexibleDates") || obj.isFlexibleDates === '') ? isFlexibleDates : '');
+    obj.discountCode = obj.discountCode || (discountCode && (!obj.hasOwnProperty("discountCode") || obj.discountCode === '') ? discountCode : '');
+
+    // Check for miles
+    if (tenantType === 'airline' && isRedemption !== undefined && (!obj.hasOwnProperty("miles") || obj.miles === undefined)) {
+      obj.miles = isRedemption;
+    }
+
+    // Page details previously added
+    if (obj.page && obj.page[0]) {
+      obj.page[0].siteEdition = obj.page[0].siteEdition ||
+                                window?.EM?.context?.geo?.language?.site_edition?.toUpperCase() ||
+                                window?.EM?.dataLayer?.[0]?.page?.siteEdition?.toUpperCase() ||
+                                '';
+      obj.page[0].countryIsoCode = obj.page[0].countryIsoCode ||
+                                   window?.EM?.context?.geo?.language?.siteEditionMarket ||
+                                   window?.EM?.dataLayer?.[0]?.page?.countryIsoCode ||
+                                   '';
+      obj.page[0].languageIsoCode = obj.page[0].languageIsoCode ||
+                                    window?.EM?.context?.geo?.language?.siteEditionLanguage ||
+                                    window?.EM?.dataLayer?.[0]?.page?.languageIsoCode ||
+                                    '';
+    }
+
+    return obj;
   } catch (error) {
-    console.error('Error in formatTenant:', error.message);
-    return obj; // Return the original object in case of error.
+    console.error('Error in formatDetails:', error.message);
+    return obj; // Return the original object in case of error
   }
 };
+
 
 /**
  * Returns tenant type based on tenant code. Checks whether tenant code belongs in tenant list. 
@@ -707,25 +802,6 @@ const formatTenantType = (obj) => {
   }
 };
 
-    const formatPageTypeName = (obj) => {
-      try {
-        if (!obj.page[0].hasOwnProperty("pageTypeName")) {
-          obj.page[0].pageTypeName = '';
-        }
-    
-        obj.page[0].pageTypeName =
-          obj.page[0].pageTypeName ||
-          (window?.EM?.context?.datasource?.step?.page?.[0]?.pageTypeName?.toUpperCase()) ||
-          (window?.EM?.dataLayer?.[0]?.page?.typeName?.toUpperCase()) || window?.EM?.context?.datasource?.step?.toUpperCase() ||
-          '';
-    
-        return obj.page[0].pageTypeName;
-      } catch (error) {
-        console.error('Error in formatPageTypeName:', error.message);
-        return obj;
-      }
-      return obj
-    };
 /**
  * Pushes formatted object to datalayer
  * @param  {object} obj - formatted object

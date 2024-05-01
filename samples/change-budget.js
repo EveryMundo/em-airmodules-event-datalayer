@@ -22,7 +22,7 @@ const eventObject = {
     isFlexibleDates: null,
     discountCode: null,
     deeplinkSiteEdition: null,
-    miles: "500",
+    miles: true,
     timestamp: "04 November 2021 5:13 EST",
     url: "https://www.testurl.com/",
     passenger: [
