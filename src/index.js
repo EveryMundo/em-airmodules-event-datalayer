@@ -1,6 +1,7 @@
 import {tenantList} from "./tenantlist.js"
 import {version}  from './version.js'
 import { hangarConfig } from './config.js'
+import { tealiumList } from "./whitelist.js"
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -810,9 +811,14 @@ const pushFormattedEventData = (obj) => {
   if (!window) {
     error('window is not defined');
   } else {
+    const tenantCode = obj.airlineIataCode || obj.tenantCode
+    const whiteList = tealiumList?.[tenantCode] ?? false
     logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(obj)))
-    if (window.utag) {
+    if (window.utag && whiteList) {
       window.utag.link(obj);
+    }
+    else{
+      logger.log("utag.link not enabled")
     }
     if (window.dataLayer) {
       if(window.localDataLayer && window.localDataLayer.length > 0) {
