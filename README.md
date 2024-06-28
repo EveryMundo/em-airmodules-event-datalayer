@@ -162,27 +162,16 @@ Identify the appropriate empty event object template based on the vertical or ca
 const eventObject = {
   event: '',
   module: '',
-  eventAction: '',
   actionLabel: '',
-  airlineIataCode: '',
-  journeyType: '',
   originAirportIataCode: '',
   destinationAirportIataCode: '',
-  route: '',
   currencyCode: '',
   totalPrice: 0,
   totalPriceUSD: '',
-  fareClass: '',
   departureDate: '',
   returnDate: '',
-  daysUntilFlight: 0,
-  tripLength: 0,
-  isFlexibleDates: '',
-  discountCode: '',
   deeplinkSiteEdition: '',
   miles: '',
-  timestamp: '',
-  url: '',
   passenger: [
     {
       count: 1,
@@ -191,14 +180,6 @@ const eventObject = {
       childCount: '',
       infantInLapCount: '',
       infantInSeatCount: ''
-    }
-  ],
-  page: [
-    {
-      siteEdition: '',
-      countryIsoCode: '',
-      languageIsoCode: '',
-      pageTypeName: ''
     }
   ],
   lodging: [
@@ -217,12 +198,11 @@ const eventObject = {
       provider: '',
       brand: '',
       model: ''
-  }
- ],
+    }
+  ],
   moduleId: '',
   tagName: ''
 }
-
 ```
 </details>
 
