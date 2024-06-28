@@ -1,7 +1,9 @@
-import {tenantList} from "./tenantlist.js"
-import {version}  from './version.js'
-import { hangarConfig } from './config.js'
-import { tealiumList } from "./whitelist.js"
+import { baseAirlineObject, baseEventObject, baseHospitalityObject } from "./schema.js";
+import { version } from './version.js';
+import { hangarConfig } from './config.js';
+import { tenantList } from "./tenantlist.js";
+import { tealiumList } from "./whitelist.js";
+
 /**
  * Returns fully formatted object.
  * @param {object} obj - data layer object.
@@ -24,95 +26,79 @@ const logger = {
   }
 };
 
+const ensureFields = (obj, baseObj) => {
+  for (const key in baseObj) {
+    if (baseObj.hasOwnProperty(key)) {
+      if (!obj.hasOwnProperty(key)) {
+        obj[key] = Array.isArray(baseObj[key]) ? [] : baseObj[key];
+      }
+
+      if (Array.isArray(baseObj[key]) && Array.isArray(obj[key])) {
+        baseObj[key].forEach((baseElem, i) => {
+          obj[key][i] = ensureFields(obj[key][i] || {}, baseElem);
+        });
+      } else if (typeof baseObj[key] === 'object' && baseObj[key] !== null) {
+        obj[key] = ensureFields(obj[key] || {}, baseObj[key]);
+      }
+    }
+  }
+  return obj;
+};
+
 const formatAirlines = (obj) => {
-  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)))
-  if (
-    obj.hasOwnProperty("module") &&
-    obj.module != "" &&
-    obj.hasOwnProperty("eventAction") &&
-    obj.eventAction != ""
-  ) {
-    return (
-      addParameters(obj),
-      convertValues(obj),
-      formatDetails(obj, 'airline'),
-      formatCase(obj),
-      formatJourney(obj),
-      formatFareClass(obj),
-      formatTenantType(obj),
-      formatDate(obj, true),
-      formatUrl(obj),
-      addCalculatedParameters(obj),
-      pushFormattedEventData(obj)
-    );
+  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)));
+  obj = ensureFields(obj, baseAirlineObject);
+  if (obj.module && obj.eventAction) {
+    convertValues(obj);
+    formatDetails(obj, 'airline');
+    formatCase(obj);
+    formatJourney(obj);
+    formatFareClass(obj);
+    formatTenantType(obj);
+    formatDate(obj, true);
+    formatUrl(obj);
+    addCalculatedParameters(obj);
+    pushFormattedEventData(obj);
+    return obj;
   }
   return "Module name or eventAction missing.";
 };
 
 const formatHotels = (obj) => {
-  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)))
-  if (
-    obj.hasOwnProperty("module") &&
-    obj.module != "" &&
-    obj.hasOwnProperty("eventAction") &&
-    obj.eventAction != ""
-  ) {
-    return (
-      convertValues(obj),
-      formatDetails(obj, 'hotel'),
-      formatCase(obj),
-      formatTenantType(obj),
-      formatDate(obj),
-      formatUrl(obj),
-      addCustomParameters(obj),
-      pushFormattedEventData(obj)
-    );
+  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)));
+  obj = ensureFields(obj, baseHospitalityObject);
+  if (obj.module && obj.eventAction) {
+    convertValues(obj);
+    formatDetails(obj, 'hotel');
+    formatCase(obj);
+    formatTenantType(obj);
+    formatDate(obj);
+    formatUrl(obj);
+    addCustomParameters(obj);
+    pushFormattedEventData(obj);
+    return obj;
   }
   return "Module name or eventAction missing.";
-}
+};
 
 const formatEvents = (obj) => {
-  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)))
-  if(
-    obj.hasOwnProperty("module") &&
-    obj.module != "" &&
-    obj.hasOwnProperty("eventAction") &&
-    obj.eventAction != ""
-  )
-   {
-    return (
-      convertValues(obj),
-      formatJourney(obj),
-      formatFareClass(obj),
-      formatDetails(obj, 'event'),
-      formatCase(obj),
-      formatPageTypeName(obj),
-      formatTenantType(obj),
-      formatDate(obj),
-      formatUrl(obj),
-      pushFormattedEventData(obj)
-    );
+  logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)));
+  obj = ensureFields(obj, baseEventObject);
+  if (obj.module && obj.eventAction) {
+    convertValues(obj);
+    formatJourney(obj);
+    formatFareClass(obj);
+    formatDetails(obj, 'event');
+    formatCase(obj);
+    formatPageTypeName(obj);
+    formatTenantType(obj);
+    formatDate(obj);
+    formatUrl(obj);
+    pushFormattedEventData(obj);
+    return obj;
   }
   return "Module name or eventAction missing.";
 };
-
-
-/**
- * Adds moduleId and tagName parameters if they are not in the given object.
- * @param {object} obj - data layer object.
- * @return {object} - Returns the formatted object with the parameters as needed.
- */
-
-const addParameters = (obj) => {
-  if (!obj.hasOwnProperty("moduleId")) {
-    obj.moduleId = "";
-  }
-  if (!obj.hasOwnProperty("tagName")) {
-    obj.tagName = "";
-  }
-  return obj;
-};
-
 /**
  * Saves to localStorage
  * @param {object} key - Key of item
@@ -293,37 +279,38 @@ const formatCase = (obj) => {
 
   const toSnakeCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
   const toKebabCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
-  const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase());
+  const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0)?.toUpperCase() + match.slice(1).toLowerCase());
 
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
       switch (key) {
         case "event":
+        case "eventAction":
           const eventValue = toSnakeCase(obj[key]);
           obj[key] = eventValue === 'select-stop' ? 'select_stops' : eventValue;
+          if (!obj.event) obj.event = obj.eventAction;
+          if (!obj.eventAction) obj.eventAction = obj.event;
           break;
         case "module":
         case "actionLabel":
           obj[key] = typeof obj[key] === "number" ? obj[key].toString() : toKebabCase(obj[key]);
           break;
-        case "eventAction":
-          obj.eventAction = obj.hasOwnProperty("event") && obj.event !== "" ? obj.event : obj.eventAction;
-          break;
         case "pageTypeCode":
         case "pageTypeName":
-          obj[key] = toSnakeCase(obj[key]).toUpperCase();
+          obj[key] = toSnakeCase(obj[key])?.toUpperCase();
           break;
         default:
-          obj[key] = titleCase.includes(key) ? (key === "eventExperience" && obj[key].match(/(multiple|,)/gi) ? "MULTIPLE" : obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key])) : obj[key].toUpperCase();
+          obj[key] = titleCase.includes(key) ? (key === "eventExperience" && obj[key].match(/(multiple|,)/gi) ? "MULTIPLE" : obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key])) : obj[key]?.toUpperCase();
       }
     }
+ 
   
     if (obj.page !== undefined && obj.page[0]?.hasOwnProperty(key) && (key === "languageIsoCode" || key === "siteEdition" || key === "countryIsoCode")) {
       const siteEdition = toKebabCase(obj.page[0].siteEdition).split("-");
-      obj.page[0].countryIsoCode = (obj.page[0]?.countryIsoCode || "").toUpperCase();
-      obj.page[0].languageIsoCode = (obj.page[0]?.languageIsoCode || "").toLowerCase();
+      obj.page[0].countryIsoCode = (obj.page[0]?.countryIsoCode || "")?.toUpperCase();
+      obj.page[0].languageIsoCode = (obj.page[0]?.languageIsoCode || "")?.toLowerCase();
       obj.page[0].siteEdition = siteEdition[1] !== undefined
-        ? `${siteEdition[0]}-${siteEdition[1].toUpperCase()}`
+        ? `${siteEdition[0]}-${siteEdition[1]?.toUpperCase()}`
         : (obj.page[0].siteEdition === "" && obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== "")
         ? `${obj.page[0].languageIsoCode}-${obj.page[0].countryIsoCode}`
         : (siteEdition[0] || "");
@@ -331,10 +318,10 @@ const formatCase = (obj) => {
   
     if (obj.lodging !== undefined && obj.lodging[0]?.hasOwnProperty(key)) {
       if (key === "cityCode") {
-        obj.lodging[0].cityCode = (obj.lodging[0]?.cityCode || "").toUpperCase();
+        obj.lodging[0].cityCode = (obj.lodging[0]?.cityCode || "")?.toUpperCase();
       }
       if (key === "name") {
-        obj.lodging[0].name = (obj.lodging[0]?.name || "").charAt(0).toUpperCase() + (obj.lodging[0]?.name || "").substr(1).toLowerCase();
+        obj.lodging[0].name = (obj.lodging[0]?.name || "").charAt(0)?.toUpperCase() + (obj.lodging[0]?.name || "").substr(1).toLowerCase();
       }
     }
   
@@ -344,10 +331,10 @@ const formatCase = (obj) => {
           obj.carRentals[0].provider = toTitleCase(obj.carRentals[0].provider || "");
           break;
         case "brand":
-          obj.carRentals[0].brand = (obj.carRentals[0].brand || "").toUpperCase();
+          obj.carRentals[0].brand = (obj.carRentals[0].brand || "")?.toUpperCase();
           break;
         case "model":
-          obj.carRentals[0].model = (obj.carRentals[0].model || "").toLowerCase();
+          obj.carRentals[0].model = (obj.carRentals[0].model || "")?.toLowerCase();
           break;
       }
     }
@@ -356,178 +343,6 @@ const formatCase = (obj) => {
   return obj;
 };
 
-// const formatCase = (obj) => {
-  
-//   let keyArr = [
-//     "event",
-//     "module",
-//     "eventAction",
-//     "airlineIataCode",
-//     "originAirportIataCode",
-//     "destinationAirportIataCode",
-//     "currencyCode",
-//     "route",
-//     "countryIsoCode",
-//     "cityCode",
-//     "languageIsoCode",
-//     "siteEdition",
-//     "name",
-//     "provider",
-//     "brand",
-//     "model",
-//     "pageTypeCode",
-//     "pageTypeName",
-//     //Hotel values
-//     "tenantCode",
-//     "actionLabel",
-//     "regionName",
-//     "countryCode",
-//     "cityName",
-//     "propertyName",
-//     //Event values
-//     "eventName",
-//     "eventLocation",
-//     "eventSession",
-//     "eventExperienceCategory",
-//     "eventExperience",
-//   ];
-
-//   let listOfEvents = [
-//     "click-out",
-//     "collapse-form",
-//     "collapse-histogram",
-//     "expand-flight",
-//     "expand-form",
-//     "filter-airlines",
-//     "flight",
-//     "fsi",
-//     "insert-email",
-//     "insert-first-name",
-//     "insert-last-name",
-//     "insert-phone-number",
-//     "more-deals",
-//     "no-fares-available",
-//     "open-booking-popup",
-//     "read-article",
-//     "reset-filter",
-//     "search",
-//     "search-initiation",
-//     "select-accessibility",
-//     "select-article",
-//     "select-budget",
-//     "select-date",
-//     "select-destination",
-//     "select-experience",
-//     "select-fare-class",
-//     "select-interest",
-//     "select-journey-type",
-//     "select-location",
-//     "select-map-destination",
-//     "select-miles",
-//     "select-month",
-//     "select-night",
-//     "select-offer",
-//     "select-origin",
-//     "select-property",
-//     "select-rating",
-//     "select-redemption",
-//     "select-resident-status",
-//     "select-return-date",
-//     "select-room-guest",
-//     "select-session",
-//     "select-start-date",
-//     "select-status",
-//     "select-stop",
-//     "select-stops",
-//     "select-tab",
-//     "select-trip-length",
-//     "sort",
-//     "subscribe",
-//     "toggle-farelist",
-//     "viewable-impression"
-//   ]  
-
-//   const titleCase = [
-//     "regionName",
-//     "cityName",
-//     "propertyName",
-//     "eventName",
-//     "eventLocation",
-//     "eventSession",
-//     "eventExperienceCategory",
-//     "eventExperience",
-//     "provider"
-//   ];
-
-//   const toSnakeCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
-//   const toKebabCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
-//   const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase());
-  
-//   keyArr.forEach((key) => {
-//     if (obj.hasOwnProperty(key)) {
-//       switch (key) {
-//         case "event":
-//           const eventValue = toKebabCase(obj[key]);
-//           if (!listOfEvents.includes(eventValue)) {
-//             obj[key] = "Event value does not exist";
-//             logger.log("Error: Please check event value");
-//           } else {
-//             obj[key] = eventValue === 'select-stop' ? 'select_stops' : toSnakeCase(obj[key]);
-//           }
-//           break;
-//         case "module":
-//         case "actionLabel":
-//           obj[key] = typeof obj[key] === "number" ? obj[key].toString() : toKebabCase(obj[key]);
-//           break;
-//         case "eventAction":
-//           obj.eventAction = obj.hasOwnProperty("event") && obj.event !== "" ? obj.event : obj.eventAction;
-//           break;
-//         case "pageTypeCode":
-//         case "pageTypeName":
-//           obj[key] = toSnakeCase(obj[key]).toUpperCase();
-//           break;
-//         default:
-//           obj[key] = titleCase.includes(key) ? (key === "eventExperience" && obj[key].match(/(multiple|,)/gi) ? "MULTIPLE" : obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key])) : obj[key].toUpperCase();
-//       }
-//     }
-  
-//     if (obj.page !== undefined && obj.page[0]?.hasOwnProperty(key) && (key === "languageIsoCode" || key === "siteEdition" || key === "countryIsoCode")) {
-//       const siteEdition = toKebabCase(obj.page[0].siteEdition).split("-");
-//       obj.page[0].countryIsoCode = (obj.page[0]?.countryIsoCode || "").toUpperCase();
-//       obj.page[0].languageIsoCode = (obj.page[0]?.languageIsoCode || "").toLowerCase();
-//       obj.page[0].siteEdition = siteEdition[1] !== undefined
-//         ? `${siteEdition[0]}-${siteEdition[1].toUpperCase()}`
-//         : (obj.page[0].siteEdition === "" && obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== "")
-//         ? `${obj.page[0].languageIsoCode}-${obj.page[0].countryIsoCode}`
-//         : (siteEdition[0] || "");
-//     }
-  
-//     if (obj.lodging !== undefined && obj.lodging[0]?.hasOwnProperty(key)) {
-//       if (key === "cityCode") {
-//         obj.lodging[0].cityCode = (obj.lodging[0]?.cityCode || "").toUpperCase();
-//       }
-//       if (key === "name") {
-//         obj.lodging[0].name = (obj.lodging[0]?.name || "").charAt(0).toUpperCase() + (obj.lodging[0]?.name || "").substr(1).toLowerCase();
-//       }
-//     }
-  
-//     if (obj.carRentals !== undefined && obj.carRentals[0]?.hasOwnProperty(key)) {
-//       switch (key) {
-//         case "provider":
-//           obj.carRentals[0].provider = toTitleCase(obj.carRentals[0].provider || "");
-//           break;
-//         case "brand":
-//           obj.carRentals[0].brand = (obj.carRentals[0].brand || "").toUpperCase();
-//           break;
-//         case "model":
-//           obj.carRentals[0].model = (obj.carRentals[0].model || "").toLowerCase();
-//           break;
-//       }
-//     }
-//   });
-
-//   return obj;  
-// }
 /**
  * Formats date to ISO format.
  * @param {object} obj - data layer object.
@@ -659,78 +474,88 @@ const addCustomParameters = (obj) => {
  * @return {object} - Returns formatted object.
  */
 const convertValues = (obj) => {
+  const formatNumber = (num) => {
+    const parsedNum = parseFloat(num);
+    return isNaN(parsedNum) ? num : parseFloat(parsedNum.toFixed(2));
+  }
+  
   for (const property in obj) {
     if (obj.hasOwnProperty(property)) {
-      if (typeof obj[property] === "object") {
-        convertValues(obj[property]);
-        if (obj[property] == null || !obj[property]) {
-          obj[property] = "";
-        }
+      const value = obj[property];
+      if (typeof value === "object" && value !== null) {
+        convertValues(value);
       } else if (typeof obj[property] === "string") {
         if (!isNaN(obj[property]) && !isNaN(parseFloat(obj[property]))) {
           obj[property] = +obj[property];
-        } else if (obj[property] === "false" || obj[property] === "true") {
-          obj[property] = obj[property].toLowerCase() === "true" ? true : false;
+        } else if (value.toLowerCase() === "false" || value.toLowerCase() === "true") {
+          obj[property] = value.toLowerCase() === "true";
         }
-      } else if (typeof obj[property] === "number") {
-        obj[property] = parseFloat((Math.round(obj[property] * 100) / 100).toFixed(2));
-      } else {
-        // Default the property to an empty string if it's not a string
-        obj[property] = "";
+      } else if (typeof value === "number") {
+        obj[property] = formatNumber(value);
       }
     }
   }
+
+  if (obj.hasOwnProperty('totalPrice')) {
+    obj.totalPrice = formatNumber(obj.totalPrice)
+  }
+  if (obj.hasOwnProperty('totalPriceUSD')) {
+    obj.totalPriceUSD = formatNumber(obj.totalPriceUSD)
+  }
+
   return obj;
 };
 
 const formatDetails = (obj, tenantType = '') => {
   try {
-    // Retrieve properties from multiple sources
-    const providerName = window?.EM?.context?.airline?.name || window?.EM?.dataLayer?.[0]?.airline?.name || '';
-    const code = window?.EM?.context?.airline?.code || window?.EM?.dataLayer?.[0]?.airline?.iataCode || '';
-    const journeyType = window?.EM?.context?.dynamicContext?.productCategory;
-    const fareClass = window?.EM?.context?.dynamicContext?.productType;
-    const isFlexibleDates = window?.EM?.context?.dynamicContext?.isFlexibleDates;
-    const discountCode = window?.EM?.context?.dynamicContext?.discountCode;
-    const isRedemption = window?.EM?.context?.dynamicContext?.isRedemption;
+    const context = window?.EM?.context;
+    const dataLayer = window?.EM?.dataLayer?.[0];
+
+    const providerName = context?.airline?.name || dataLayer?.airline?.name || '';
+    const code = context?.airline?.code || dataLayer?.airline?.iataCode || '';
+    const journeyType = context?.dynamicContext?.productCategory;
+    const fareClass = context?.dynamicContext?.productType;
+    const isFlexibleDates = context?.dynamicContext?.isFlexibleDates;
+    const discountCode = context?.dynamicContext?.discountCode;
+    const isRedemption = context?.dynamicContext?.isRedemption;
 
     // Format airline name
-    let finalAirlineName = obj.hasOwnProperty("provider") && obj.provider ? obj.provider : providerName;
-    finalAirlineName = finalAirlineName.match(/[a-zA-Z0-9]+/g) ? finalAirlineName.split(" ").map(key => key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()).join("") : '';
+    let finalAirlineName = obj.provider ? obj.provider : providerName;
+    finalAirlineName = finalAirlineName.match(/[a-zA-Z0-9]+/g) ? finalAirlineName.split(" ").map(key => key.charAt(0)?.toUpperCase() + key.slice(1)?.toLowerCase()).join("") : '';
     obj.provider = finalAirlineName || obj.provider;
 
     // Handle tenant code based on the type
     if ((tenantType !== 'airline' && !obj.tenantCode) || obj.tenantCode === '') {
-      obj.tenantCode = code.toUpperCase();
+      obj.tenantCode = code?.toUpperCase();
     }
     if ((tenantType === 'airline' && !obj.airlineIataCode) || obj.airlineIataCode === '') {
-      obj.airlineIataCode = code.toUpperCase();
+      obj.airlineIataCode = code?.toUpperCase();
     }
 
     // Handle additional properties
-    obj.journeyType = obj.journeyType || (journeyType && (!obj.hasOwnProperty("journeyType") || obj.journeyType === '') ? journeyType : '');
-    obj.fareClass = obj.fareClass || (fareClass && (!obj.hasOwnProperty("fareClass") || obj.fareClass === '') ? fareClass : '');
-    obj.isFlexibleDates = obj.isFlexibleDates || (isFlexibleDates !== undefined && (!obj.hasOwnProperty("isFlexibleDates") || obj.isFlexibleDates === '') ? isFlexibleDates : '');
-    obj.discountCode = obj.discountCode || (discountCode && (!obj.hasOwnProperty("discountCode") || obj.discountCode === '') ? discountCode : '');
+    obj.journeyType = obj.journeyType || journeyType || '';
+    obj.fareClass = obj.fareClass || fareClass || '';
+    obj.isFlexibleDates = obj.isFlexibleDates !== undefined ? obj.isFlexibleDates : isFlexibleDates || false;
+    obj.discountCode = obj.discountCode || discountCode || '';
 
     // Check for miles
-    if (tenantType === 'airline' && isRedemption !== undefined && (!obj.hasOwnProperty("miles") || obj.miles === undefined)) {
+    if (tenantType === 'airline' && isRedemption !== undefined && (obj.miles === undefined)) {
       obj.miles = isRedemption;
     }
 
     // Page details previously added
     if (obj.page && obj.page[0]) {
       obj.page[0].siteEdition = obj.page[0].siteEdition ||
-                                window?.EM?.context?.geo?.language?.site_edition?.toUpperCase() ||
-                                window?.EM?.dataLayer?.[0]?.page?.siteEdition?.toUpperCase() ||
+                                context?.geo?.language?.site_edition?.toUpperCase() ||
+                                dataLayer?.page?.siteEdition?.toUpperCase() ||
                                 '';
       obj.page[0].countryIsoCode = obj.page[0].countryIsoCode ||
-                                   window?.EM?.context?.geo?.language?.siteEditionMarket ||
-                                   window?.EM?.dataLayer?.[0]?.page?.countryIsoCode ||
+                                   context?.geo?.language?.siteEditionMarket ||
+                                   dataLayer?.page?.countryIsoCode ||
                                    '';
       obj.page[0].languageIsoCode = obj.page[0].languageIsoCode ||
-                                    window?.EM?.context?.geo?.language?.siteEditionLanguage ||
-                                    window?.EM?.dataLayer?.[0]?.page?.languageIsoCode ||
+                                    context?.geo?.language?.siteEditionLanguage ||
+                                    dataLayer?.page?.languageIsoCode ||
                                     '';
     }
 
@@ -748,59 +573,55 @@ const formatDetails = (obj, tenantType = '') => {
  * @return {object} - returns object containing tenant type
  */
 const formatTenantType = (obj) => {
-  const tenantCode = obj.hasOwnProperty("tenantCode ") ? obj["tenantCode"] : obj.hasOwnProperty("airlineIataCode") ? obj["airlineIataCode"] : "";
-  if (typeof tenantCode === "string" && tenantCode.length > 0) {
-    const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1); // Take substring for customers with multiple tenants
+  const tenantCode = obj.tenantCode || obj.airlineIataCode || '';
+  if (typeof tenantCode === "string" && tenantCode.trim().length > 0) {
+    const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1);
 
-    //Check if tenant belongs in list
-    if (Object.keys(tenantList).includes(tenantCode)) {
-      return (obj.tenantType = tenantList[tenantCode]);
-    }
-    //If the tenant code does not belong to list
-    else if (!Object.keys(tenantList).includes(tenantCode)) {
-      //Check if substring of tenant code belongs in list
-      if (Object.keys(tenantList).includes(tenantCodeSubstr)) {
-        return (obj.tenantType = tenantList[tenantCodeSubstr]);
-      } else {
-        switch (tenantCode[0]?.toUpperCase()) {
-          case "A":
-            obj.tenantType = "airline";
-            break;
-          case "X":
-            obj.tenantType = "airline alliance";
-            break;
-          case "L":
-            obj.tenantType = "airport";
-            break;
-          case "P":
-            obj.tenantType = "package";
-            break;
-          case "H":
-            obj.tenantType = "hotel";
-            break;
-          case "E":
-            obj.tenantType = "event";
-            break;
-          case "B":
-            obj.tenantType = "bus";
-            break;
-          case "D":
-            obj.tenantType = "tourism board & dmo";
-            break;
-          case "T":
-            obj.tenantType = "train";
-            break;
-          default:
-            obj.tenantType = "";
-            logger.log("tenantCode does not adhere to the naming convention.");
-        }
-      }
+    // Check if tenant belongs in the list
+    if (tenantList[tenantCode]) {
+      obj.tenantType = tenantList[tenantCode];
+    } else if (tenantList[tenantCodeSubstr]) {
+      obj.tenantType = tenantList[tenantCodeSubstr];
     } else {
-      obj.tenantType = "";
-      logger.log("Invalid tenantCode: Not a non-empty string.");
+      // Assign tenant type based on naming convention
+      switch (tenantCode[0]?.toUpperCase()) {
+        case "A":
+          obj.tenantType = "airline";
+          break;
+        case "X":
+          obj.tenantType = "airline alliance";
+          break;
+        case "L":
+          obj.tenantType = "airport";
+          break;
+        case "P":
+          obj.tenantType = "package";
+          break;
+        case "H":
+          obj.tenantType = "hotel";
+          break;
+        case "E":
+          obj.tenantType = "event";
+          break;
+        case "B":
+          obj.tenantType = "bus";
+          break;
+        case "D":
+          obj.tenantType = "tourism board & dmo";
+          break;
+        case "T":
+          obj.tenantType = "train";
+          break;
+        default:
+          obj.tenantType = "";
+          logger.log("tenantCode does not adhere to the naming convention.");
+      }
     }
-    return obj;
+  } else {
+    obj.tenantType = "";
+    logger.log("Invalid tenantCode: Not a non-empty string.");
   }
+  return obj;
 };
 
 /**

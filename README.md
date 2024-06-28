@@ -235,8 +235,6 @@ const eventObject = {
   module: '',
   eventAction: '',
   actionLabel: '',
-  tenantCode: '',
-  tenantType: '',
   regionName: '',
   countryCode: '',
   cityName: '',
@@ -247,11 +245,7 @@ const eventObject = {
   totalPriceUSD: 0,
   startDate: '',
   endDate: '',
-  daysUntilBooking: 0,
-  tripLength: 0,
   roomAccesibility: true,
-  timestamp: '',
-  url: '',
   guest: [
     {
       count: 0,
@@ -266,9 +260,6 @@ const eventObject = {
   ],
   page: [
     {
-      siteEdition: '',
-      countryIsoCode: '',
-      languageIsoCode: '',
       pageTypeName: ''
     }
   ],
@@ -286,8 +277,6 @@ const eventObject = {
   module: '',
   eventAction: '',
   actionLabel: '',
-  tenantCode: '',
-  tenantType: '',
   regionName: '',
   countryCode: '',
   cityName: '',
@@ -298,11 +287,7 @@ const eventObject = {
   totalPriceUSD: 0,
   startDate: '',
   endDate: '',
-  daysUntilBooking: 0,
-  tripLength: 0,
   roomAccesibility: true,
-  timestamp: '',
-  url: '',
   guest: [
     {
       count: 0,
@@ -317,9 +302,6 @@ const eventObject = {
   ],
   page: [
     {
-      siteEdition: '',
-      countryIsoCode: '',
-      languageIsoCode: '',
       pageTypeName: ''
     }
   ],
