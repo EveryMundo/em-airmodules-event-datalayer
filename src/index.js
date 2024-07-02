@@ -543,8 +543,19 @@ const formatDetails = (obj, tenantType = '') => {
       obj.miles = isRedemption;
     }
 
-    // Page details previously added
+    // Handle pageTypeName
     if (obj.page && obj.page[0]) {
+      if (!obj.page[0].hasOwnProperty("pageTypeName")) {
+        obj.page[0].pageTypeName = '';
+      }
+
+      obj.page[0].pageTypeName =
+        obj.page[0].pageTypeName ||
+        (context?.datasource?.step?.page?.[0]?.pageTypeName?.toUpperCase()) ||
+        (dataLayer?.page?.typeName?.toUpperCase()) ||
+        context?.datasource?.step?.toUpperCase() ||
+        '';
+
       obj.page[0].siteEdition = obj.page[0].siteEdition ||
                                 context?.geo?.language?.site_edition?.toUpperCase() ||
                                 dataLayer?.page?.siteEdition?.toUpperCase() ||
@@ -565,6 +576,7 @@ const formatDetails = (obj, tenantType = '') => {
     return obj; // Return the original object in case of error
   }
 };
+
 
 
 /**
