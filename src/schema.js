@@ -37,7 +37,7 @@ const baseAirlineObject = {
       siteEdition: '',
       countryIsoCode: '',
       languageIsoCode: '',
-      pageTypeName: ''
+      typeName: ''
     }
   ],
   lodging: [
@@ -101,7 +101,7 @@ const baseHospitalityObject = {
       siteEdition: '',
       countryIsoCode: '',
       languageIsoCode: '',
-      pageTypeName: ''
+      typeName: ''
     }
   ],
 }
@@ -145,7 +145,7 @@ const baseEventObject = {
       siteEdition: '',
       countryIsoCode: '',
       languageIsoCode: '',
-      pageTypeName: ''
+      typeName: ''
     }
   ],
 }

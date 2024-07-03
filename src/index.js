@@ -90,7 +90,6 @@ const formatEvents = (obj) => {
     formatFareClass(obj);
     formatDetails(obj, 'event');
     formatCase(obj);
-    formatPageTypeName(obj);
     formatTenantType(obj);
     formatDate(obj);
     formatUrl(obj);
@@ -267,7 +266,7 @@ const formatCase = (obj) => {
     "event", "module", "eventAction", "airlineIataCode", "originAirportIataCode",
     "destinationAirportIataCode", "currencyCode", "route", "countryIsoCode",
     "cityCode", "languageIsoCode", "siteEdition", "name", "provider", "brand",
-    "model", "pageTypeCode", "pageTypeName", "tenantCode", "actionLabel",
+    "model", "pageTypeCode", "typeName", "tenantCode", "actionLabel",
     "regionName", "countryCode", "cityName", "propertyName", "eventName",
     "eventLocation", "eventSession", "eventExperienceCategory", "eventExperience",
   ];
@@ -296,7 +295,7 @@ const formatCase = (obj) => {
           obj[key] = typeof obj[key] === "number" ? obj[key].toString() : toKebabCase(obj[key]);
           break;
         case "pageTypeCode":
-        case "pageTypeName":
+        case "typeName":
           obj[key] = toSnakeCase(obj[key])?.toUpperCase();
           break;
         default:
@@ -543,17 +542,17 @@ const formatDetails = (obj, tenantType = '') => {
       obj.miles = isRedemption;
     }
 
-    // Handle pageTypeName
+    // Handle typeName
     if (obj.page && obj.page[0]) {
-      if (!obj.page[0].hasOwnProperty("pageTypeName")) {
-        obj.page[0].pageTypeName = '';
+      if (!obj.page[0].hasOwnProperty("typeName")) {
+        obj.page[0].typeName = '';
       }
 
-      obj.page[0].pageTypeName =
-        obj.page[0].pageTypeName ||
-        (context?.datasource?.step?.page?.[0]?.pageTypeName?.toUpperCase()) ||
-        (dataLayer?.page?.typeName?.toUpperCase()) ||
+      obj.page[0].typeName =
+        obj.page[0].typeName?.toUpperCase() ||
+        dataLayer?.page?.typeName?.toUpperCase() ||
         context?.datasource?.step?.toUpperCase() ||
+        context?.datasource?.step?.page?.[0]?.typeName?.toUpperCase() ||
         '';
 
       obj.page[0].siteEdition = obj.page[0].siteEdition ||

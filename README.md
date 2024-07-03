@@ -99,7 +99,7 @@ const eventObject = {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
       languageIsoCode: 'en',
-      pageTypeName: 'CUSTOM_PAGE'
+      typeName: 'CUSTOM_PAGE'
     }
   ],
   lodging: [
@@ -240,7 +240,7 @@ const eventObject = {
   ],
   page: [
     {
-      pageTypeName: ''
+      typeName: ''
     }
   ],
 }
@@ -282,7 +282,7 @@ const eventObject = {
   ],
   page: [
     {
-      pageTypeName: ''
+      typeName: ''
     }
   ],
 }
@@ -516,7 +516,7 @@ This section provides a detailed explanation of the parameters used in the event
 | languageIsoCode                          | en                        | Language ISO 629-1 code                                                                                                                                                                                                | Yes       |
 | tagName*                                 |                           | Name given by Standard Fare Modules or Front Components. *Required if there is a name or tag associated with the module other than the module name. E.g. A module that only displays miles and has been named "Miles"  | No        |
 | discountCode                             | AFFBFAN                   | Discount promotion code                                                                                                                                                                                                | Optional  |
-| pageTypeName                             | CUSTOM_PAGE               | Name of the type of page template                                                                                                                                                                                      | No        |
+| typeName                             | CUSTOM_PAGE               | Name of the type of page template                                                                                                                                                                                      | No        |
 
 </details>
 
@@ -603,7 +603,7 @@ This section provides a detailed explanation of the parameters used in the event
 | languageIsoCode        | en                               | The language ISO 629-1 code                                                                            | Yes      |
 | tagName                |                                  | Name given to Standard Fare Modules (SFM) / Front Components (FC)                                      | Yes - if there is a name or tag associated with the module other than the module name. E.g., A module that only displays miles and has been named "Miles".      |
 | discountCode           | AFFBFAN                          | Discount promotion code                                                                                | Yes      |
-| pageTypeName           | CUSTOM_PAGE                      | Name of the type of page template                                                                      | Yes      |
+| typeName           | CUSTOM_PAGE                      | Name of the type of page template                                                                      | Yes      |
 
 </details>
 
@@ -641,7 +641,7 @@ This section provides a detailed explanation of the parameters used in the event
 | languageIsoCode                         | en                                | The language ISO 629-1 code                                                                           | Yes                                                                                                                                                        |
 | tagName*                                |                                   | Name given by Standard Fare Modules or Front Components.                                              | Yes - if there is a name or tag associated with the module other than the module name. E.g., A module that only displays miles and has been named "Miles". |
 | discountCode                            | AFFBFAN                           | Discount promotion code                                                                               | Yes                                                                                                                                                        |
-| pageTypeName                            | CUSTOM_PAGE                       | Name of the type of page template                                                                     | Yes                                                                                                                                                        |
+| typeName                            | CUSTOM_PAGE                       | Name of the type of page template                                                                     | Yes                                                                                                                                                        |
 
 </details>
 
@@ -704,7 +704,7 @@ const eventObject = {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
       languageIsoCode: 'en',
-      pageTypeName: 'CUSTOM_PAGE'
+      typeName: 'CUSTOM_PAGE'
     }
   ],
   lodging: [
@@ -775,7 +775,7 @@ const eventObject = {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
       languageIsoCode: 'en',
-      pageTypeName: 'CUSTOM_PAGE'
+      typeName: 'CUSTOM_PAGE'
     }
   ]
 }
@@ -821,7 +821,7 @@ const eventObject = {
         'siteEdition': 'en-LK',
         'countryIsoCode': 'LK',
         'languageIsoCode': 'en',
-        'pageTypeName': 'CUSTOM_PAGE'
+        'typeName': 'CUSTOM_PAGE'
     }],
 }
 ```
