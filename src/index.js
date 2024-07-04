@@ -481,11 +481,13 @@ const convertValues = (obj) => {
   for (const property in obj) {
     if (obj.hasOwnProperty(property)) {
       const value = obj[property];
-      if (typeof value === "object" && value !== null) {
+      if (value === null || value === undefined) {
+        obj[property] = "";
+      } else if (typeof value === "object") {
         convertValues(value);
-      } else if (typeof obj[property] === "string") {
-        if (!isNaN(obj[property]) && !isNaN(parseFloat(obj[property]))) {
-          obj[property] = +obj[property];
+      } else if (typeof value === "string") {
+        if (!isNaN(value) && !isNaN(parseFloat(value))) {
+          obj[property] = +value;
         } else if (value.toLowerCase() === "false" || value.toLowerCase() === "true") {
           obj[property] = value.toLowerCase() === "true";
         }
