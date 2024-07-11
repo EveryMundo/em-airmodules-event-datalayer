@@ -24,7 +24,7 @@ const hotelEventObject = {
   roomAccesibility: "true",
   timestamp: "2021-02-16T17:41:43.200Z",
   url: "https: //www.hyatt.com/en/miami",
-  guest: [
+  guest: 
     {
       count: 1,
       adultCount: 1,
@@ -33,20 +33,20 @@ const hotelEventObject = {
       infantInLapCount: null,
       infantInSeatCount: null,
     },
-  ],
-  room: [
+  ,
+  room: 
     { 
       total: 1, 
       type: ""
      },
-    ],
-  page: [
+    ,
+  page: 
     {
       siteEdition: "enHk",
       countryIsoCode: "LK",
       languageIsoCode: "en",
     },
-  ],
+  ,
   pageTypeCode: '',
   pageTypeName: ''
 };

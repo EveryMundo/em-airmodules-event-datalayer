@@ -1,5 +1,5 @@
 const baseAirlineObject = {
-    event: '',
+  event: '',
   module: '',
   eventAction: '',
   actionLabel: '',
@@ -22,42 +22,34 @@ const baseAirlineObject = {
   miles: '',
   timestamp: '',
   url: '',
-  passenger: [
-    {
-      count: 1,
-      adultCount: 1,
-      youngAdultCount: '',
-      childCount: '',
-      infantInLapCount: '',
-      infantInSeatCount: ''
-    }
-  ],
-  page: [
-    {
-      siteEdition: '',
-      countryIsoCode: '',
-      languageIsoCode: '',
-      typeName: ''
-    }
-  ],
-  lodging: [
-    {
-      cityCode: '',
-      name: '',
-      startDate: '',
-      endDate: '',
-      roomCount: 0,
-      tripLength: 0,
-      starRating: 0 
-    }
-  ],
-  carRentals: [
-    {
-      provider: '',
-      brand: '',
-      model: ''
-  }
- ],
+  passenger: {
+    count: 1,
+    adultCount: 1,
+    youngAdultCount: '',
+    childCount: '',
+    infantInLapCount: '',
+    infantInSeatCount: ''
+  },
+  page: {
+    siteEdition: '',
+    countryIsoCode: '',
+    languageIsoCode: '',
+    typeName: ''
+  },
+  lodging: {
+    cityCode: '',
+    name: '',
+    startDate: '',
+    endDate: '',
+    roomCount: 0,
+    tripLength: 0,
+    starRating: 0 
+  },
+  carRentals: {
+    provider: '',
+    brand: '',
+    model: ''
+  },
   moduleId: '',
   tagName: '' 
 }
@@ -84,30 +76,24 @@ const baseHospitalityObject = {
   roomAccesibility: true,
   timestamp: '',
   url: '',
-  guest: [
-    {
-      count: 0,
-      adult: 0
-    }
-  ],
-  room: [ 
-    { 
-      count: 0, 
-      type: '' 
-    } 
-  ],
-  page: [
-    {
-      siteEdition: '',
-      countryIsoCode: '',
-      languageIsoCode: '',
-      typeName: ''
-    }
-  ],
+  guest: {
+    count: 0,
+    adult: 0
+  },
+  room: { 
+    count: 0, 
+    type: '' 
+  },
+  page: {
+    siteEdition: '',
+    countryIsoCode: '',
+    languageIsoCode: '',
+    typeName: ''
+  }
 }
 
 const baseEventObject = {
-    event: '',
+  event: '',
   module: '',
   eventAction: '',
   actionLabel: '',
@@ -128,26 +114,20 @@ const baseEventObject = {
   roomAccesibility: true,
   timestamp: '',
   url: '',
-  guest: [
-    {
-      count: 0,
-      adult: 0
-    }
-  ],
-  room: [ 
-    { 
-      count: 0, 
-      type: '' 
-    } 
-  ],
-  page: [
-    {
-      siteEdition: '',
-      countryIsoCode: '',
-      languageIsoCode: '',
-      typeName: ''
-    }
-  ],
+  guest: {
+    count: 0,
+    adult: 0
+  },
+  room: { 
+    count: 0, 
+    type: '' 
+  },
+  page: {
+    siteEdition: '',
+    countryIsoCode: '',
+    languageIsoCode: '',
+    typeName: ''
+  }
 }
 
 export { baseAirlineObject, baseEventObject, baseHospitalityObject }

@@ -58,7 +58,7 @@ const formatAirlines = (obj) => {
     formatDate(obj, true);
     formatUrl(obj);
     addCalculatedParameters(obj);
-    pushFormattedEventData(obj);
+    pushFormattedEventData(obj, baseAirlineObject);
     return obj;
   }
   return "Module name or eventAction missing.";
@@ -75,7 +75,7 @@ const formatHotels = (obj) => {
     formatDate(obj);
     formatUrl(obj);
     addCustomParameters(obj);
-    pushFormattedEventData(obj);
+    pushFormattedEventData(obj, baseHospitalityObject);
     return obj;
   }
   return "Module name or eventAction missing.";
@@ -93,7 +93,7 @@ const formatEvents = (obj) => {
     formatTenantType(obj);
     formatDate(obj);
     formatUrl(obj);
-    pushFormattedEventData(obj);
+    pushFormattedEventData(obj, baseEventObject);
     return obj;
   }
   return "Module name or eventAction missing.";
@@ -304,44 +304,39 @@ const formatCase = (obj) => {
     }
  
   
-    if (obj.page !== undefined && obj.page[0]?.hasOwnProperty(key) && (key === "languageIsoCode" || key === "siteEdition" || key === "countryIsoCode")) {
-      const siteEdition = toKebabCase(obj.page[0].siteEdition).split("-");
-      obj.page[0].countryIsoCode = (obj.page[0]?.countryIsoCode || "")?.toUpperCase();
-      obj.page[0].languageIsoCode = (obj.page[0]?.languageIsoCode || "")?.toLowerCase();
-      obj.page[0].siteEdition = siteEdition[1] !== undefined
+    if (obj.page !== undefined && obj.page?.hasOwnProperty(key) && (key === "languageIsoCode" || key === "siteEdition" || key === "countryIsoCode")) {
+      const siteEdition = toKebabCase(obj.page.siteEdition).split("-");
+      obj.page.countryIsoCode = (obj.page?.countryIsoCode || "")?.toUpperCase();
+      obj.page.languageIsoCode = (obj.page?.languageIsoCode || "")?.toLowerCase();
+      obj.page.siteEdition = siteEdition[1] !== undefined
         ? `${siteEdition[0]}-${siteEdition[1]?.toUpperCase()}`
-        : (obj.page[0].siteEdition === "" && obj.page[0].languageIsoCode && obj.page[0].countryIsoCode !== "")
-        ? `${obj.page[0].languageIsoCode}-${obj.page[0].countryIsoCode}`
+        : (obj.page.siteEdition === "" && obj.page.languageIsoCode && obj.page.countryIsoCode !== "")
+        ? `${obj.page.languageIsoCode}-${obj.page.countryIsoCode}`
         : (siteEdition[0] || "");
     }
-  
-    if (obj.lodging !== undefined && obj.lodging[0]?.hasOwnProperty(key)) {
+    
+    if (obj.lodging !== undefined && obj.lodging.hasOwnProperty(key)) {
       if (key === "cityCode") {
-        obj.lodging[0].cityCode = (obj.lodging[0]?.cityCode || "")?.toUpperCase();
+        obj.lodging.cityCode = (obj.lodging?.cityCode || "")?.toUpperCase();
       }
       if (key === "name") {
-        obj.lodging[0].name = (obj.lodging[0]?.name || "").charAt(0)?.toUpperCase() + (obj.lodging[0]?.name || "").substr(1).toLowerCase();
+        obj.lodging.name = (obj.lodging?.name || "").charAt(0)?.toUpperCase() + (obj.lodging?.name || "").substr(1).toLowerCase();
       }
     }
-  
-    if (obj.carRentals !== undefined && obj.carRentals[0]?.hasOwnProperty(key)) {
+    
+    if (obj.carRentals !== undefined && obj.carRentals.hasOwnProperty(key)) {
       switch (key) {
         case "provider":
-          obj.carRentals[0].provider = toTitleCase(obj.carRentals[0].provider || "");
+          obj.carRentals.provider = toTitleCase(obj.carRentals.provider || "");
           break;
         case "brand":
-          obj.carRentals[0].brand = (obj.carRentals[0].brand || "")?.toUpperCase();
+          obj.carRentals.brand = (obj.carRentals.brand || "")?.toUpperCase();
           break;
         case "model":
-          obj.carRentals[0].model = (obj.carRentals[0].model || "")?.toLowerCase();
+          obj.carRentals.model = (obj.carRentals.model || "")?.toLowerCase();
           break;
       }
-    }
-  });
-
-  return obj;
-};
-
+    }})}   
 /**
  * Formats date to ISO format.
  * @param {object} obj - data layer object.
@@ -389,7 +384,7 @@ obj.tripLength = Math.round((returnDate - departure) / (1000 * 60 * 60 * 24));
 
   // Format lodging dates if applicable
   if (obj.lodging && obj.lodging.length > 0) {
-    const lodgingObj = obj.lodging[0];
+    const lodgingObj = obj.lodging;
     lodgingObj.startDate = lodgingObj.hasOwnProperty("startDate") ? formatISODate(lodgingObj.startDate) : '';
     lodgingObj.endDate = lodgingObj.hasOwnProperty("endDate") ? formatISODate(lodgingObj.endDate) : '';
   }
@@ -545,27 +540,27 @@ const formatDetails = (obj, tenantType = '') => {
     }
 
     // Handle typeName
-    if (obj.page && obj.page[0]) {
-      if (!obj.page[0].hasOwnProperty("typeName")) {
-        obj.page[0].typeName = '';
+    if (obj.page && obj.page) {
+      if (!obj.page.hasOwnProperty("typeName")) {
+        obj.page.typeName = '';
       }
 
-      obj.page[0].typeName =
-        obj.page[0].typeName?.toUpperCase() ||
+      obj.page.typeName =
+        obj.page.typeName?.toUpperCase() ||
         dataLayer?.page?.typeName?.toUpperCase() ||
         context?.datasource?.step?.toUpperCase() ||
         context?.datasource?.step?.page?.[0]?.typeName?.toUpperCase() ||
         '';
 
-      obj.page[0].siteEdition = obj.page[0].siteEdition ||
+      obj.page.siteEdition = obj.page.siteEdition ||
                                 context?.geo?.language?.site_edition?.toUpperCase() ||
                                 dataLayer?.page?.siteEdition?.toUpperCase() ||
                                 '';
-      obj.page[0].countryIsoCode = obj.page[0].countryIsoCode ||
+      obj.page.countryIsoCode = obj.page.countryIsoCode ||
                                    context?.geo?.language?.siteEditionMarket ||
                                    dataLayer?.page?.countryIsoCode ||
                                    '';
-      obj.page[0].languageIsoCode = obj.page[0].languageIsoCode ||
+      obj.page.languageIsoCode = obj.page.languageIsoCode ||
                                     context?.geo?.language?.siteEditionLanguage ||
                                     dataLayer?.page?.languageIsoCode ||
                                     '';
@@ -637,35 +632,75 @@ const formatTenantType = (obj) => {
   return obj;
 };
 
-/**
- * Pushes formatted object to datalayer
- * @param  {object} obj - formatted object
- */
-const pushFormattedEventData = (obj) => {
+const filterObjectBySchema = (obj, schema) => {
+  const filteredObj = {};
+  for (const key in schema) {
+    if (obj.hasOwnProperty(key)) {
+      if (typeof schema[key] === 'object' && !Array.isArray(schema[key])) {
+        filteredObj[key] = filterObjectBySchema(obj[key], schema[key]);
+      } else {
+        filteredObj[key] = obj[key];
+      }
+    }
+  }
+  return filteredObj;
+};
+
+const pushFormattedEventData = (obj, schema) => {
   if (!window) {
     error('window is not defined');
   } else {
-    const tenantCode = obj.airlineIataCode || obj.tenantCode
-    const whiteList = tealiumList?.[tenantCode] ?? false
-    logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(obj)))
+    const tenantCode = obj.airlineIataCode || obj.tenantCode;
+    const whiteList = tealiumList?.[tenantCode] ?? false;
+    const filteredObj = filterObjectBySchema(obj, schema);
+    logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(filteredObj)));
     if (window.utag && whiteList) {
-      window.utag.link(obj);
-    }
-    else{
-      logger.log("utag.link not enabled")
+      window.utag.link(filteredObj);
+    } else {
+      logger.log("utag.link not enabled");
     }
     if (window.dataLayer) {
-      if(window.localDataLayer && window.localDataLayer.length > 0) {
+      if (window.localDataLayer && window.localDataLayer.length > 0) {
         window.dataLayer.push(...window.localDataLayer);
         window.localDataLayer = [];
       }
-      window.dataLayer.push(obj);  
+      window.dataLayer.push(filteredObj);
     } else {
       window.localDataLayer = [];
-      window.localDataLayer.push(obj);
+      window.localDataLayer.push(filteredObj);
     }
   }
 };
+
+// /**
+//  * Pushes formatted object to datalayer
+//  * @param  {object} obj - formatted object
+//  */
+// const pushFormattedEventData = (obj) => {
+//   if (!window) {
+//     error('window is not defined');
+//   } else {
+//     const tenantCode = obj.airlineIataCode || obj.tenantCode
+//     const whiteList = tealiumList?.[tenantCode] ?? false
+//     logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(obj)))
+//     if (window.utag && whiteList) {
+//       window.utag.link(obj);
+//     }
+//     else{
+//       logger.log("utag.link not enabled")
+//     }
+//     if (window.dataLayer) {
+//       if(window.localDataLayer && window.localDataLayer.length > 0) {
+//         window.dataLayer.push(...window.localDataLayer);
+//         window.localDataLayer = [];
+//       }
+//       window.dataLayer.push(obj);  
+//     } else {
+//       window.localDataLayer = [];
+//       window.localDataLayer.push(obj);
+//     }
+//   }
+// };
 
 const formatter = { formatAirlines, formatHotels, formatEvents };
 

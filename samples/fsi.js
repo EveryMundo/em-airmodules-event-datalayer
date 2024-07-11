@@ -26,20 +26,20 @@ const eventObject =
   'miles': null,
   'timestamp': '2021-02-16T17:41:43.200Z',
   'url': 'https: //www.srilankan.com/en-lk/',
-  'passenger': [{
+  'passenger': {
       'count': 1,
       'adultCount': 1,
       'youngAdultCount': null,
       'childCount': null,
       'infantInLapCount': null,
       'infantInSeatCount': null
-  }],
-  'page': [{
+  }
+  'page': {
       'siteEdition': 'en-LK',
       'countryIsoCode': 'LK',
       'languageIsoCode': 'en'
-  }],
-  'lodging': [{
+  }
+  'lodging': {
       'cityCode': 'SIN',
       'name': 'Intercontinental',
       'startDate': '2021-03-13',
@@ -47,12 +47,12 @@ const eventObject =
       'roomCount': 2,
       'tripLength': 7,
       'starRating': 5
-  }],
-  'carRentals': [{
+  }
+  'carRentals': {
       'provider': 'hertz',
       'brand': 'bmw',
       'model': '530I'
-  }]
+  }
 }
 
   console.log("OUTPUT FOR AIRLINE OBJECT", formatter.formatAirlines(eventObject));

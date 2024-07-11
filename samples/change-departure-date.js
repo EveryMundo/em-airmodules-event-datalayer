@@ -25,7 +25,7 @@ const eventObject = {
     miles: null,
     timestamp: "2021-02-16",
     url: "https://www.testurl.com/",
-    passenger: [
+    passenger: 
       {
         count: 2,
         adultCount: 2,
@@ -34,15 +34,16 @@ const eventObject = {
         infantInLapCount: null,
         infantInSeatCount: null,
       },
-    ],
-    page: [
+    
+    page: 
       {
         siteEdition: "en-US",
         countryIsoCode: "us",
         languageIsoCode: "en",
+        typeName: ''
       },
-    ],
-    lodging: [
+    
+    lodging: 
       {
         cityCode: "FLL",
         name: "fll",
@@ -52,9 +53,6 @@ const eventObject = {
         tripLength: "7",
         starRating: "5",
       },
-    ],
-    pageTypeCode: '',
-    pageTypeName: ''
   };
 
   console.log("OUTPUT FOR AIRLINE OBJECT", formatter.formatAirlines(eventObject));

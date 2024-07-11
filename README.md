@@ -84,7 +84,7 @@ const eventObject = {
   miles: '',
   timestamp: '2021-02-16T00:00:00.000Z',
   url: 'https: //www.srilankan.com/en-lk/',
-  passenger: [
+  passenger: 
     {
       count: 1,
       adultCount: 1,
@@ -93,16 +93,16 @@ const eventObject = {
       infantInLapCount: '',
       infantInSeatCount: ''
     }
-  ],
-  page: [
+  ,
+  page: 
     {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
       languageIsoCode: 'en',
       typeName: 'CUSTOM_PAGE'
     }
-  ],
-  lodging: [
+  ,
+  lodging: 
     {
       cityCode: 'SIN',
       name: 'Intercontinental',
@@ -112,7 +112,7 @@ const eventObject = {
       tripLength: 7,
       starRating: 5
     }
-  ],
+  ,
   moduleId: '',
   tagName: ''
 }
@@ -145,6 +145,8 @@ These functions are designed to handle specific verticals and ensure proper form
 
 -   <b>Pushing to the dataLayer:</b> After formatting, the resulting data will be pushed to the dataLayer, making it ready for further processing and analysis by analytics tools.
 
+-   <b>Handling Nested Fields:</b> Nested fields should not be sent in the form of "Array of Objects" `[{}]` (e.g ❌ `page[0].typeName` -> ✅ `page.typeName`). Fields that do not adhere to the standard dataLayer structure will be discarded.
+
 Ensure you choose the correct function based on your application's vertical to maintain consistency in data formatting and tracking. Customize the event object and parameters as needed for your specific tracking requirements.
 
 ## 📓 Constructing the Event Object<a name="-constructing-the-event-object"></a>
@@ -172,7 +174,7 @@ const eventObject = {
   returnDate: '',
   deeplinkSiteEdition: '',
   miles: '',
-  passenger: [
+  passenger: 
     {
       count: 1,
       adultCount: 1,
@@ -181,8 +183,8 @@ const eventObject = {
       infantInLapCount: '',
       infantInSeatCount: ''
     }
-  ],
-  lodging: [
+  ,
+  lodging: 
     {
       cityCode: '',
       name: '',
@@ -192,14 +194,14 @@ const eventObject = {
       tripLength: 0,
       starRating: 0 
     }
-  ],
-  carRentals: [
+  ,
+  carRentals: 
     {
       provider: '',
       brand: '',
       model: ''
     }
-  ],
+  ,
   moduleId: '',
   tagName: ''
 }
@@ -226,23 +228,18 @@ const eventObject = {
   startDate: '',
   endDate: '',
   roomAccesibility: true,
-  guest: [
+  guest: 
     {
       count: 0,
       adult: 0
     }
-  ],
-  room: [ 
+  ,
+  room:
     { 
       count: 0, 
       type: '' 
     } 
-  ],
-  page: [
-    {
-      typeName: ''
-    }
-  ],
+  ,
 }
 
 ```
@@ -268,23 +265,18 @@ const eventObject = {
   startDate: '',
   endDate: '',
   roomAccesibility: true,
-  guest: [
+  guest: 
     {
       count: 0,
       adult: 0
     }
-  ],
-  room: [ 
+  ,
+  room: 
     { 
       count: 0, 
       type: '' 
     } 
-  ],
-  page: [
-    {
-      typeName: ''
-    }
-  ],
+  ,
 }
 
 ```
@@ -689,7 +681,7 @@ const eventObject = {
   miles: '',
   timestamp: '2021-02-16T00:00:00.000Z',
   url: 'https: //www.srilankan.com/en-lk/',
-  passenger: [
+  passenger: 
     {
       count: 1,
       adultCount: 1,
@@ -698,16 +690,16 @@ const eventObject = {
       infantInLapCount: '',
       infantInSeatCount: ''
     }
-  ],
-  page: [
+  ,
+  page: 
     {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
       languageIsoCode: 'en',
       typeName: 'CUSTOM_PAGE'
     }
-  ],
-  lodging: [
+  ,
+  lodging: 
     {
       cityCode: 'SIN',
       name: 'Intercontinental',
@@ -717,14 +709,14 @@ const eventObject = {
       tripLength: 7,
       starRating: 5
     }
-  ],
-  carRentals: [
+  ,
+  carRentals: 
     {
         provider: Hertz,
         brand: BMW,
     model: 530i
     }
-  ],
+  ,
   moduleId: '',
   tagName: '',
 }
@@ -758,26 +750,25 @@ const eventObject = {
   roomAccesibility: true,
   timestamp: '2021-02-16T17:41:43.200Z',
   url: 'https:  //www.hyatt.com/en/miami',
-  guest: [
+  guest: 
     {
       count: 1,
       adult: 1
     }
-  ],
-  room: [ 
+  ,
+  room: 
     { 
       count: 1, 
       type: '' 
     } 
-  ],
-  page: [
+  ,
+  page: 
     {
       siteEdition: 'en-LK',
       countryIsoCode: 'LK',
       languageIsoCode: 'en',
       typeName: 'CUSTOM_PAGE'
     }
-  ]
 }
 
 ```
@@ -811,18 +802,18 @@ const eventObject = {
     'endDate': '2021-03-14',
     'timestamp': '2021-02-16T17:41:43.200Z',
     'url': 'https: //www.srilankan.com/en-lk/',
-    'passenger': [{
+    'passenger': {
         'count': 1,
         'adultCount': 1,
         'youngAdultCount': null,
         'childCount': null
-    }],
-    'page': [{
+    },
+    'page': {
         'siteEdition': 'en-LK',
         'countryIsoCode': 'LK',
         'languageIsoCode': 'en',
         'typeName': 'CUSTOM_PAGE'
-    }],
+    },
 }
 ```
 </details>
