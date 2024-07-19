@@ -277,9 +277,7 @@ const eventObject = {
 ```
 </details>
 
-<B>Step 2: Decide Which Events to Track in the 'event
-
-' Field</b>
+<B>Step 2: Decide Which Events to Track in the 'event' Field</b>
 
 Determine the key event you want to track and assign them to the 'event' field. This field defines the type of user interaction and the specific action taken. For example:
 
