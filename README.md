@@ -1,5 +1,3 @@
-
-
 <p align="center">
   <a href="" rel="noopener">
  <img src="https://www.everymundo.com/wp-content/uploads/2021/11/EveryMundo-2022-black-2.jpg" alt="EM Logo"></a>
@@ -63,7 +61,6 @@ Create an event object that captures the relevant information for the specific e
 const eventObject = {
   event: 'viewable_impression',
   module: 'em-booking-popup',
-  eventAction: 'viewable_impression',
   actionLabel: '',
   airlineIataCode: 'UL',
   journeyType: 'ONE_WAY',
@@ -215,7 +212,6 @@ const eventObject = {
 const eventObject = {
   event: '',
   module: '',
-  eventAction: '',
   actionLabel: '',
   regionName: '',
   countryCode: '',
@@ -252,7 +248,6 @@ const eventObject = {
 const eventObject = {
   event: '',
   module: '',
-  eventAction: '',
   actionLabel: '',
   regionName: '',
   countryCode: '',
@@ -282,20 +277,21 @@ const eventObject = {
 ```
 </details>
 
-<B>Step 2: Decide Which Events to Track in the 'event' and 'eventAction' Fields</b>
+<B>Step 2: Decide Which Events to Track in the 'event
 
-Determine the key events you want to track and assign them to the 'event' and 'eventAction' fields. These fields define the type of user interaction and the specific action taken and take identical values. For example:
+' Field</b>
+
+Determine the key event you want to track and assign them to the 'event' field. This field defines the type of user interaction and the specific action taken. For example:
 
 ```js
 const eventObject = {
   event: 'viewable_impression',
   module: 'em-booking-popup',
-  eventAction: 'viewable_impression',
   ...
 };
 ```
 
-Adjust the values of 'event' and 'eventAction' to accurately reflect the nature of your tracked events. Refer to [Types of Events](#types-of-events) below for more information. 
+Adjust the value of 'event' to accurately reflect the nature of your tracked events. Refer to [Types of Events](#types-of-events) below for more information. 
 
 
 <b>Step 3: Set Up Event Parameters</b>
@@ -306,7 +302,6 @@ The event object includes several parameters to provide detailed context to a sp
 const eventObject = {
   event: 'viewable_impression',
   module: 'em-booking-popup',
-  eventAction: 'viewable_impression',
   actionLabel: '',
   airlineIataCode: 'UL',
   journeyType: 'ONE_WAY',
@@ -446,19 +441,18 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 
 Custom events are events that you define. Make sure to only create custom events when no other events work for your use case. Custom events do not show up in most standard reports and require a custom request for meaningful analysis. (we give guidelines in case nothing on our list is appropriate)
 
-To track a custom event, simply add in the event object an event action name and/or module name that is not on the recommended list. 
+To track a custom event, simply add in the event object an event name and/or module name that is not on the recommended list. 
 
 The event object must contain the following properties:
-* <b> event and eventName: </b> The name of the event. Both fields have the same value.
+* <b> event: </b> The name of the event.
 * <b> module: </b> The name of the module.
 
-For example, the following event object would track a custom event called "product_detail_clicked" for a new module ':
+For example, the following event object would track a custom event called "product_detail_clicked" for a new module:
 
 ```js
 const eventObject = {
   event: 'product_detail_clicked',
   module: '',
-  eventAction: 'product_detail_clicked',
   ...
   }
   ```
@@ -477,11 +471,13 @@ const eventObject = {
 
 This section provides a detailed explanation of the parameters used in the event object, along with their examples, definitions, and whether they are required.
 
-* The parameters marked as required need to be inluded in all events.
+* The parameters marked as required need to be included in all events.
 
 * The viewable-impression events will only collect the required parameters.
 
 * The interaction events, such as select-departure-date, will only populate the relevant parameters to the event itself and what has already been filtered in the module.
+
+* Parameters that are not being used can be removed from the event object.
 
 <details>
 <summary> Common Parameters Across All Verticals </summary>
@@ -490,7 +486,6 @@ This section provides a detailed explanation of the parameters used in the event
 |------------------------------------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | event                                    | T_123456                  | Name of the event performed                                                                                                                                                                                            | Yes       |
 | module                                   | em-booking-popup          | Name of the module                                                                                                                                                                                                     | Yes       |
-| eventAction                              | viewable_impression       | Name of the event action used in GA Reports                                                                                                                                                                            | Yes       |
 | actionLabel                              | ...                       | Populated based on what was selected in the user interaction. See details below.                                                                                                                                       | Optional  |
 | tenantCode                               | HDI                       | Tenant Code                                                                                                                                                                                                            | Yes       |
 | tenantType                               | hotel                     | Tenant Type (Hotel, Airline, Event)                                                                                                                                                                                    | Yes       |
@@ -608,7 +603,6 @@ This section provides a detailed explanation of the parameters used in the event
 | tenantType                              | hotel                             | Tenant Type (Hotel, Airline, Event)                                                                   | Yes                                                                                                                                                        |                                                                                                                                        |
 | event                                   | search_initiation                 | Name of the event                                                                                     | Yes                                                                                                                                                        |
 | module                                  | open-booking-popup-abstract       | Name of the interacted module                                                                         | Yes                                                                                                                                                        |
-| eventAction                             | search_initiation                 | Name of the event action used in Google Analytics Reports. It is the same value as the “event” field. | Yes                                                                                                                                                        |
 | actionLabel                             | Book Now                          | Name of the event action                                                                              | Yes                                                                                                                                                        |
 | eventName                               | Semifinal                         | Name of the Event                                                                                     | Yes                                                                                                                                                        |
 | eventLocation                           | Laver Arena                       | Location for the selected Event                                                                       | Yes                                                                                                                                                        |
@@ -660,7 +654,6 @@ The 'actionLabel' serves as a descriptive label, tracking what was specifically 
 const eventObject = {
   event: 'viewable_impression',
   module: 'em-booking-popup',
-  eventAction: 'viewable_impression',
   actionLabel: '',
   airlineIataCode: 'UL',
   journeyType: 'ONE_WAY',
@@ -731,7 +724,6 @@ const eventObject = {
 const eventObject = {
   event: 'viewable_impression',
   module: 'em-booking-popup-abstract',
-  eventAction: 'viewable_impression',
   actionLabel: '',
   tenantCode: 'UL',
   tenantType: '',
@@ -782,7 +774,6 @@ const eventObject = {
   const eventObject = {
     'event': 'search_initiation',
     'module': 'em-booking-popup-abstract',
-    'eventAction': 'search_initiation',
     'actionLabel': null,
     'tenantCode': 'ETA',
     'eventName': 'Semifinal',
