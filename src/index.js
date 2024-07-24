@@ -116,8 +116,12 @@ const saveToLocalStorage = (key, value) => {
  * @return {object} - Returns an object with the list of airport codes and their corresponding country codes
  */
 const fetchAirportCountries = async iataCode => {
+  if (!hangarConfig) {
+    console.warn('Hangar configuration is not defined.');
+    return [];
+  }
+
   try {
-    // Assuming current  is correctly defined in your scope
     const url = `${hangarConfig.apiUrl}${iataCode.toLowerCase()}${hangarConfig.apiPath}`;
     const apiKey = hangarConfig.apiKey;
 
@@ -135,27 +139,23 @@ const fetchAirportCountries = async iataCode => {
     });
 
     if (!response.ok) {
-      // Handle HTTP errors
       console.error(`Error fetching airport countries: ${response.statusText}`);
-      return {}; // Return an empty object or array as needed
+      return [];
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    // Handle network errors or JSON parsing errors
     console.error(`Error in fetchAirportCountries: ${error.message}`);
-    return {}; // Return an empty object or array as needed
+    return [];
   }
 };
-
 
 /**
  * Loads the list of country codes for each airport code
  * @param {string} iataCode - Iata code of airline
  * @return {Map} - Returns a map of airport codes and their corresponding country codes
  */
-
 const loadAirportCountries = async iataCode => {
   let airportCountryCodesList = JSON.parse(localStorage.getItem("airportCountryCodes")) || [];
 
@@ -164,6 +164,7 @@ const loadAirportCountries = async iataCode => {
   if (!hasIataCode) {
     try {
       const airportCountries = await fetchAirportCountries(iataCode);
+
       if (Array.isArray(airportCountries) && airportCountries.length > 0) {
         const newEntries = airportCountries
           .filter(airport => airport.iataCode && airport.country && airport.country.isoCode)
@@ -180,6 +181,7 @@ const loadAirportCountries = async iataCode => {
       console.error(`Error loading airport countries for ${iataCode}: ${error}`);
     }
   }
+
   return new Map(airportCountryCodesList);
 };
 
@@ -188,23 +190,29 @@ const loadAirportCountries = async iataCode => {
  * @param {object} obj - data layer object.
  * @return {object} - Returns the formatted object with the parameters as needed.
  */
-
 const addCalculatedParameters = async obj => {
-  obj.originCountryCode = "";
-  obj.destinationCountryCode = "";
+  obj.originCountryCode = obj.originCountryCode || "";
+  obj.destinationCountryCode = obj.destinationCountryCode || "";
   obj.flightType = "";
-  const airportCountries = await loadAirportCountries(obj.airlineIataCode || obj.tenantCode);
-  if (obj.originAirportIataCode) {
-    obj.originCountryCode = airportCountries.get(obj.originAirportIataCode);
+
+  if (!obj.originCountryCode || !obj.destinationCountryCode) {
+    const airportCountries = await loadAirportCountries(obj.airlineIataCode || obj.tenantCode);
+
+    if (!obj.originCountryCode && obj.originAirportIataCode) {
+      obj.originCountryCode = airportCountries.get(obj.originAirportIataCode) ?? '';
+    }
+
+    if (!obj.destinationCountryCode && obj.destinationAirportIataCode) {
+      obj.destinationCountryCode = airportCountries.get(obj.destinationAirportIataCode) ?? '';
+    }
   }
-  if (obj.destinationAirportIataCode) {
-    obj.destinationCountryCode = airportCountries.get(obj.destinationAirportIataCode);
+
+  if (obj.originCountryCode && obj.destinationCountryCode) {
+    obj.flightType = obj.originCountryCode === obj.destinationCountryCode ? "DOMESTIC" : "INTERNATIONAL";
+  } else {
+    obj.flightType = "";
   }
-  obj.originCountryCode && obj.destinationCountryCode
-  ? obj.originCountryCode === obj.destinationCountryCode
-  ? obj.flightType = "DOMESTIC"
-  : obj.flightType = "INTERNATIONAL"
-  : obj.flightType = "";
+
   return obj;
 };
 
@@ -266,7 +274,7 @@ const formatCase = (obj) => {
     "event", "module", "eventAction", "airlineIataCode", "originAirportIataCode",
     "destinationAirportIataCode", "currencyCode", "route", "countryIsoCode",
     "cityCode", "languageIsoCode", "siteEdition", "name", "provider", "brand",
-    "model", "pageTypeCode", "typeName", "tenantCode", "actionLabel",
+    "model", "tenantCode", "actionLabel",
     "regionName", "countryCode", "cityName", "propertyName", "eventName",
     "eventLocation", "eventSession", "eventExperienceCategory", "eventExperience",
   ];
@@ -276,9 +284,9 @@ const formatCase = (obj) => {
     "eventSession", "eventExperienceCategory", "eventExperience", "provider"
   ];
 
-  const toSnakeCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
-  const toKebabCase = (str) => str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
-  const toTitleCase = (str) => str.replace(/\w\S*/g, match => match.charAt(0)?.toUpperCase() + match.slice(1).toLowerCase());
+  const toSnakeCase = (str) => str?.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s.-]+/g, "_").toLowerCase();
+  const toKebabCase = (str) => str?.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/[\s._]+/g, "-").toLowerCase();
+  const toTitleCase = (str) => str?.replace(/\w\S*/g, match => match.charAt(0)?.toUpperCase() + match.slice(1).toLowerCase());
 
   keyArr.forEach((key) => {
     if (obj.hasOwnProperty(key)) {
@@ -294,12 +302,11 @@ const formatCase = (obj) => {
         case "actionLabel":
           obj[key] = typeof obj[key] === "number" ? obj[key].toString() : toKebabCase(obj[key]);
           break;
-        case "pageTypeCode":
         case "typeName":
           obj[key] = toSnakeCase(obj[key])?.toUpperCase();
           break;
         default:
-          obj[key] = titleCase.includes(key) ? (key === "eventExperience" && obj[key].match(/(multiple|,)/gi) ? "MULTIPLE" : obj[key].toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key])) : obj[key]?.toUpperCase();
+          obj[key] = titleCase.includes(key) ? (key === "eventExperience" && obj[key].match(/(multiple|,)/gi) ? "MULTIPLE" : obj[key]?.toLowerCase().includes("n/a") ? "" : toTitleCase(obj[key])) : obj[key]?.toUpperCase();
       }
     }
  
@@ -540,11 +547,6 @@ const formatDetails = (obj, tenantType = '') => {
     }
 
     // Handle typeName
-    if (obj.page && obj.page) {
-      if (!obj.page.hasOwnProperty("typeName")) {
-        obj.page.typeName = '';
-      }
-
       obj.page.typeName =
         obj.page.typeName?.toUpperCase() ||
         dataLayer?.page?.typeName?.toUpperCase() ||
@@ -564,7 +566,6 @@ const formatDetails = (obj, tenantType = '') => {
                                     context?.geo?.language?.siteEditionLanguage ||
                                     dataLayer?.page?.languageIsoCode ||
                                     '';
-    }
 
     return obj;
   } catch (error) {
