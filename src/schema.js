@@ -6,7 +6,10 @@ const baseAirlineObject = {
   airlineIataCode: '',
   journeyType: '',
   originAirportIataCode: '',
+  originCountryCode: '',
+  destinationCountryCode: '',
   destinationAirportIataCode: '',
+  flightType: '',
   route: '',
   currencyCode: '',
   totalPrice: 0,
@@ -28,7 +31,8 @@ const baseAirlineObject = {
     youngAdultCount: '',
     childCount: '',
     infantInLapCount: '',
-    infantInSeatCount: ''
+    infantInSeatCount: '',
+    overseasFilipinoWorker: 0
   },
   page: {
     siteEdition: '',

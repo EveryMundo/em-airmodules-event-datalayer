@@ -1,6 +1,6 @@
 import { baseAirlineObject, baseEventObject, baseHospitalityObject } from "./schema.js";
 import { version } from './version.js';
-import { hangarConfig } from './config.js';
+import { hangarEnv } from './config.js';
 import { tenantList } from "./tenantlist.js";
 import { tealiumList } from "./whitelist.js";
 
@@ -45,10 +45,11 @@ const ensureFields = (obj, baseObj) => {
   return obj;
 };
 
-const formatAirlines = (obj) => {
+const formatAirlines = async (obj) => {
   logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)));
   obj = ensureFields(obj, baseAirlineObject);
   if (obj.module && obj.eventAction) {
+    await addCalculatedParameters(obj);
     convertValues(obj);
     formatDetails(obj, 'airline');
     formatCase(obj);
@@ -57,7 +58,6 @@ const formatAirlines = (obj) => {
     formatTenantType(obj);
     formatDate(obj, true);
     formatUrl(obj);
-    addCalculatedParameters(obj);
     pushFormattedEventData(obj, baseAirlineObject);
     return obj;
   }
@@ -111,11 +111,33 @@ const saveToLocalStorage = (key, value) => {
 }
 
 /**
+  * Returns environment based on url's domain or from EM.dataLayer.
+  * @returns {string} The environment based on url's domain or EM.dataLayer.
+  */
+const getEnvironment = () => {
+  const environment = window.EM?.dataLayer?.[0]?.extraInfo?.environment ?? window?.location?.hostname;
+
+  const environments = {
+    development: ["dev", "prepro", "DEVELOPMENT", "PREPRODUCTION"],
+    production: ["production", "PRODUCTION", "prod"]
+  };
+
+  for (const [key, keywords] of Object.entries(environments)) {
+    if (keywords.some(keyword => environment.includes(keyword) || environment === keyword)) {
+      return hangarEnv[key];
+    }
+  }
+
+  return "";
+};
+
+/**
  * Fetches the list of country codes for each airport code from the hangar API
  * @param {string} iataCode - Iata code of airline
  * @return {object} - Returns an object with the list of airport codes and their corresponding country codes
  */
-const fetchAirportCountries = async iataCode => {
+const fetchAirportCountries = async (iataCode) => {
+  const hangarConfig = getEnvironment();
   if (!hangarConfig) {
     console.warn('Hangar configuration is not defined.');
     return [];
@@ -123,12 +145,10 @@ const fetchAirportCountries = async iataCode => {
 
   try {
     const url = `${hangarConfig.apiUrl}${iataCode.toLowerCase()}${hangarConfig.apiPath}`;
-    const apiKey = hangarConfig.apiKey;
-
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'EM-API-KEY': apiKey,
+        'EM-API-KEY': hangarConfig.apiKey,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -143,13 +163,13 @@ const fetchAirportCountries = async iataCode => {
       return [];
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error(`Error in fetchAirportCountries: ${error.message}`);
     return [];
   }
 };
+
 
 /**
  * Loads the list of country codes for each airport code
@@ -212,7 +232,6 @@ const addCalculatedParameters = async obj => {
   } else {
     obj.flightType = "";
   }
-
   return obj;
 };
 
@@ -547,12 +566,27 @@ const formatDetails = (obj, tenantType = '') => {
     }
 
     // Handle typeName
-      obj.page.typeName =
-        obj.page.typeName?.toUpperCase() ||
-        dataLayer?.page?.typeName?.toUpperCase() ||
-        context?.datasource?.step?.toUpperCase() ||
-        context?.datasource?.step?.page?.[0]?.typeName?.toUpperCase() ||
-        '';
+    const validTypeNames = new Set([
+      "HOMEPAGE", "CITY_TO_CITY", "FROM_CITY", "TO_CITY",
+      "CITY_TO_COUNTRY", "COUNTRY_TO_CITY", "COUNTRY_TO_COUNTRY",
+      "FROM_COUNTRY", "TO_COUNTRY", "EXTERNALIZED", "CUSTOM_PAGE",
+      "404_PAGE", "SITEMAP", "BUS_STATION", "FROM_STATE", "FROM_AIRPORT"
+    ]);
+    
+    // List of potential sources for typeName in order of preference
+    const potentialTypeNames = [
+      obj.page?.typeName,
+      dataLayer?.page?.typeName,
+      context?.datasource?.step,
+      context?.datasource?.step?.page?.[0]?.typeName
+    ];
+    
+    // Iterate over potential sources to find a valid typeName
+    obj.page.typeName = potentialTypeNames.find(source => {
+      const typeName = source?.toUpperCase(); // Convert to uppercase for comparison
+      return typeName && validTypeNames.has(typeName);
+    }) || '';
+    
 
       obj.page.siteEdition = obj.page.siteEdition ||
                                 context?.geo?.language?.site_edition?.toUpperCase() ||
