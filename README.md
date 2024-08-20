@@ -643,27 +643,81 @@ const eventObject = {
 > Understand that legacy modules may employ the Tracking Library (TL), Tracking Package (TP), or both in their implementation. The focus should be on having an "airmodule" data layer for each user interaction, ensuring events are collected in Google Analytics 4 (GA4).
 
 
-To ensure the proper integration with the Tracking Package, follow these steps to effectively test the event object:
+## 🔨 Testing the Tracking Implementation <a name ="-testing-the-tracking-implementation-"></a> 
 
-1. **Check the Event Object**
+> **Note: Tracking Implementation Options**
+>
+> Understand that legacy modules may employ the Tracking Library (TL), Tracking Package (TP), or both in their implementation. The focus should be on having an "airmodule" data layer for each user interaction, ensuring events are collected in Google Analytics 4 (GA4).
 
-Inspect the event object by typing `tp_debug=true` in the browser console. This will allow you to view the event object and identify any issues. This feature is available for implementations of the tracking package version 1.4.3 and above. You can check the Tracking Package version by typing tp_v in the console.
 
-Additional note on verifying search_initiation events:
+<details>
+<summary> How to check the current version of the Tracking Package </summary>
+<br>
+To check the current version of the Tracking Package in use, follow these steps:
 
-In addition to the steps above, before performing the search, run this in the console to avoid redirection to the search results page:
+1. **Using the `tp_v` function in the browser console**:
+   - Open the browser's developer tools (typically by pressing `F12` or `Ctrl+Shift+I`).
+   - Navigate to the "Console" tab.
+   - Type `tp_v` and press `Enter`.
+   - The console will display the current tracking package version used by VG, airmodules, and standard airmodules on the page.
 
-`window.onbeforeunload = function (e) { e = e || window.event; return ''; }`
+**Notes for `tp_v`:**
+- The `tp_v` function shows the current Tracking Package version dynamically based on the component loaded on the page during scroll.
+- Since VG, air modules, and standard modules might use different Tracking Package versions, the version displayed may vary.
+- This behavior is subject to improvement in future versions.
 
-That will prompt a popup to appear asking if you want to change pages. Just click "Cancel" and you should be able to see the details.
+</details>
 
-2. **Inspect the Data Layer**
+<details>
+<summary> How to test the event object being sent </summary>
+<br>
+To test if the event object is being sent correctly, you can use the following methods:
 
-Interact with the modules as users would and observe the corresponding data layer events in the console. To inspect the formatted result, open your browser's console and type "dataLayer." This action will reveal the structured data layer, allowing you to review and confirm that the necessary events are captured in the "airmodule" data layer format.
+1. **Using the `tp_debug` function**:
+   - The `tp_debug` function is available from Tracking Package version 1.3.1 and later.
+   - Open the browser's developer tools and go to the "Console" tab.
+   - Type `tp_debug=true` and press `Enter`.
+   - This will activate debugging mode, logging the event object to the console with each interaction. 
+   - This feature helps determine whether an airModule is being tracked via the Tracking Package or the older Tracking Library, ensuring the event object is correctly formatted and sent.
 
-3. **Validate GA4 Integration**
+   **Note**: 
+   - If you notice PubSub events being sent for a particular module, this indicates that the module is using the Tracking Library instead of the Tracking Package. 
+   - To check for PubSub events, enter the following command in the console:
+     ```
+     EM.utils.PubSub.subscribe('em', function(msg, data){console.log("MSG",msg,"\n Data: ", data)});
+     ```
+   - This command will log any PubSub events, displaying both the message and data, allowing you to confirm whether the Tracking Library is being used.
 
-Verify the successful collection and transmission of events to Google Analytics 4 (GA4) by entering collect in the Network tab. Confirm that the required data is being sent to GA4.
+2. **Inspecting the Data Layer**:
+   - Interact with the modules as users would and observe the corresponding data layer events in the console.
+   - To inspect the formatted result, open your browser's console and type `dataLayer`.
+   - This will reveal the structured data layer, allowing you to review and confirm that the necessary events are captured in the "airmodule" data layer format.
+
+3. **Validating GA4 Integration**:
+   - Verify the successful collection and transmission of events to Google Analytics 4 (GA4).
+   - Open the "Network" tab in the developer tools and enter `collect` in the filter.
+   - This will display the network requests sent to GA4, allowing you to confirm that the required data is being sent correctly.
+
+</details>
+
+<details>
+<summary> How to verify `fsi` (search_initiation) events </summary>
+<br>
+To verify `search_initiation` events, follow these additional steps:
+
+1. **Prevent Page Redirection**:
+   - Before initiating a search, open the browser’s developer tools and go to the "Console" tab.
+   - Type the following command and press `Enter`:
+     ```
+     window.onbeforeunload = function (e) { e = e || window.event; return ''; }
+     ```
+   - This command will prompt a popup when a page change is attempted, asking if you want to leave the page. Click "Cancel" to stay on the page.
+
+2. **Test the Event**:
+   - Perform the search action and observe the event object details in the console, without being redirected to the search results page.
+   - This method allows you to capture and inspect the `fsi` event object for correctness.
+
+</details>
 
 ## ❓ FAQ<a name="-faq"></a> 
 

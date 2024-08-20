@@ -617,55 +617,50 @@ const formatDetails = (obj, tenantType = '') => {
  */
 const formatTenantType = (obj) => {
   const tenantCode = obj.tenantCode || obj.airlineIataCode || '';
-  if (typeof tenantCode === "string" && tenantCode.trim().length > 0) {
-    const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1);
 
-    // Check if tenant belongs in the list
-    if (tenantList[tenantCode]) {
-      obj.tenantType = tenantList[tenantCode];
-    } else if (tenantList[tenantCodeSubstr]) {
-      obj.tenantType = tenantList[tenantCodeSubstr];
-    } else {
-      // Assign tenant type based on naming convention
-      switch (tenantCode[0]?.toUpperCase()) {
-        case "A":
-          obj.tenantType = "airline";
-          break;
-        case "X":
-          obj.tenantType = "airline alliance";
-          break;
-        case "L":
-          obj.tenantType = "airport";
-          break;
-        case "P":
-          obj.tenantType = "package";
-          break;
-        case "H":
-          obj.tenantType = "hotel";
-          break;
-        case "E":
-          obj.tenantType = "event";
-          break;
-        case "B":
-          obj.tenantType = "bus";
-          break;
-        case "D":
-          obj.tenantType = "tourism board & dmo";
-          break;
-        case "T":
-          obj.tenantType = "train";
-          break;
-        default:
-          obj.tenantType = "";
-          logger.log("tenantCode does not adhere to the naming convention.");
-      }
-    }
-  } else {
+  if (window?.EM?.context?.type) {
+    obj.tenantType = window.EM.context.type;
+    return obj;
+  }
+
+  if (typeof tenantCode !== "string" || tenantCode.trim().length === 0) {
     obj.tenantType = "";
     logger.log("Invalid tenantCode: Not a non-empty string.");
+    return obj;
   }
+
+  const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1);
+
+  if (typeof tenantList === 'object' && tenantList !== null) {
+    if (tenantList[tenantCode]) {
+      obj.tenantType = tenantList[tenantCode];
+      return obj;
+    } else if (tenantList[tenantCodeSubstr]) {
+      obj.tenantType = tenantList[tenantCodeSubstr];
+      return obj;
+    }
+  }
+
+  const TENANT_TYPES = {
+    A: "airline",
+    X: "airline alliance",
+    L: "airport",
+    P: "package",
+    H: "hospitality",
+    E: "event",
+    B: "bus",
+    D: "tourism board & dmo",
+    T: "train",
+  };
+
+  obj.tenantType = TENANT_TYPES[tenantCode[0]?.toUpperCase()] || "";
+  if (!obj.tenantType) {
+    logger.log(`tenantCode "${tenantCode}" does not adhere to the naming convention.`);
+  }
+
   return obj;
-};
+}
+
 
 const filterObjectBySchema = (obj, schema) => {
   const filteredObj = {};
