@@ -642,14 +642,6 @@ const eventObject = {
 >
 > Understand that legacy modules may employ the Tracking Library (TL), Tracking Package (TP), or both in their implementation. The focus should be on having an "airmodule" data layer for each user interaction, ensuring events are collected in Google Analytics 4 (GA4).
 
-
-## 🔨 Testing the Tracking Implementation <a name ="-testing-the-tracking-implementation-"></a> 
-
-> **Note: Tracking Implementation Options**
->
-> Understand that legacy modules may employ the Tracking Library (TL), Tracking Package (TP), or both in their implementation. The focus should be on having an "airmodule" data layer for each user interaction, ensuring events are collected in Google Analytics 4 (GA4).
-
-
 <details>
 <summary> How to check the current version of the Tracking Package </summary>
 <br>
