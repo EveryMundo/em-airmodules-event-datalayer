@@ -147,7 +147,9 @@ const eventObject = {
   module: '',
   actionLabel: '',
   originAirportIataCode: '',
+  originCountryCode: '',
   destinationAirportIataCode: '',
+  destinationCountryCode: '',
   currencyCode: '',
   totalPrice: 0,
   totalPriceUSD: '',
@@ -444,6 +446,8 @@ This section provides a detailed explanation of the parameters used in the event
 |-----------------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
 | originAirportIataCode                   | SFO                                       | IATA identifier for the departure/origin airport                                                                                                                | Yes                                                        |
 | destinationAirportIataCode              | JFK                                       | IATA identifier for the arrival/destination airport                                                                                                             | Yes                                                        |
+| originAirportIataCode                   | US                                      | IATA identifier for the country of departure/origin airport                                                                                                                | Yes                                                        |
+| destinationAirportIataCode              | ES                                       | IATA identifier for the country of arrival/destination airport                                                                                                             | Yes                                                        |
 | currencyCode                            | USD                                       | The currency (in 3-letter ISO 4217 format) of the price                                                                                                         | Yes                                                        |
 | totalPrice                              | 399.37                                    | The total price for the flight ticket, including applicable taxes, shipping, etc.                                                                               | Yes                                                        |
 | totalPriceUsd                           | 530.62                                    | The total price for the flight ticket in USD, including applicable taxes, shipping, etc.                                                                        | Yes                                                        |
@@ -542,8 +546,10 @@ const eventObject = {
   event: 'viewable_impression',
   module: 'em-booking-popup',
   actionLabel: '',
-  originAirportIataCode: 'CMB',
-  destinationAirportIataCode: 'SIN',
+  originAirportIataCode: 'MAD',
+  originCountryCode: 'ES'
+  destinationAirportIataCode: 'MIA',
+  destinationCountryCode: 'US'
   currencyCode: 'LKR',
   totalPrice: 5.21,
   totalPriceUSD: '',
