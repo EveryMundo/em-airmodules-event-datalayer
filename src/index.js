@@ -55,7 +55,6 @@ const formatAirlines = async (obj) => {
     formatCase(obj);
     formatJourney(obj);
     formatFareClass(obj);
-    formatTenantType(obj);
     formatDate(obj, true);
     formatUrl(obj);
     pushFormattedEventData(obj, baseAirlineObject);
@@ -71,10 +70,8 @@ const formatHotels = (obj) => {
     convertValues(obj);
     formatDetails(obj, 'hotel');
     formatCase(obj);
-    formatTenantType(obj);
     formatDate(obj);
     formatUrl(obj);
-    addCustomParameters(obj);
     pushFormattedEventData(obj, baseHospitalityObject);
     return obj;
   }
@@ -90,7 +87,6 @@ const formatEvents = (obj) => {
     formatFareClass(obj);
     formatDetails(obj, 'event');
     formatCase(obj);
-    formatTenantType(obj);
     formatDate(obj);
     formatUrl(obj);
     pushFormattedEventData(obj, baseEventObject);
@@ -469,23 +465,6 @@ const formatUrl = (obj) => {
 };
 
 /**
- * Adds custom parameters to the data layer object.
- * @param {object} obj - data layer object.
- * @return {object} - Returns url spaced between : and /.
- */
-const addCustomParameters = (obj) => {
-  // Add daysUntilBooking parameter
-  if (!obj.hasOwnProperty("daysUntilBooking") && obj.hasOwnProperty("startDate") && obj.startDate !== "") {
-    const startDate = new Date(obj.startDate);
-    const today = new Date();
-    const timeDiff = startDate.getTime() - today.getTime();
-    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    obj['daysUntilBooking'] = daysDiff;
-  }
-  return obj;
-};
-
-/**
  * Recursive Function.
  * Replaces null values to empty string.
  * Converts numeric string values to their number value.
@@ -554,6 +533,14 @@ const formatDetails = (obj, tenantType = '') => {
       obj.airlineIataCode = code?.toUpperCase();
     }
 
+    if (tenantType === 'hotel' && !obj.daysUntilBooking && obj.startDate?.trim()) {
+      const startDate = new Date(obj.startDate);
+      const today = new Date();
+      const timeDiff = startDate - today;
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      obj.daysUntilBooking = daysDiff;
+    }
+
     // Handle additional properties
     obj.journeyType = obj.journeyType || journeyType || '';
     obj.fareClass = obj.fareClass || fareClass || '';
@@ -608,60 +595,6 @@ const formatDetails = (obj, tenantType = '') => {
   }
 };
 
-
-
-/**
- * Returns tenant type based on tenant code. Checks whether tenant code belongs in tenant list. 
- * @param  {object} obj - formatted object
- * @return {object} - returns object containing tenant type
- */
-const formatTenantType = (obj) => {
-  const tenantCode = obj.tenantCode || obj.airlineIataCode || '';
-
-  if (window?.EM?.context?.type) {
-    obj.tenantType = window.EM.context.type;
-    return obj;
-  }
-
-  if (typeof tenantCode !== "string" || tenantCode.trim().length === 0) {
-    obj.tenantType = "";
-    logger.log("Invalid tenantCode: Not a non-empty string.");
-    return obj;
-  }
-
-  const tenantCodeSubstr = tenantCode.substring(0, tenantCode.length - 1);
-
-  if (typeof tenantList === 'object' && tenantList !== null) {
-    if (tenantList[tenantCode]) {
-      obj.tenantType = tenantList[tenantCode];
-      return obj;
-    } else if (tenantList[tenantCodeSubstr]) {
-      obj.tenantType = tenantList[tenantCodeSubstr];
-      return obj;
-    }
-  }
-
-  const TENANT_TYPES = {
-    A: "airline",
-    X: "airline alliance",
-    L: "airport",
-    P: "package",
-    H: "hospitality",
-    E: "event",
-    B: "bus",
-    D: "tourism board & dmo",
-    T: "train",
-  };
-
-  obj.tenantType = TENANT_TYPES[tenantCode[0]?.toUpperCase()] || "";
-  if (!obj.tenantType) {
-    logger.log(`tenantCode "${tenantCode}" does not adhere to the naming convention.`);
-  }
-
-  return obj;
-}
-
-
 const filterObjectBySchema = (obj, schema) => {
   const filteredObj = {};
   for (const key in schema) {
@@ -682,10 +615,10 @@ const pushFormattedEventData = (obj, schema) => {
   } else {
     const tenantCode = obj.airlineIataCode || obj.tenantCode;
     const whiteList = tealiumList?.[tenantCode] ?? false;
-    const filteredObj = filterObjectBySchema(obj, schema);
+    const filteredObj = {tp_v: version, ...filterObjectBySchema(obj, schema)};
     logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(filteredObj)));
     if (window.utag && whiteList) {
-      window.utag.link(filteredObj);
+      window.utag.link(...filteredObj);
     } else {
       logger.log("utag.link not enabled");
     }
@@ -701,36 +634,6 @@ const pushFormattedEventData = (obj, schema) => {
     }
   }
 };
-
-// /**
-//  * Pushes formatted object to datalayer
-//  * @param  {object} obj - formatted object
-//  */
-// const pushFormattedEventData = (obj) => {
-//   if (!window) {
-//     error('window is not defined');
-//   } else {
-//     const tenantCode = obj.airlineIataCode || obj.tenantCode
-//     const whiteList = tealiumList?.[tenantCode] ?? false
-//     logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(obj)))
-//     if (window.utag && whiteList) {
-//       window.utag.link(obj);
-//     }
-//     else{
-//       logger.log("utag.link not enabled")
-//     }
-//     if (window.dataLayer) {
-//       if(window.localDataLayer && window.localDataLayer.length > 0) {
-//         window.dataLayer.push(...window.localDataLayer);
-//         window.localDataLayer = [];
-//       }
-//       window.dataLayer.push(obj);  
-//     } else {
-//       window.localDataLayer = [];
-//       window.localDataLayer.push(obj);
-//     }
-//   }
-// };
 
 const formatter = { formatAirlines, formatHotels, formatEvents };
 
