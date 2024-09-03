@@ -107,7 +107,7 @@ const saveToLocalStorage = (key, value) => {
 }
 
 /**
-  * Returns environment based on url's domain or from EM.dataLayer.
+  * Returns environment based on url's domain or from EM.dataLayer. Default to PROD if no environment
   * @returns {string} The environment based on url's domain or EM.dataLayer.
   */
 const getEnvironment = () => {
@@ -124,7 +124,7 @@ const getEnvironment = () => {
     }
   }
 
-  return "";
+  return hangarEnv.production || ""
 };
 
 /**
