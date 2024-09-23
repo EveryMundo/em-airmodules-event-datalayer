@@ -615,10 +615,10 @@ const pushFormattedEventData = (obj, schema) => {
   } else {
     const tenantCode = obj.airlineIataCode || obj.tenantCode;
     const whiteList = tealiumList?.[tenantCode] ?? false;
-    const filteredObj = {tp_v: version, ...filterObjectBySchema(obj, schema)};
-    logger.log("Formatted event obj: ", JSON.parse(JSON.stringify(filteredObj)));
+    const filteredObj = Object.assign({ tp_v: version }, filterObjectBySchema(obj, schema));
+    logger.log("Formatted event obj:", filteredObj);
     if (window.utag && whiteList) {
-      window.utag.link(...filteredObj);
+      window.utag.link(filteredObj);
     } else {
       logger.log("utag.link not enabled");
     }
