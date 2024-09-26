@@ -55,7 +55,8 @@ const baseAirlineObject = {
     model: ''
   },
   moduleId: '',
-  tagName: '' 
+  tagName: '',
+  tp_v: ''
 }
 
 const baseHospitalityObject = {
@@ -64,7 +65,6 @@ const baseHospitalityObject = {
   eventAction: '',
   actionLabel: '',
   tenantCode: '',
-  tenantType: '',
   regionName: '',
   countryCode: '',
   cityName: '',
@@ -82,7 +82,8 @@ const baseHospitalityObject = {
   url: '',
   guest: {
     count: 0,
-    adult: 0
+    adultCount: 0,
+    childCount: 0
   },
   room: { 
     count: 0, 
@@ -93,7 +94,8 @@ const baseHospitalityObject = {
     countryIsoCode: '',
     languageIsoCode: '',
     typeName: ''
-  }
+  },
+    tp_v: ''
 }
 
 const baseEventObject = {
@@ -102,7 +104,6 @@ const baseEventObject = {
   eventAction: '',
   actionLabel: '',
   tenantCode: '',
-  tenantType: '',
   regionName: '',
   countryCode: '',
   cityName: '',
@@ -120,7 +121,8 @@ const baseEventObject = {
   url: '',
   guest: {
     count: 0,
-    adult: 0
+    adultCount: 0,
+    childCount: 0
   },
   room: { 
     count: 0, 
@@ -131,7 +133,8 @@ const baseEventObject = {
     countryIsoCode: '',
     languageIsoCode: '',
     typeName: ''
-  }
+  },
+    tp_v: ''
 }
 
 export { baseAirlineObject, baseEventObject, baseHospitalityObject }

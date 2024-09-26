@@ -26,25 +26,6 @@ const logger = {
   }
 };
 
-const ensureFields = (obj, baseObj) => {
-  for (const key in baseObj) {
-    if (baseObj.hasOwnProperty(key)) {
-      if (!obj.hasOwnProperty(key)) {
-        obj[key] = Array.isArray(baseObj[key]) ? [] : baseObj[key];
-      }
-
-      if (Array.isArray(baseObj[key]) && Array.isArray(obj[key])) {
-        baseObj[key].forEach((baseElem, i) => {
-          obj[key][i] = ensureFields(obj[key][i] || {}, baseElem);
-        });
-      } else if (typeof baseObj[key] === 'object' && baseObj[key] !== null) {
-        obj[key] = ensureFields(obj[key] || {}, baseObj[key]);
-      }
-    }
-  }
-  return obj;
-};
-
 const formatAirlines = async (obj) => {
   logger.log("Incoming obj: ", JSON.parse(JSON.stringify(obj)));
   obj = ensureFields(obj, baseAirlineObject);
@@ -94,6 +75,30 @@ const formatEvents = (obj) => {
   }
   return "Module name or eventAction missing.";
 };
+
+const ensureFields = (obj, baseObj) => {
+  for (const key in baseObj) {
+    if (baseObj.hasOwnProperty(key)) {
+      if (!obj.hasOwnProperty(key)) {
+        obj[key] = Array.isArray(baseObj[key]) ? {} : baseObj[key];
+      }
+      if(Array.isArray(obj[key]) && typeof baseObj[key] === 'object'){
+        obj[key] = obj[key][0] || {}
+      }
+
+      if (Array.isArray(baseObj[key]) && Array.isArray(obj[key])) {
+        baseObj[key].forEach((baseElem, i) => {
+          obj[key][i] = ensureFields(obj[key][i] || {}, baseElem);
+        });
+      } else if (typeof baseObj[key] === 'object' && baseObj[key] !== null) {
+        obj[key] = ensureFields(obj[key] || {}, baseObj[key]);
+      }
+    }
+  }
+  return obj;
+};
+
+
 /**
  * Saves to localStorage
  * @param {object} key - Key of item
@@ -514,11 +519,20 @@ const formatDetails = (obj, tenantType = '') => {
 
     const providerName = context?.airline?.name || dataLayer?.airline?.name || '';
     const code = context?.airline?.code || dataLayer?.airline?.iataCode || '';
-    const journeyType = context?.dynamicContext?.productCategory;
-    const fareClass = context?.dynamicContext?.productType;
-    const isFlexibleDates = context?.dynamicContext?.isFlexibleDates;
-    const discountCode = context?.dynamicContext?.discountCode;
-    const isRedemption = context?.dynamicContext?.isRedemption;
+    const dynamicContext = context?.dynamicContext || {};
+    const {
+      productCategory: journeyType,
+      productType: fareClass,
+      isFlexibleDates,
+      discountCode,
+      isRedemption
+    } = dynamicContext;
+
+    // Format tp_v
+    obj.tp_v = version;
+
+    // Handle special case for actionLabel -> "budget"
+    obj.actionLabel = obj?.budget ?? obj.actionLabel;
 
     // Format airline name
     let finalAirlineName = obj.provider ? obj.provider : providerName;
@@ -533,6 +547,7 @@ const formatDetails = (obj, tenantType = '') => {
       obj.airlineIataCode = code?.toUpperCase();
     }
 
+    // Calculate days until booking for hotels
     if (tenantType === 'hotel' && !obj.daysUntilBooking && obj.startDate?.trim()) {
       const startDate = new Date(obj.startDate);
       const today = new Date();
@@ -548,7 +563,7 @@ const formatDetails = (obj, tenantType = '') => {
     obj.discountCode = obj.discountCode || discountCode || '';
 
     // Check for miles
-    if (tenantType === 'airline' && isRedemption !== undefined && (obj.miles === undefined)) {
+    if (tenantType === 'airline' && isRedemption !== undefined && obj.miles === undefined) {
       obj.miles = isRedemption;
     }
 
@@ -559,34 +574,43 @@ const formatDetails = (obj, tenantType = '') => {
       "FROM_COUNTRY", "TO_COUNTRY", "EXTERNALIZED", "CUSTOM_PAGE",
       "404_PAGE", "SITEMAP", "BUS_STATION", "FROM_STATE", "FROM_AIRPORT"
     ]);
-    
-    // List of potential sources for typeName in order of preference
+
     const potentialTypeNames = [
       obj.page?.typeName,
       dataLayer?.page?.typeName,
       context?.datasource?.step,
       context?.datasource?.step?.page?.[0]?.typeName
     ];
-    
-    // Iterate over potential sources to find a valid typeName
+
     obj.page.typeName = potentialTypeNames.find(source => {
-      const typeName = source?.toUpperCase(); // Convert to uppercase for comparison
+      const typeName = source?.toUpperCase();
       return typeName && validTypeNames.has(typeName);
     }) || '';
-    
 
-      obj.page.siteEdition = obj.page.siteEdition ||
-                                context?.geo?.language?.site_edition?.toUpperCase() ||
-                                dataLayer?.page?.siteEdition?.toUpperCase() ||
-                                '';
-      obj.page.countryIsoCode = obj.page.countryIsoCode ||
-                                   context?.geo?.language?.siteEditionMarket ||
-                                   dataLayer?.page?.countryIsoCode ||
-                                   '';
-      obj.page.languageIsoCode = obj.page.languageIsoCode ||
-                                    context?.geo?.language?.siteEditionLanguage ||
-                                    dataLayer?.page?.languageIsoCode ||
-                                    '';
+    // Handle site edition, country, and language codes
+    obj.page.siteEdition = obj.page.siteEdition ||
+      context?.geo?.language?.site_edition?.toUpperCase() ||
+      dataLayer?.page?.siteEdition?.toUpperCase() ||
+      '';
+    obj.page.countryIsoCode = obj.page.countryIsoCode ||
+      context?.geo?.language?.siteEditionMarket ||
+      dataLayer?.page?.countryIsoCode ||
+      '';
+    obj.page.languageIsoCode = obj.page.languageIsoCode ||
+      context?.geo?.language?.siteEditionLanguage ||
+      dataLayer?.page?.languageIsoCode ||
+      '';
+
+    // Handle guest and passenger counts
+    if (obj.guest) {
+      obj.guest.adultCount = obj.guest.adultCount || obj.guest.adult || 0;
+      obj.guest.childCount = obj.guest.childCount || obj.guest.child || 0;
+    }
+
+    if (obj.passenger) {
+      obj.passenger.adultCount = obj.passenger.adultCount || obj.passenger.adult || 0;
+      obj.passenger.childCount = obj.passenger.childCount || obj.passenger.child || 0;
+    }
 
     return obj;
   } catch (error) {
@@ -606,6 +630,10 @@ const filterObjectBySchema = (obj, schema) => {
       }
     }
   }
+  if (obj.hasOwnProperty('configuration')) {
+    filteredObj['configuration'] = obj['configuration'];
+  }
+  
   return filteredObj;
 };
 
@@ -615,7 +643,7 @@ const pushFormattedEventData = (obj, schema) => {
   } else {
     const tenantCode = obj.airlineIataCode || obj.tenantCode;
     const whiteList = tealiumList?.[tenantCode] ?? false;
-    const filteredObj = Object.assign({ tp_v: version }, filterObjectBySchema(obj, schema));
+    const filteredObj = filterObjectBySchema(obj, schema);
     logger.log("Formatted event obj:", filteredObj);
     if (window.utag && whiteList) {
       window.utag.link(filteredObj);
