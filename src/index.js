@@ -602,15 +602,20 @@ const formatDetails = (obj, tenantType = '') => {
       '';
 
     // Handle guest and passenger counts
-    if (obj.guest) {
-      obj.guest.adultCount = obj.guest.adultCount || obj.guest.adult || 0;
-      obj.guest.childCount = obj.guest.childCount || obj.guest.child || 0;
-    }
+    const normalizeCount = (obj, key) => {
+      if (obj[key]) {
+        const normalizedKeys = Object.keys(obj[key]).reduce((acc, k) => {
+          acc[k.toLowerCase()] = obj[key][k];
+          return acc;
+        }, {});
 
-    if (obj.passenger) {
-      obj.passenger.adultCount = obj.passenger.adultCount || obj.passenger.adult || 0;
-      obj.passenger.childCount = obj.passenger.childCount || obj.passenger.child || 0;
-    }
+        obj[key].adultCount = normalizedKeys.adultcount || normalizedKeys.adult || 0;
+        obj[key].childCount = normalizedKeys.childcount || normalizedKeys.child || 0;
+      }
+    };
+
+    normalizeCount(obj, 'guest');
+    normalizeCount(obj, 'passenger');
 
     return obj;
   } catch (error) {
