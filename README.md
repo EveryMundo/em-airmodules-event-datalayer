@@ -60,7 +60,7 @@ Create an event object that captures the relevant information for the specific e
 ```js
 const eventObject = {
   event: 'viewable_impression',
-  module: 'em-booking-popup',
+  module: 'em-booking-mask',
   actionLabel: '',
   originAirportIataCode: 'CMB',
   destinationAirportIataCode: 'SIN',
@@ -247,7 +247,7 @@ Determine the key event you want to track and assign them to the 'event' field. 
 ```js
 const eventObject = {
   event: 'viewable_impression',
-  module: 'em-booking-popup',
+  module: 'em-booking-mask',
   ...
 };
 ```
@@ -261,7 +261,7 @@ The event object includes several parameters to provide detailed context to a sp
 ```js
 const eventObject = {
   event: 'viewable_impression',
-  module: 'em-booking-popup',
+  module: 'em-booking-mask',
   actionLabel: '',
   originAirportIataCode: 'CMB',
   destinationAirportIataCode: 'SIN',
@@ -420,7 +420,7 @@ This section provides a detailed explanation of the parameters used in the event
 | Parameter                                | Example                   | Definition                                                                                                                                                                                                             | Required  |
 |------------------------------------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | event                                    | viewable-impression       | Name of the event performed                                                                                                                                                                                            | Yes *     |
-| module                                   | em-booking-popup          | Name of the module                                                                                                                                                                                                     | Yes *     |
+| module                                   | em-booking-mask          | Name of the module                                                                                                                                                                                                     | Yes *     |
 | actionLabel                              | ...                       | Populated based on what was selected in the user interaction. See details below.                                                                                                                                       | Optional  |
 | currencyCode                             | USD                       | The currency (in 3-letter ISO 4217 format) of the price                                                                                                                                                                | Yes       |
 | totalPrice                               | 399.37                    | The total price for the reservation or ticket, including applicable taxes, shipping, etc                                                                                                                               | Yes       |
@@ -547,7 +547,7 @@ The 'actionLabel' serves as a descriptive label, tracking what was specifically 
 ```js
 const eventObject = {
   event: 'viewable_impression',
-  module: 'em-booking-popup',
+  module: 'em-booking-mask',
   actionLabel: '',
   originAirportIataCode: 'MAD',
   originCountryCode: 'ES'
@@ -596,7 +596,7 @@ const eventObject = {
 ```js
 const eventObject = {
   event: 'viewable_impression',
-  module: 'em-booking-popup-abstract',
+  module: 'em-booking-mask-abstract',
   actionLabel: '',
   currencyCode: 'USD',
   totalPrice: 900.55,
@@ -624,7 +624,7 @@ const eventObject = {
 ```js
 const eventObject = {
   event: 'search_initiation',
-  module: 'em-booking-popup-abstract',
+  module: 'em-booking-mask-abstract',
   actionLabel: null,
   currencyCode: 'LKR',
   totalPrice: null,
