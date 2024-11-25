@@ -108,7 +108,7 @@ const eventObject = {
 After constructing the event tracking object, use the appropriate function based on the tenant type (vertical) to format and process the event. Pass the event object as the parameter to ensure accurate tracking.
 
 ```js
-// For Vertical Airlines
+// For Vertical Airlines and Vactions/Packages
 formatter.formatAirlines(eventObject);
 
 // For Vertical Hospitality
@@ -141,7 +141,7 @@ Events let you measure user interactions on your app; for example, you can measu
 Identify the appropriate empty event object template based on the vertical or category of the event you intend to track. Different verticals may require specific information to be captured.
 
 <details>
-<summary>Airlines</summary>
+<summary>Airlines, Vacation, Packages</summary>
 
 ```js
 const eventObject = {
@@ -286,7 +286,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 
 
 <details>
-<summary>For Airlines</summary>
+<summary>For Airlines and Vactions/Packages</summary>
 
 | Event                   | Description                                                                                           |
 |-------------------------|-------------------------------------------------------------------------------------------------------|
@@ -298,6 +298,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | select_journey_type     | Journey type field updated                                                                            |
 | select_miles            | User changes the miles limit                                                                          |
 | select_fare_class       | User changes fare class in the module. This includes branded classes such as "Basic Economy", "Main Cabin", "Economy Light", etc. |
+| select_currency | Currency field updated                                                                    |
 | selected_travel_interest| A travel interest was selected                                                                        |
 | select_interest         | User selects travel interest (Tracking Package)                                                       |
 | click_out               | User clicks on one link of the content module                                                         |
@@ -336,6 +337,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | select_redemption     | User selects redemption as payment method             |
 | select_stay_length    | User selects stay length of the trip                  |
 | select_offer          | Special offer is selected in the low fares calendar   |
+| select_currency       | Currency field updated                                |       
 | no_fares_available    | The FC does not have fares to display                 |
 | insert_first_name     | First name field updated                              |
 | insert_last_name      | Last name field updated                               |
@@ -360,6 +362,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | select_experience     | Event experience field updated                        |
 | select_location       | Event location field updated                          |
 | select_budget         | A budget was selected                                 |
+| select_currency       | Currency field updated                                |
 | sort                  | Sorting option selected                               |
 | reset_filter          | Clear button clicked                                  |
 | no_fares_available    | The FC does not have fares to display                 |
@@ -442,7 +445,7 @@ This section provides a detailed explanation of the parameters used in the event
 
 
 <details>
-<summary>Airlines Vertical Parameters</summary>
+<summary>Airlines, Packages, Vacation Vertical Parameters</summary>
 
 | Parameter                               | Example                                                           | Definition                                                                                                                                                                                                            | Required                                                              |
 |-----------------------------------------|-------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
@@ -542,7 +545,7 @@ The 'actionLabel' serves as a descriptive label, tracking what was specifically 
 ### Examples<a name="examples"></a>
 
 <details>
-<summary>Airlines</summary>
+<summary>Airlines, Vacation, Packages </summary>
 
 ```js
 const eventObject = {

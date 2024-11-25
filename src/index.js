@@ -568,24 +568,75 @@ const formatDetails = (obj, tenantType = '') => {
     }
 
     // Handle typeName
-    const validTypeNames = new Set([
-      "HOMEPAGE", "CITY_TO_CITY", "FROM_CITY", "TO_CITY",
-      "CITY_TO_COUNTRY", "COUNTRY_TO_CITY", "COUNTRY_TO_COUNTRY",
-      "FROM_COUNTRY", "TO_COUNTRY", "EXTERNALIZED", "CUSTOM_PAGE",
-      "404_PAGE", "SITEMAP", "BUS_STATION", "FROM_STATE", "FROM_AIRPORT"
-    ]);
+    // const validTypeNames = new Set([
+    //   "HOMEPAGE", "CITY_TO_CITY", "FROM_CITY", "TO_CITY",
+    //   "CITY_TO_COUNTRY", "COUNTRY_TO_CITY", "COUNTRY_TO_COUNTRY",
+    //   "FROM_COUNTRY", "TO_COUNTRY", "EXTERNALIZED", "CUSTOM_PAGE",
+    //   "404_PAGE", "SITEMAP", "BUS_STATION", "FROM_STATE", "FROM_AIRPORT"
+    // ]);
 
+    // const potentialTypeNames = [
+    //   obj.page?.typeName,
+    //   obj.page?.pageTypeName,
+    //   dataLayer?.page?.typeName,
+    //   context?.datasource?.step,
+    //   context?.datasource?.step?.page?.[0]?.typeName
+    // ];
+
+    // obj.page.typeName = potentialTypeNames.find(source => {
+    //   const typeName = source?.toUpperCase();
+    //   return typeName && validTypeNames.has(typeName);
+    // }) || '';
+
+    const ptnMappings = {
+      "city-to-city": "CITY_TO_CITY",
+      "to-city": "TO_CITY",
+      "from-city": "FROM_CITY",
+      "city-to-country": "CITY_TO_COUNTRY",
+      "country-to-city": "COUNTRY_TO_CITY",
+      "country-to-country": "COUNTRY_TO_COUNTRY",
+      "from-country": "FROM_COUNTRY",
+      "to-country": "TO_COUNTRY",
+      "from-state": "FROM_STATE",
+      "from-airport": "FROM_AIRPORT",
+      "bus-station": "BUS_STATION",
+      "city_to_city": "CITY_TO_CITY",
+      "to_city": "TO_CITY",
+      "from_city": "FROM_CITY",
+      "city_to_country": "CITY_TO_COUNTRY",
+      "country_to_city": "COUNTRY_TO_CITY",
+      "country_to_country": "COUNTRY_TO_COUNTRY",
+      "from_country": "FROM_COUNTRY",
+      "to_country": "TO_COUNTRY",
+      "from_state": "FROM_STATE",
+      "from_airport": "FROM_AIRPORT",
+      "bus_station": "BUS_STATION",
+      "home": "HOMEPAGE",
+      "hp": "EXTERNALIZED",
+      "homepage": "EXTERNALIZED",
+      "home page": "EXTERNALIZED",
+      "discovery": "EXTERNALIZED"
+    };
+
+    const validTypeNames = new Set(Object.values(ptnMappings));
+
+    const getMappedTypeName = (ptc) => {
+      if (!ptc) return null;
+      const normalizedTypeName = ptc.trim().toLowerCase().replace(/[\s-]/g, "_");
+      const mappedTypeName = ptnMappings[normalizedTypeName]?.toUpperCase();
+      return validTypeNames.has(mappedTypeName) ? mappedTypeName : null;
+    };
+    
     const potentialTypeNames = [
       obj.page?.typeName,
+      obj.page?.pageTypeName,
       dataLayer?.page?.typeName,
       context?.datasource?.step,
       context?.datasource?.step?.page?.[0]?.typeName
     ];
-
-    obj.page.typeName = potentialTypeNames.find(source => {
-      const typeName = source?.toUpperCase();
-      return typeName && validTypeNames.has(typeName);
-    }) || '';
+  
+    obj.page.typeName = potentialTypeNames.map(getMappedTypeName).find(Boolean) || '';
+    
 
     // Handle site edition, country, and language codes
     obj.page.siteEdition = obj.page.siteEdition ||
