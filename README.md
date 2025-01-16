@@ -295,6 +295,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | select_destination      | Destination (To) field updated                                                                        |
 | select_departure_date   | Departure date field updated                                                                          |
 | select_return_date      | Return date field updated                                                                             |
+| select_date_range       | Range between departure and return dates updated                                                      |
 | select_journey_type     | Journey type field updated                                                                            |
 | select_miles            | User changes the miles limit                                                                          |
 | select_fare_class       | User changes fare class in the module. This includes branded classes such as "Basic Economy", "Main Cabin", "Economy Light", etc. |
@@ -328,6 +329,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | select_destination    | Destination (To) field updated                        |
 | select_budget         | A budget was selected                                 |
 | reset_filter          | Clear button clicked                                  |
+| select_date_range     | Range between check-in and check-out dates updated    |
 | select_night          | Number of nights filter is updated                    |
 | select_property       | Hotel property updated                                |
 | select_start_date     | Hotel check-in date updated                           |
@@ -356,7 +358,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | viewable_impression   | An element is seen on the user's browser              |
 | search_initiation     | Search initiation                                     |
 | open_booking_popup    | Popup clicked                                         |
-| select_date           | Event date updated                                    |
+| select_date_range     | Date range updated                                    |
 | select_session        | Event sessions field updated                          |
 | select_category       | Event category selected                               |
 | select_experience     | Event experience field updated                        |
