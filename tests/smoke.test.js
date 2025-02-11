@@ -133,14 +133,10 @@ describe("Regression Test for Wingo Page Mapping", () => {
     );
   });
 
-  test("Wingo page mapping typeName", async () => {
-    // In this regression test, we simulate a case where the dataLayer is empty and context is home. We expect the typeName to be HOMEPAGE.
+  test("Wingo page mapping dataLayer is not available returns mapping from EM.context", async () => {
+    // In this regression test, we simulate a case where the dataLayer is empty and context is home. 
+    // We expect the typeName to be HOMEPAGE.
     window.EM = {
-      dataLayer: [{
-        page: {
-          typeName: ""
-        }
-      }],
       context: {
         datasource: {
           step: "home"
@@ -159,8 +155,7 @@ describe("Regression Test for Wingo Page Mapping", () => {
     expect(result.page.typeName).toBe("HOMEPAGE");
   });
 
-  test("Wingo page mapping when dataLayer is available returns HOMEPAGE", async () => {
-    // Also test a case where the dataLayer already provides a correct mapping.
+  test("Wingo page mapping when dataLayer is available with value HOMEPAGE returns EXTERNALIZED", async () => {
     window.EM = {
       dataLayer: [{
         page: {
