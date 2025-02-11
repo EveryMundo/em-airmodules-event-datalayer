@@ -615,6 +615,7 @@ const formatDetails = (obj, tenantType = '') => {
       "hp": "EXTERNALIZED",
       "homepage": "EXTERNALIZED",
       "home page": "EXTERNALIZED",
+      "home_page": "EXTERNALIZED",
       "discovery": "EXTERNALIZED"
     };
 
