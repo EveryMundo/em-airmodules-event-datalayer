@@ -302,6 +302,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | select_currency | Currency field updated                                                                    |
 | selected_travel_interest| A travel interest was selected                                                                        |
 | select_interest         | User selects travel interest (Tracking Package)                                                       |
+| select_stops         |   Number of stops selected                       |
 | click_out               | User clicks on one link of the content module                                                         |
 | no_fares_available      | The FC does not have fares to display                                                                 |
 | insert_first_name       | First name field updated                                                                              |
@@ -339,6 +340,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | select_redemption     | User selects redemption as payment method             |
 | select_stay_length    | User selects stay length of the trip                  |
 | select_offer          | Special offer is selected in the low fares calendar   |
+| select_stops         |   Number of stops selected                       |
 | select_currency       | Currency field updated                                |       
 | no_fares_available    | The FC does not have fares to display                 |
 | insert_first_name     | First name field updated                              |
@@ -375,6 +377,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | insert_phone_number   | Phone number field updated                            |
 | subscribe             | Subscription option selected                          |
 | enter_promo_code      | Promo code field updated                              |
+| select_stops         |   Number of stops selected                       |
 
 </details>
 
