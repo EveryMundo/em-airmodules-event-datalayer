@@ -385,35 +385,44 @@ const formatDate = (obj, isAirline = false) => {
     return isValidDate(newDate) ? newDate.toISOString() : '';
   };
 
+  const parsedDates = {};
   dateFields.forEach(field => {
     if (obj.hasOwnProperty(field)) {
-      obj[field] = field === 'timestamp' ? formatISODateTime(obj[field]) : formatISODate(obj[field]);
+      const dateObj = new Date(obj[field]);
+      parsedDates[field] = isValidDate(dateObj) ? dateObj : null;
     }
   });
 
-  // Airline-specific calculations
-  if (isAirline) {
-    if ((!obj.hasOwnProperty("daysUntilFlight") || obj.daysUntilFlight === undefined || obj.daysUntilFlight === '') &&
-        isValidDate(new Date(obj.departureDate)) && isValidDate(new Date(obj.timestamp))) {
-      const departure = new Date(obj.departureDate);
-      const currentTimestamp = new Date(obj.timestamp);
-      obj.daysUntilFlight = Math.round((departure - currentTimestamp) / (1000 * 60 * 60 * 24));
-    }
+  if (isAirline && parsedDates.departureDate && parsedDates.timestamp) {
+    obj.daysUntilFlight = Math.round(
+      (parsedDates.departureDate - parsedDates.timestamp) / (1000 * 60 * 60 * 24)
+    );
   }
 
-  if ((!obj.hasOwnProperty("tripLength") || obj.tripLength === undefined || obj.tripLength === '') &&
-  isValidDate(new Date(obj.departureDate)) && isValidDate(new Date(obj.returnDate))) {
-const departure = new Date(obj.departureDate);
-const returnDate = new Date(obj.returnDate);
-obj.tripLength = Math.round((returnDate - departure) / (1000 * 60 * 60 * 24));
-}
+  if (parsedDates.departureDate && parsedDates.returnDate) {
+    obj.tripLength = Math.round(
+      (parsedDates.returnDate - parsedDates.departureDate) / (1000 * 60 * 60 * 24)
+    );
+  }
 
+  dateFields.forEach(field => {
+    if (parsedDates[field]) {
+      obj[field] = field === 'timestamp'
+        ? formatISODateTime(parsedDates[field])
+        : formatISODate(parsedDates[field]);
+    } else if (obj.hasOwnProperty(field)) {
+      obj[field] = '';
+    }
+  });
 
-  // Format lodging dates if applicable
-  if (obj.lodging && obj.lodging.length > 0) {
+  if (obj.lodging && typeof obj.lodging === 'object') {
     const lodgingObj = obj.lodging;
-    lodgingObj.startDate = lodgingObj.hasOwnProperty("startDate") ? formatISODate(lodgingObj.startDate) : '';
-    lodgingObj.endDate = lodgingObj.hasOwnProperty("endDate") ? formatISODate(lodgingObj.endDate) : '';
+    if (lodgingObj.hasOwnProperty("startDate")) {
+      lodgingObj.startDate = formatISODate(lodgingObj.startDate);
+    }
+    if (lodgingObj.hasOwnProperty("endDate")) {
+      lodgingObj.endDate = formatISODate(lodgingObj.endDate);
+    }
   }
 
   return obj;

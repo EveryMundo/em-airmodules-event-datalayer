@@ -303,6 +303,7 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | selected_travel_interest| A travel interest was selected                                                                        |
 | select_interest         | User selects travel interest (Tracking Package)                                                       |
 | select_stops         |   Number of stops selected                       |
+| select_redemption        |  User selects redemption type (e.g., 'points', 'cash')             |
 | click_out               | User clicks on one link of the content module                                                         |
 | no_fares_available      | The FC does not have fares to display                                                                 |
 | insert_first_name       | First name field updated                                                                              |
