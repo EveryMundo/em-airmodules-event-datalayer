@@ -177,33 +177,37 @@ const fetchAirportCountries = async (iataCode) => {
  * @param {string} iataCode - Iata code of airline
  * @return {Map} - Returns a map of airport codes and their corresponding country codes
  */
-const loadAirportCountries = async iataCode => {
-  let airportCountryCodesList = JSON.parse(localStorage.getItem("airportCountryCodes")) || [];
+/**
+ * @param {string} iataCode
+ * @returns {Promise<Array<[string, string]>>}
+ */
+const loadAirportCountries = async (iataCode) => {
+  if (typeof iataCode !== 'string' || !iataCode.trim()) {
+    console.warn('loadAirportCountries: invalid iataCode');
+    return new Map();
+  }
 
-  const hasIataCode = airportCountryCodesList.some(([code]) => code === iataCode);
+  let list = JSON.parse(localStorage.getItem('airportCountryCodes') || '[]');
 
-  if (!hasIataCode) {
-    try {
-      const airportCountries = await fetchAirportCountries(iataCode);
+  const already = list.some(([code]) => code === iataCode);
+  if (!already) {
+    const airportCountries = await fetchAirportCountries(iataCode);
 
-      if (Array.isArray(airportCountries) && airportCountries.length > 0) {
-        const newEntries = airportCountries
-          .filter(airport => airport.iataCode && airport.country && airport.country.isoCode)
-          .map(airport => [airport.iataCode, airport.country.isoCode]);
+    if (Array.isArray(airportCountries) && airportCountries.length) {
+      const newEntries = airportCountries
+        .filter(a => typeof a.iataCode === 'string' && typeof a.countryIsoCode === 'string')
+        .map(a => [a.iataCode, a.countryIsoCode]);
 
-        airportCountryCodesList = [...airportCountryCodesList, ...newEntries]
-          .sort((a, b) => a[0].localeCompare(b[0]));
+      list = [...list, ...newEntries]
+        .sort(([a], [b]) => a.localeCompare(b));
 
-        saveToLocalStorage('airportCountryCodes', airportCountryCodesList);
-      } else {
-        console.warn('No airport countries found or data in unexpected format.');
-      }
-    } catch (error) {
-      console.error(`Error loading airport countries for ${iataCode}: ${error}`);
+      localStorage.setItem('airportCountryCodes', JSON.stringify(list));
+    } else {
+      console.warn(`No data returned for ${iataCode}`);
     }
   }
 
-  return new Map(airportCountryCodesList);
+  return new Map(list);
 };
 
 /**
@@ -731,5 +735,5 @@ const pushFormattedEventData = (obj, schema) => {
 
 const formatter = { formatAirlines, formatHotels, formatEvents };
 
-export { formatter }
+export { formatter, fetchAirportCountries }
 export default formatter
