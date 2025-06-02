@@ -471,14 +471,7 @@ const formatUrl = (obj) => {
     } else if (obj["url"] === '') {
       obj.url = document.location.href;
     }
-
-    if (obj.url) {
-      obj.url = obj.url.split(":").join(": ");
-    } else {
-      obj.url = ''; //Fallback
-    }
   }
-
   return obj;
 };
 
@@ -580,28 +573,7 @@ const formatDetails = (obj, tenantType = '') => {
       obj.miles = isRedemption;
     }
 
-    // Handle typeName
-    // const validTypeNames = new Set([
-    //   "HOMEPAGE", "CITY_TO_CITY", "FROM_CITY", "TO_CITY",
-    //   "CITY_TO_COUNTRY", "COUNTRY_TO_CITY", "COUNTRY_TO_COUNTRY",
-    //   "FROM_COUNTRY", "TO_COUNTRY", "EXTERNALIZED", "CUSTOM_PAGE",
-    //   "404_PAGE", "SITEMAP", "BUS_STATION", "FROM_STATE", "FROM_AIRPORT"
-    // ]);
-
-    // const potentialTypeNames = [
-    //   obj.page?.typeName,
-    //   obj.page?.pageTypeName,
-    //   dataLayer?.page?.typeName,
-    //   context?.datasource?.step,
-    //   context?.datasource?.step?.page?.[0]?.typeName
-    // ];
-
-    // obj.page.typeName = potentialTypeNames.find(source => {
-    //   const typeName = source?.toUpperCase();
-    //   return typeName && validTypeNames.has(typeName);
-    // }) || '';
-
-    const ptnMappings = {
+    const ptnMappings =     {
       "city-to-city": "CITY_TO_CITY",
       "to-city": "TO_CITY",
       "from-city": "FROM_CITY",
@@ -628,28 +600,29 @@ const formatDetails = (obj, tenantType = '') => {
       "hp": "EXTERNALIZED",
       "homepage": "EXTERNALIZED",
       "home page": "EXTERNALIZED",
-      "home_page": "EXTERNALIZED",
-      "discovery": "EXTERNALIZED"
-    };
+      "discovery": "EXTERNALIZED",
+      "confirmationpage": "EXTERNALIZED",
+      "coresite-custom-best-fare-finder": "EXTERNALIZED"
+    }
 
-    const validTypeNames = new Set(Object.values(ptnMappings));
+const validTypeNames = new Set(Object.values(ptnMappings));
+const CUSTOM_PAGE_RX = /\bcustom page\b/i;
+const normalize = s =>
+  s.trim()
+   .toLowerCase()
+   .replace(/[\s-]+/g, "_");
 
-    const getMappedTypeName = (ptc) => {
-      if (!ptc) return null;
-      const normalizedTypeName = ptc.trim().toLowerCase().replace(/[\s-]/g, "_");
-      const mappedTypeName = ptnMappings[normalizedTypeName]?.toUpperCase();
-      return validTypeNames.has(mappedTypeName) ? mappedTypeName : null;
-    };
-    
-    const potentialTypeNames = [
-      obj.page?.typeName,
-      obj.page?.pageTypeName,
-      dataLayer?.page?.typeName,
-      context?.datasource?.step,
-      context?.datasource?.step?.page?.[0]?.typeName
-    ];
-  
-    obj.page.typeName = potentialTypeNames.map(getMappedTypeName).find(Boolean) || '';
+const getMappedTypeName = key => {
+  if (!key) return null;
+  const mapped = ptnMappings[ normalize(key) ];
+  return validTypeNames.has(mapped) ? mapped : null;
+};
+const resolveTypeName = () => {
+  return CUSTOM_PAGE_RX.test(EM?.context?.datasource?.step) ? "CUSTOM_PAGE" : getMappedTypeName(EM?.context?.datasource?.step) ?? "n/a";
+};
+
+obj.page.typeName = resolveTypeName();
+
     
 
     // Handle site edition, country, and language codes

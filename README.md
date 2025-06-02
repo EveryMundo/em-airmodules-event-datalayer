@@ -312,6 +312,11 @@ Refer to [Event Object Parameters](#event-object-parameters) below for a detaile
 | insert_phone_number     | Phone number field updated                                                                            |
 | subscribe               | Subscription option selected                                                                          |
 | enter_promo_code        | Promo code field updated                                                                              |
+| search_prompt     | Fare Finder Genie AI Prompt searched                 |
+| select_dropdown   | Option in dropdown updated                           |
+| no_match          | Fare Finder Genie AI prompt returned no results      |
+| like_prompt       | User liked a Fare Finder Genie AI prompt             |
+| unlike_prompt     | User disliked a Fare Finder Genie AI prompt          |
 
 </details>
 
