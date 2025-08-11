@@ -195,8 +195,8 @@ const loadAirportCountries = async (iataCode) => {
 
     if (Array.isArray(airportCountries) && airportCountries.length) {
       const newEntries = airportCountries
-        .filter(a => typeof a.iataCode === 'string' && typeof a.countryIsoCode === 'string')
-        .map(a => [a.iataCode, a.countryIsoCode]);
+        .filter(a => typeof a.iataCode === 'string' && (typeof a.country?.isoCode === 'string' || typeof a.countryIsoCode === 'string'))
+        .map(a => [a.iataCode, a.country?.isoCode || a.countryIsoCode]);
 
       list = [...list, ...newEntries]
         .sort(([a], [b]) => a.localeCompare(b));
